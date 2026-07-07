@@ -72,26 +72,28 @@ def prepare_ligand_pdb(pdb_path: str, ligand_resname: str, output_path: str):
     structure = parser.get_structure("ligand", pdb_path)
     model = structure[0]
 
+    serial = 0
     with open(output_path, "w") as f:
         for chain in model:
             for residue in chain:
-                if residue.get_resname().strip() == ligand_resname:
-                    for atom in residue:
-                        line = (
-                            f"ATOM  {atom.get_serial_number():>5d} "
-                            f"{atom.get_name():<4s}"
-                            f"{residue.get_resname():>3s} "
-                            f"{chain.get_id()}{residue.get_id()[1]:>4d}    "
-                            f"{atom.get_coord()[0]:>8.3f}"
-                            f"{atom.get_coord()[1]:>8.3f}"
-                            f"{atom.get_coord()[2]:>8.3f}"
-                            f"{atom.get_occupancy():>6.2f}"
-                            f"{atom.get_bfactor():>6.2f}"
-                            f"          {atom.element:>2s}\n"
-                        )
-                        f.write(line)
-                    f.write("TER\n")
-                    break
+                if residue.get_resname().strip() != ligand_resname:
+                    continue
+                for atom in residue:
+                    serial += 1
+                    # Infer element from atom name if not set
+                    elem = atom.element if atom.element and atom.element != ' ' else atom.get_name()[0]
+                    line = (
+                        f"HETATM{serial:>5d} {atom.get_name():<4s}"
+                        f"{residue.get_resname():>3s} "
+                        f"{chain.get_id()}{residue.get_id()[1]:>4d}    "
+                        f"{atom.get_coord()[0]:>8.3f}"
+                        f"{atom.get_coord()[1]:>8.3f}"
+                        f"{atom.get_coord()[2]:>8.3f}"
+                        f"  1.00  0.00          {elem:>2s}\n"
+                    )
+                    f.write(line)
+                f.write("TER\n")
+                return  # Only first matching residue
 
 
 def pdb_to_pdbqt(pdb_path: str, pdbqt_path: str, is_receptor: bool = True):

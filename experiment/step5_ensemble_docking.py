@@ -64,8 +64,12 @@ def calculate_bfibs(pdb_id: str) -> dict:
     BFIbs ≈ 1: binding site flexibility matches protein average
     BFIbs > 1: binding site is more flexible than average
     """
-    pdb_file = os.path.join(PDB_DIR, f"{pdb_id}.pdb")
-    if not os.path.exists(pdb_file):
+    # Try both lowercase and uppercase filenames
+    for name in (pdb_id.lower(), pdb_id.upper()):
+        pdb_file = os.path.join(PDB_DIR, f"{name}.pdb")
+        if os.path.exists(pdb_file):
+            break
+    else:
         return None
     
     parser = PDBParser(QUIET=True)
@@ -153,7 +157,8 @@ def calculate_bfibs(pdb_id: str) -> dict:
 def compute_all_bfibs() -> list:
     """Calculate BFIbs for all downloaded structures."""
     pdb_files = [f for f in os.listdir(PDB_DIR) if f.endswith('.pdb')]
-    pdb_ids = [f.replace('.pdb', '') for f in pdb_files]
+    # Normalize to uppercase for consistency with cross-docking results
+    pdb_ids = [f.replace('.pdb', '').upper() for f in pdb_files]
     
     results = []
     for pdb_id in sorted(pdb_ids):
@@ -277,7 +282,7 @@ def run_ensemble_docking(ensembles: dict):
     - Success = best RMSD < threshold
     """
     # Load cross-docking results from step3
-    crossdock_file = os.path.join(OUTPUT_DIR, "crossdocking_results.csv")
+    crossdock_file = os.path.join(OUTPUT_DIR, "cross_docking_results.csv")
     if not os.path.exists(crossdock_file):
         print("ERROR: Run step3 cross-docking first!")
         return None
@@ -287,7 +292,7 @@ def run_ensemble_docking(ensembles: dict):
     with open(crossdock_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            key = (row['receptor_pdb'], row['ligand_pdb'])
+            key = (row['receptor'], row['ligand_from'])
             results_lookup[key] = float(row['rmsd'])
     
     # Evaluate each ensemble

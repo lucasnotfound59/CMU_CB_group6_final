@@ -60,24 +60,23 @@ def search_pdb(query: str, rows: int = 500) -> list[dict]:
 def get_structure_info(pdb_id: str) -> dict:
     """
     Fetch structure metadata from RCSB GraphQL API.
-    Returns resolution, ligands, chain info.
+    Returns resolution, title, experimental method.
     """
     url = "https://data.rcsb.org/graphql"
-    query = """
-    query structure($id: String!) {
-        entry(entry_id: $id) {
-            rcsb_entry_info {
+    query = f"""
+    {{
+        entry(entry_id: "{pdb_id}") {{
+            rcsb_entry_info {{
                 resolution_combined
                 experimental_method
-                molecule_count
-            }
-            struct {
+            }}
+            struct {{
                 title
-            }
-        }
-    }
+            }}
+        }}
+    }}
     """
-    payload = {"query": query, "variables": {"id": pdb_id}}
+    payload = {"query": query}
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode(),
@@ -93,7 +92,6 @@ def get_structure_info(pdb_id: str) -> dict:
         "title": entry["struct"]["title"],
         "resolution": info["resolution_combined"],
         "method": info["experimental_method"],
-        "molecule_count": info["molecule_count"],
     }
 
 
@@ -221,9 +219,18 @@ def survey_target(target_name: str):
             print(f"  [warn] Could not fetch info for {item['pdb_id']}: {e}")
 
     # Filter: X-ray, resolution <= 3.0Å
-    filtered = [i for i in infos
-                if i["method"] and "X-RAY" in str(i["method"]).upper()
-                and i["resolution"][0] <= 3.0]
+    def valid(info):
+        if not info.get("method"):
+            return False
+        if "X-RAY" not in str(info["method"]).upper():
+            return False
+        res = info.get("resolution")
+        if res is None:
+            return False
+        res_val = res[0] if isinstance(res, list) else res
+        return res_val is not None and res_val <= 3.0
+
+    filtered = [i for i in infos if valid(i)]
 
     print(f"After filtering (X-ray, ≤3.0Å): {len(filtered)} structures\n")
 
@@ -234,7 +241,8 @@ def survey_target(target_name: str):
     print(f"{'PDB ID':<10} {'Resolution':<12} {'Title'}")
     print("-" * 70)
     for info in filtered[:30]:
-        res = f"{info['resolution'][0]:.2f} Å"
+        res_val = info['resolution'][0] if isinstance(info['resolution'], list) else info['resolution']
+        res = f"{res_val:.2f} Å" if res_val else "N/A"
         title = info['title'][:45]
         print(f"{info['pdb_id']:<10} {res:<12} {title}")
 

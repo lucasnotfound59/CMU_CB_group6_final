@@ -80,3 +80,6 @@ Paper_Outline_B-factors_and_Docking.docx
 
 Downloaded structures, docking results, and generated figures are produced at
 runtime and are not tracked in git (see `.gitignore`).
+
+## colab
+- emily

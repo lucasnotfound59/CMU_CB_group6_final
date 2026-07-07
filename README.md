@@ -107,6 +107,11 @@ matching the target name. Filters to X-ray crystallography with resolution
 ≤ 3.0 Å. Prints a table sorted by resolution and a ready-to-paste
 `TARGET_PDB_IDS` list.
 
+**What name to use?** Anything the PDB knows — gene names (`CDK2`, `EGFR`,
+`MAPK14`), common names (`Thrombin`, `Trypsin`), or multi-word names in quotes
+(`"carbonic anhydrase II"`, `"HIV-1 protease"`). The survey uses RCSB's
+full-text search, so if the protein is in the PDB, it'll find it.
+
 **Example output:**
 
 ```

@@ -11,13 +11,15 @@ Usage:
     python main.py prepare              # Prepare Vina inputs (PDBQT files)
     python main.py dock                 # Run cross-docking
     python main.py analyze              # Analyze B-factor vs RMSD correlation
-    python main.py ensemble             # Run ensemble docking (B-factor guided)
+    python main.py ensemble             # Run ensemble docking (all strategies)
+    python main.py enopt                # Run EnOpt ML-based ensemble selection
     python main.py all                  # Run everything (except survey)
 
 Prerequisites:
-    pip install biopython numpy scipy matplotlib
+    pip install biopython numpy scipy matplotlib pandas
     # Install AutoDock Vina: https://vina.scripps.edu/download/
     # Install Open Babel: https://openbabel.org/ (for PDB → PDBQT conversion)
+    # EnOpt deps: pip install scikit-learn xgboost plotly
 """
 
 import sys
@@ -92,7 +94,7 @@ def cmd_analyze():
 
 
 def cmd_ensemble():
-    """Run ensemble docking with B-factor guided selection."""
+    """Run ensemble docking with all selection strategies."""
     import step5_ensemble_docking as ens
     
     print("=" * 60)
@@ -106,7 +108,7 @@ def cmd_ensemble():
         print("ERROR: No BFIbs data. Run bfactors step first.")
         return
     
-    # Select ensembles
+    # Select ensembles (includes enopt if enopt_ensemble.csv exists)
     print("\nStep 2: Selecting ensembles by different strategies...")
     ensembles = ens.select_all_ensembles(bfibs_data)
     ens.save_ensemble_selections(ensembles, bfibs_data)
@@ -122,6 +124,33 @@ def cmd_ensemble():
     print("\n" + "=" * 60)
     print("ENSEMBLE PIPELINE COMPLETE")
     print("=" * 60)
+
+
+def cmd_enopt():
+    """Run EnOpt ML-based ensemble selection benchmark."""
+    import step6_enopt
+    
+    print("=" * 60)
+    print("ENOPT BENCHMARK")
+    print("=" * 60)
+    
+    # Export matrix
+    print("\nStep 1: Export EnOpt score matrix...")
+    matrix_path = step6_enopt.export_enopt_matrix()
+    known_path = step6_enopt.create_known_ligands(matrix_path)
+    
+    # Run EnOpt
+    print("\nStep 2: Running EnOpt...")
+    out_prefix = step6_enopt.run_enopt(matrix_path, known_path)
+    
+    # Parse ensemble
+    print("\nStep 3: Parsing EnOpt ensemble selection...")
+    step6_enopt.parse_enopt_ensemble(out_prefix)
+    
+    print("\n" + "=" * 60)
+    print("ENOPT BENCHMARK COMPLETE")
+    print("=" * 60)
+    print("\nRun 'python main.py ensemble' to include EnOpt in strategy comparison.")
 
 
 def cmd_all():
@@ -149,6 +178,11 @@ def cmd_all():
     print("STEP 5: Ensemble docking")
     print("=" * 60)
     cmd_ensemble()
+
+    print("\n" + "=" * 60)
+    print("STEP 6: EnOpt ML benchmark")
+    print("=" * 60)
+    cmd_enopt()
 
     print("\n" + "=" * 60)
     print("PIPELINE COMPLETE")
@@ -181,6 +215,8 @@ if __name__ == "__main__":
         cmd_analyze()
     elif command == "ensemble":
         cmd_ensemble()
+    elif command == "enopt":
+        cmd_enopt()
     elif command == "all":
         cmd_all()
     else:

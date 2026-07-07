@@ -219,6 +219,17 @@ def select_all_ensembles(bfibs_data: list) -> dict:
         ensembles[strategy] = {}
         
         for size in ENSEMBLE_SIZES:
+            if strategy == "enopt":
+                # EnOpt ensemble is pre-computed by step6; read from CSV
+                enopt_file = os.path.join(OUTPUT_DIR, "enopt_ensemble.csv")
+                if not os.path.exists(enopt_file):
+                    print(f"  [skip] enopt: {enopt_file} not found. Run step6 first.")
+                    continue
+                ensembles[strategy][size] = _load_enopt_ensemble(enopt_file, size)
+                if not ensembles[strategy][size]:
+                    del ensembles[strategy][size]
+                continue
+            
             if size > len(bfibs_data):
                 continue
             
@@ -238,6 +249,18 @@ def select_all_ensembles(bfibs_data: list) -> dict:
                     ensembles[strategy][size].append(ens)
     
     return ensembles
+
+
+def _load_enopt_ensemble(enopt_file: str, size: int) -> list:
+    """Load EnOpt-selected ensemble for a given size from CSV."""
+    selections = []
+    with open(enopt_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if int(row['ensemble_size']) == size:
+                pdb_ids = row['pdb_ids'].split(';')
+                selections.append(pdb_ids)
+    return selections
 
 
 def save_ensemble_selections(ensembles: dict, bfibs_data: list):
@@ -410,7 +433,7 @@ def compare_strategies(results: list):
         
         strategies = sorted(set(r['strategy'] for r in comparison_rows))
         colors = {'bfactor_guided': '#2ecc71', 'random': '#95a5a6', 
-                  'lowest_bfactor': '#3498db'}
+                  'lowest_bfactor': '#3498db', 'enopt': '#e74c3c'}
         
         x = np.arange(len(ENSEMBLE_SIZES))
         width = 0.25

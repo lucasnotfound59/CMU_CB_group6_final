@@ -25,7 +25,7 @@ python main.py survey CDK2
 # 2. Download them
 python main.py download
 
-# 3. Run the full pipeline
+# 3. Run the full pipeline (includes EnOpt ML benchmark)
 python main.py all
 ```
 
@@ -47,6 +47,10 @@ pip install biopython numpy scipy matplotlib
 | `numpy` | B-factor statistics, RMSD computation, array operations |
 | `scipy` | Pearson/Spearman correlation, t-tests |
 | `matplotlib` | Scatter plots, histograms, bar charts |
+| `pandas` | Data manipulation, EnOpt matrix export |
+| `scikit-learn` | EnOpt Random Forest backend |
+| `xgboost` | EnOpt XGBoost backend |
+| `plotly` | EnOpt interactive output |
 
 ### 2. External tools
 
@@ -120,8 +124,9 @@ python main.py <command> [args]
 | `prepare` | — | Convert PDB → PDBQT (receptor + ligand) for Vina docking |
 | `dock` | — | Run all-vs-all rigid cross-docking with AutoDock Vina |
 | `analyze` | — | Correlation analysis (B-factor vs RMSD) + statistical tests + figures |
-| `ensemble` | — | Calculate BFIbs, select ensembles, compare strategies |
-| `all` | — | Run `bfactors → prepare → dock → analyze → ensemble` in sequence |
+| `ensemble` | — | Calculate BFIbs, select ensembles, compare strategies (incl. EnOpt) |
+| `enopt` | — | Run EnOpt ML-based ensemble selection benchmark |
+| `all` | — | Run `bfactors → prepare → dock → analyze → ensemble → enopt` in sequence |
 
 ### Step-by-step walkthrough
 
@@ -230,10 +235,11 @@ Merges B-factor data with cross-docking results:
    - BFIbs < 1: binding site more rigid than protein average.
    - BFIbs ≈ 1: balanced flexibility (preferred).
    - BFIbs > 1: binding site more flexible than average.
-2. **Select ensembles** using three strategies at sizes *n* = {2, 3, 5}:
+2. **Select ensembles** using four strategies at sizes *n* = {2, 3, 5}:
    - `bfactor_guided` — structures with BFIbs closest to 1.0.
    - `random` — 20 random draws for statistical comparison.
    - `lowest_bfactor` — most rigid binding sites.
+   - `enopt` — ML-based selection via EnOpt (Bhatt et al., 2024).
 3. **Evaluate ensembles** — for each ligand, dock against all ensemble members
    and take the best pose (lowest RMSD).
 4. **Compare strategies** — success rates with standard deviations.
@@ -244,7 +250,26 @@ Merges B-factor data with cross-docking results:
 | `output/ensemble_selections.csv` | Which PDB IDs in each ensemble, with BFIbs values |
 | `output/ensemble_docking_results.csv` | Per-ensemble success rates and RMSD statistics |
 | `output/ensemble_comparison.csv` | Strategy × size comparison summary |
-| `figures/ensemble_comparison.png` | Grouped bar chart with error bars |
+| `output/enopt_ensemble.csv` | EnOpt-selected ensemble members per size |
+| `figures/ensemble_comparison.png` | Grouped bar chart with error bars (4 strategies) |
+
+#### `enopt` — ML-based ensemble selection
+
+Runs EnOpt (Bhatt et al., 2024) as an ML benchmark:
+
+1. **Export score matrix** — converts `cross_docking_results.csv` to EnOpt's
+   compounds × conformations CSV format (affinity scores).
+2. **Create known ligands** — randomly selects 50% of co-crystallized ligands
+   as "known actives" for supervised ML training.
+3. **Run EnOpt** — Random Forest/XGBoost identifies the most predictive
+   receptor conformations via 3-fold CV.
+4. **Parse ensemble** — ranks conformations by cross-model votes, saves
+   selections to `output/enopt_ensemble.csv`.
+
+After running `enopt`, re-run `ensemble` — the EnOpt-selected ensemble is
+automatically included in the strategy comparison.
+
+> **Dependencies:** `pip install pandas scikit-learn xgboost plotly`
 
 ---
 
@@ -276,6 +301,8 @@ All parameters live in [`experiment/config.py`](experiment/config.py):
 survey ──→ download ──→ bfactors ──→ prepare ──→ dock ──→ analyze
                                                     │         │
                                                     └──→ ensemble ──→ compare
+                                                          │
+                                                          └──→ enopt (ML benchmark)
 ```
 
 | Step | Script | Core functions |
@@ -285,6 +312,7 @@ survey ──→ download ──→ bfactors ──→ prepare ──→ dock �
 | Cross-docking | `step3_cross_docking.py` | `prepare_receptor_pdb()`, `prepare_ligand_pdb()`, `pdb_to_pdbqt()`, `run_vina()`, `compute_rmsd()` |
 | Analysis | `step4_analyze.py` | `analyze()` — correlation tests, t-test, figure generation |
 | Ensemble docking | `step5_ensemble_docking.py` | `calculate_bfibs()`, `select_ensemble_bfactor_guided()`, `run_ensemble_docking()`, `compare_strategies()` |
+| EnOpt benchmark | `step6_enopt.py` | `export_enopt_matrix()`, `run_enopt()`, `parse_enopt_ensemble()` |
 
 The orchestrator [`experiment/main.py`](experiment/main.py) ties everything
 together with a CLI that wraps each module's entry point.
@@ -300,22 +328,24 @@ models to identify the most predictive sub-ensemble and a weighted consensus
 score. It answers: *given docking scores, which ensemble members are most
 useful?*
 
-BFIbs-Ensemble asks a complementary upstream question: *before running
-large-scale virtual screening, can B-factors alone predict which crystal
-structures will form the best ensemble?* The two approaches could be combined:
+BFIbs-Ensemble now **integrates EnOpt as a benchmark strategy** (`step6_enopt.py`).
+The pipeline exports its cross-docking affinity matrix in EnOpt format, runs
+EnOpt to select ensembles via ML, then compares the result against BFIbs-guided,
+random, and lowest-B-factor strategies using the same evaluation metric (success
+rate = RMSD < 2 Å).
 
 ```
-BFIbs-Ensemble                    EnOpt
-─────────────────                 ─────────────────
-B-factors → BFIbs → select        Docking scores → ML → weighted
-ensemble members                  consensus score
+BFIbs-Ensemble                         EnOpt (integrated)
+─────────────────                      ─────────────────
+B-factors → BFIbs → select             Docking scores → ML → weighted
+ensemble members                       consensus score
+         ╲                                      ╱
+          ────── same evaluation ───────────────
+                  (success rate comparison)
 ```
 
-Our `bfactor_guided` strategy provides a physics-based (B-factor) prior for
-ensemble selection. Future work could export our cross-docking score matrix in
-EnOpt's CSV format and benchmark BFIbs-guided selection against EnOpt's ML-based
-selection on the same data — testing whether simple crystallographic information
-can match or complement machine learning for ensemble curation.
+This lets us answer: *can simple crystallographic B-factors match or complement
+machine learning for ensemble curation?*
 
 **Key differences from EnOpt:**
 
@@ -349,6 +379,8 @@ can match or complement machine learning for ensemble curation.
 │   ├── step3_cross_docking.py                  # Vina cross-docking + RMSD
 │   ├── step4_analyze.py                        # Correlation + figures
 │   ├── step5_ensemble_docking.py               # BFIbs + ensemble comparison
+│   ├── step6_enopt.py                           # EnOpt ML benchmark integration
+│   ├── enopt/                                   # EnOpt source (cloned from durrantlab/EnOpt)
 │   ├── data/pdb_files/                         # Downloaded .pdb (gitignored)
 │   ├── data/vina_inputs/                       # PDBQT files (gitignored)
 │   ├── data/docking_results/                   # Vina output (gitignored)
@@ -395,6 +427,22 @@ continue. Check `data/vina_inputs/` to verify which structures were converted.
 Reduce `VINA_EXHAUSTIVENESS` in `config.py` (e.g., from 64 to 16) for faster
 but less thorough docking. Reduce the number of structures in
 `TARGET_PDB_IDS`.
+
+### "EnOpt not found"
+
+EnOpt should be cloned into `experiment/enopt/`. If missing:
+```bash
+cd experiment
+git clone --depth 1 https://github.com/durrantlab/EnOpt.git enopt
+```
+Also install EnOpt dependencies:
+```bash
+pip install pandas scikit-learn xgboost plotly
+```
+
+### EnOpt fails with import errors
+Make sure you're running from the `experiment/` directory (not `enopt/`).
+The pipeline sets `PYTHONPATH` correctly when invoked via `main.py enopt`.
 
 ---
 

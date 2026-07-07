@@ -49,6 +49,7 @@ ENSEMBLE_STRATEGIES = [
     "bfactor_guided",    # Select structures with BFIbs closest to 1
     "random",            # Random selection (baseline)
     "lowest_bfactor",    # Select structures with lowest BFIbs (most rigid pocket)
+    "enopt",             # ML-based ensemble selection via EnOpt (Bhatt et al., 2024)
 ]
 NUM_RANDOM_ENSEMBLES = 20   # Number of random ensembles for statistical comparison
 

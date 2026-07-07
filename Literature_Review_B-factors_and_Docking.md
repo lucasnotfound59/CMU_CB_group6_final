@@ -344,6 +344,121 @@ introduction\
 • \"Moving target\" metaphor is effective for presentations\
 • CRAAP: 21/25
 
+## 4.4 De Paris et al. (2018) --- Ensemble Optimizer
+
+**Citation:** De Paris, R., Vahl Quevedo, C., Ruiz, D. D., Gargano, F.,
+& de Souza, O. N. (2018). A selective method for optimizing ensemble
+docking-based experiments on an InhA fully-flexible receptor model.
+BMC Bioinformatics, 19, 235. https://doi.org/10.1186/s12859-018-2228-9
+
+**Summary / Main Point:** Proposes a hierarchical clustering strategy
+for ensemble selection using docking-score feedback. Instead of selecting
+conformations by structural similarity alone, this method iteratively
+refines the ensemble based on how well each conformation performs in
+actual docking runs. Tested on InhA (enoyl-ACP reductase) from
+*Mycobacterium tuberculosis* with a fully-flexible receptor model.
+Demonstrates that score-based ensemble pruning consistently outperforms
+RMSD-based clustering for selecting productive receptor conformations.
+
+**What We Can Use:** • Direct methodological competitor: iterative
+score-based optimization vs. our B-factor-based selection\
+• Serves as a literature benchmark (upper bound) for ensemble
+optimization performance\
+• Demonstrates that docking-score feedback beats structural similarity
+for ensemble selection --- our BFIbs approach is a middle ground\
+• CRAAP: 22/25
+
+**What to Learn More About:** • InhA-specific; generalizability to
+kinases (CDK2) not tested\
+• Requires running docking to select the ensemble --- computationally
+more expensive than B-factor pre-filtering\
+• Does not leverage crystallographic data (B-factors) at all
+
+## 4.5 Bolstad & Anderson (2009) --- Ensemble Pruning
+
+**Citation:** Bolstad, A. C., & Anderson, A. C. (2009). In pursuit of
+virtual lead optimization: Pruning ensembles of receptor structures for
+increased efficiency and accuracy during docking. Journal of
+Computer-Aided Molecular Design, 23(11), 755--763.
+https://doi.org/10.1007/s10822-009-9220-9
+
+**Summary / Main Point:** Introduces a relative-distance-based pruning
+method that retains ensemble members whose active-site core geometry
+best preserves the conserved ligand-binding pharmacophore. Tested on
+dihydrofolate reductase (DHFR): pruned ensembles of 3--5 structures
+matched or exceeded the accuracy of full 20+ member ensembles at a
+fraction of the computational cost. Key insight: geometric preservation
+of the binding site core is more important than conformational diversity
+per se.
+
+**What We Can Use:** • Validates the principle that small, well-chosen
+ensembles can match large ensembles --- core rationale for BFIbs
+selection\
+• Geometric pruning provides a complementary benchmark to De Paris
+docking-score method\
+• Supports our hypothesis that selection strategy matters more than
+ensemble size\
+• CRAAP: 21/25
+
+**What to Learn More About:** • DHFR-specific; kinase applicability
+unknown\
+• Geometric pruning uses RMSD of active-site residues --- B-factor may
+capture similar information at zero computational cost\
+• Published 2009; methods like De Paris (2018) have since advanced the
+score-based approach
+
+## 4.6 Bhatt et al. (2024) --- Ensemble Optimizer (EnOpt)
+
+**Citation:** Bhatt, R., Wang, A., & Durrant, J. D. (2024). Teaching
+old docks new tricks with machine learning enhanced ensemble docking.
+Scientific Reports, 14, 22489.
+https://doi.org/10.1038/s41598-024-71699-3
+
+**Summary / Main Point:** Introduces Ensemble Optimizer (EnOpt), a
+machine-learning tool that improves the accuracy and interpretability of
+ensemble virtual screening. EnOpt trains interpretable ML models on
+per-ligand docking scores across multiple receptor conformations to
+predict which conformations are most likely to produce active ligands.
+Unlike prior ensemble selection methods (De Paris 2018, Bolstad 2009),
+EnOpt learns from the docking data itself rather than relying on
+structural clustering or geometric pruning. Demonstrated improved
+enrichment over traditional averaging and heuristic selection across
+multiple targets.
+
+**What We Can Use:** • STATE-OF-THE-ART ensemble optimizer --- this is
+the primary literature benchmark for our ensemble selection comparison\
+• ML-based approach provides the upper bound against which BFIbs-guided
+selection should be compared\
+• Interpretable ML framework: feature importance reveals which
+conformations drive performance --- analogous to our B-factor analysis\
+• Directly addresses the same problem we tackle: which structures to
+include in an ensemble\
+• CRAAP: 23/25
+
+**What to Learn More About:** • Requires running full docking before
+selection (like De Paris) --- BFIbs is pre-docking and zero-cost\
+• ML training overhead may be impractical for small-scale studies\
+• Does not leverage crystallographic B-factors --- our approach is
+complementary, not competitive\
+
+## 4.7 Bhatt et al. (2023) --- EnOpt (Biophysical Journal)
+
+**Citation:** Bhatt, R., Wang, A., & Durrant, J. D. (2023). Ensemble
+optimizer: Interpretable scoring functions for virtual screening.
+Biophysical Journal, 122(3), 67a.
+https://doi.org/10.1016/j.bpj.2022.11.557
+
+**Summary / Main Point:** Earlier conference presentation of the
+Ensemble Optimizer concept. Proposes interpretable scoring functions for
+combining and comparing ensemble docking scores, moving beyond simple
+averaging heuristics. Establishes the mathematical framework later
+expanded in the 2024 Scientific Reports paper.
+
+**What We Can Use:** • Provides the theoretical foundation for EnOpt\
+• Demonstrates that heuristic averaging (common in ensemble docking) is
+suboptimal --- validates our motivation for principled selection\
+• CRAAP: 20/25 (conference abstract, less detail than full paper)
+
 # Summary: Literature by Priority
 
 ## Must-Read (Core Support)
@@ -405,6 +520,23 @@ introduction\
   Bottegoni et al.  22/25             4D docking        Benchmark data
   (2009)                              benchmark (99     
                                       proteins)         
+
+  De Paris et al.   22/25             Score-based       Literature
+  (2018)                              ensemble          benchmark for
+                                      optimizer;         ensemble
+                                      iterative         optimization
+                                      docking feedback  
+
+  Bolstad &         21/25             Geometric         Validates
+  Anderson (2009)                     pruning retains   small-ensemble
+                                      pharmacophore;    principle
+                                      3--5 ≈ 20+        
+
+  Bhatt et al.      23/25             ML-based          State-of-the-art
+  (2024) EnOpt                        Ensemble          benchmark for
+                                      Optimizer;        ensemble
+                                      interpretable     selection
+                                      scoring           
 
   Carlson (2002)    21/25             \"Moving target\" Introduction
                                       conceptual        framing

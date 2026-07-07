@@ -286,6 +286,24 @@ prediction
 
 14. Zhao, Y., & Sanner, M. F. (2007). FLIPDock. Proteins, 68, 726--737.
 
+15. De Paris, R., Vahl Quevedo, C., Ruiz, D. D., Gargano, F., & de
+    Souza, O. N. (2018). A selective method for optimizing ensemble
+    docking-based experiments on an InhA fully-flexible receptor model.
+    BMC Bioinformatics, 19, 235.
+
+16. Bolstad, A. C., & Anderson, A. C. (2009). In pursuit of virtual
+    lead optimization: Pruning ensembles of receptor structures for
+    increased efficiency and accuracy during docking. Journal of
+    Computer-Aided Molecular Design, 23(11), 755--763.
+
+17. Bhatt, R., Wang, A., & Durrant, J. D. (2024). Teaching old docks
+    new tricks with machine learning enhanced ensemble docking.
+    Scientific Reports, 14, 22489.
+
+18. Bhatt, R., Wang, A., & Durrant, J. D. (2023). Ensemble optimizer:
+    Interpretable scoring functions for virtual screening.
+    Biophysical Journal, 122(3), 67a.
+
 # Appendix: Timeline
 
   -----------------------------------------------------------------------

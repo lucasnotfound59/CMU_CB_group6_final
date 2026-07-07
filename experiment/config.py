@@ -34,7 +34,7 @@ TARGET_PDB_IDS = [
 BINDING_SITE_DISTANCE = 5.0   # Å from co-crystallized ligand heavy atoms
 
 # === Vina parameters ===
-VINA_BINARY = "vina"          # Path to Vina executable (or just "vina" if in PATH)
+VINA_BINARY = os.path.join(BASE_DIR, "vina")  # Bundled Vina binary (auto-detected)
 VINA_BOX_SIZE = (25, 25, 25)  # Å — search box dimensions
 VINA_EXHAUSTIVENESS = 64      # Higher = more thorough but slower
 VINA_NUM_MODES = 9            # Number of binding poses to generate

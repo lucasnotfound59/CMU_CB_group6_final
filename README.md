@@ -19,9 +19,8 @@ docking performance (see [Relation to EnOpt](#relation-to-enopt)).
 ```bash
 cd experiment
 
-# 1. Find structures for your target
+# 1. Find structures for your target (auto-updates config.py)
 python main.py survey CDK2
-# → copy the printed PDB IDs into config.py TARGET_PDB_IDS
 
 # 2. Download them
 python main.py download
@@ -49,25 +48,51 @@ pip install biopython numpy scipy matplotlib
 | `scipy` | Pearson/Spearman correlation, t-tests |
 | `matplotlib` | Scatter plots, histograms, bar charts |
 
-### 2. External tools (must be on `PATH`)
+### 2. External tools
+
+#### AutoDock Vina
+
+Vina **cannot** be installed via `pip` or `brew`. Download the pre-compiled
+binary for your platform:
+
+**macOS (Apple Silicon / aarch64):**
+```bash
+curl -sL "https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_mac_aarch64" \
+  -o experiment/vina
+chmod +x experiment/vina
+experiment/vina --version   # verify
+```
+
+**macOS (Intel / x86_64):**
+```bash
+curl -sL "https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_mac_x86_64" \
+  -o experiment/vina
+chmod +x experiment/vina
+```
+
+**Linux:**
+```bash
+curl -sL "https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64" \
+  -o experiment/vina
+chmod +x experiment/vina
+```
+
+`config.py` auto-detects the binary at `experiment/vina`. If you prefer a
+system-wide install, move the binary to a directory on `PATH` (e.g.
+`/usr/local/bin/vina`) and update `VINA_BINARY` in `config.py` accordingly.
+
+> Latest releases: [github.com/ccsb-scripps/AutoDock-Vina/releases](https://github.com/ccsb-scripps/AutoDock-Vina/releases)
+
+#### Open Babel
 
 | Tool | Version tested | Install |
 |------|---------------|---------|
-| **AutoDock Vina** | ≥ 1.2.0 | [vina.scripps.edu/download](https://vina.scripps.edu/download/) |
 | **Open Babel** | ≥ 3.1 | `brew install open-babel` (macOS) or [openbabel.org](https://openbabel.org/) |
 
-Verify installation:
-
+Verify:
 ```bash
-vina --version
 obabel --version
 ```
-
-If Vina is installed at a non-standard path, set `VINA_BINARY` in
-`experiment/config.py` to the absolute path (e.g., `"/usr/local/bin/vina"`).
-
-> **Note:** AutoDock Vina **cannot** be installed via `pip`. Download the
-> pre-compiled binary for your platform from the link above.
 
 ### 3. (Optional) MGLTools fallback
 
@@ -131,7 +156,8 @@ PDB ID     Resolution   Title
 TARGET_PDB_IDS = ["1AQ1", "1B38", ...]
 ```
 
-Copy the printed list into `TARGET_PDB_IDS` in `config.py`.
+The survey **automatically updates** `TARGET_PDB_IDS` in `config.py` with the
+best-resolution structures. No manual copy needed.
 
 #### `download` — Fetch PDB files
 
@@ -230,7 +256,7 @@ All parameters live in [`experiment/config.py`](experiment/config.py):
 |-----------|---------|-------------|
 | `TARGET_PDB_IDS` | `[]` | List of PDB IDs to download and analyze |
 | `BINDING_SITE_DISTANCE` | `5.0` | Å — max distance from ligand atom to pocket residue |
-| `VINA_BINARY` | `"vina"` | Path to Vina executable |
+| `VINA_BINARY` | `os.path.join(BASE_DIR, "vina")` | Path to Vina executable (auto-detected in `experiment/`) |
 | `VINA_BOX_SIZE` | `(25, 25, 25)` | Å³ — docking search box dimensions |
 | `VINA_EXHAUSTIVENESS` | `64` | Higher = more thorough conformational search, slower |
 | `VINA_NUM_MODES` | `9` | Number of binding poses Vina generates |
@@ -338,7 +364,15 @@ and excluded from version control via `.gitignore`.
 ## Troubleshooting
 
 ### "Vina not found"
-Set the full path in `config.py`:
+
+Make sure the binary is downloaded to `experiment/vina`:
+```bash
+# macOS Apple Silicon (aarch64)
+curl -sL "https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_mac_aarch64" \
+  -o experiment/vina
+chmod +x experiment/vina
+```
+Or set the full path in `config.py`:
 ```python
 VINA_BINARY = "/usr/local/bin/vina"
 ```

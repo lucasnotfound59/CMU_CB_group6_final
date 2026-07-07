@@ -1,88 +1,384 @@
-# B-factors and Docking — Group 6 Final Project
+# BFIbs-Ensemble — B-factor Guided Ensemble Docking
 
-Do crystallographic **B-factors** at a protein's binding site predict how hard that
-pocket is to **dock** into? This project tests that idea end to end: we survey a
-protein family in the PDB, extract binding-site flexibility from B-factors, run
-**cross-docking** with AutoDock Vina, and ask whether flexible pockets produce
-worse (higher-RMSD) poses. We then use the same B-factor signal to guide
-**ensemble docking**.
+**Can crystallographic B-factors predict docking difficulty — and guide ensemble
+selection better than random chance?**
 
-## Hypothesis
-
-Binding-site residues with high relative B-factors are more flexible. Flexibility
-makes a single rigid receptor a poorer docking target, so we expect:
-
-1. **Cross-docking:** pairs whose receptor has higher binding-site B-factors show
-   higher docking RMSD (worse accuracy).
-2. **Ensemble docking:** choosing an ensemble of structures guided by B-factors
-   (`BFIbs`, a B-factor Index for the binding site) beats random selection.
-
-## Pipeline
-
-The experiment is driven by [`experiment/main.py`](experiment/main.py), which
-orchestrates five steps:
-
-| Step | Script | What it does |
-|------|--------|--------------|
-| 1 | `step1_download_structures.py` | Survey the RCSB PDB for a target (e.g. CDK2) and download holo (protein + ligand) structures |
-| 2 | `step2_extract_bfactors.py` | Find binding-site residues within 5 Å of the ligand and extract per-residue B-factors (relative to the pocket average) |
-| 3 | `step3_cross_docking.py` | Prepare PDBQT inputs and cross-dock every ligand into every other receptor with Vina |
-| 4 | `step4_analyze.py` | Test the correlation between receptor binding-site B-factors and docking RMSD |
-| 5 | `step5_ensemble_docking.py` | Compute `BFIbs`, select ensembles (B-factor-guided vs. random vs. lowest-B-factor), and compare docking performance |
+BFIbs-Ensemble tests this hypothesis end-to-end: survey a protein target in the
+PDB → extract per-residue B-factors at the binding site → cross-dock with
+AutoDock Vina → compare B-factor-guided ensemble selection (BFIbs; Halip et al.,
+2021) against random and lowest-B-factor baselines. The Ensemble Optimizer
+(EnOpt; Bhatt et al., 2024) provides the literature upper bound for ensemble
+docking performance (see [Relation to EnOpt](#relation-to-enopt)).
 
 ![Pipeline](experiment/pipeline_diagram.png)
 
-## Usage
+---
+
+## Quick Start
 
 ```bash
 cd experiment
 
-# One-time: survey the target and pick structures
-python main.py survey CDK2        # prints candidate PDB IDs
-# → paste the chosen IDs into TARGET_PDB_IDS in config.py
+# 1. Find structures for your target
+python main.py survey CDK2
+# → copy the printed PDB IDs into config.py TARGET_PDB_IDS
+
+# 2. Download them
 python main.py download
 
-# Run the analysis
-python main.py all                # steps 2–5 in sequence
-# ...or run individual steps:
-python main.py bfactors
-python main.py prepare
-python main.py dock
-python main.py analyze
-python main.py ensemble
+# 3. Run the full pipeline
+python main.py all
 ```
 
-Results are written to `experiment/output/` (CSVs) and `experiment/figures/` (plots).
+Results appear in `experiment/output/` (CSVs) and `experiment/figures/` (plots).
 
-## Prerequisites
+---
+
+## Setup
+
+### 1. Python environment
 
 ```bash
 pip install biopython numpy scipy matplotlib
 ```
 
-External tools (must be on your `PATH`):
-- **AutoDock Vina** — https://vina.scripps.edu/download/
-- **Open Babel** — https://openbabel.org/ (PDB → PDBQT conversion)
+| Package | Used for |
+|---------|----------|
+| `biopython` | PDB parsing, structure I/O, ligand identification |
+| `numpy` | B-factor statistics, RMSD computation, array operations |
+| `scipy` | Pearson/Spearman correlation, t-tests |
+| `matplotlib` | Scatter plots, histograms, bar charts |
 
-## Configuration
+### 2. External tools (must be on `PATH`)
 
-All knobs live in [`experiment/config.py`](experiment/config.py): the target PDB
-IDs, binding-site distance cutoff, Vina search box / exhaustiveness, the RMSD
-success threshold, and the ensemble sizes and selection strategies.
+| Tool | Version tested | Install |
+|------|---------------|---------|
+| **AutoDock Vina** | ≥ 1.2.0 | [vina.scripps.edu/download](https://vina.scripps.edu/download/) |
+| **Open Babel** | ≥ 3.1 | `brew install open-babel` (macOS) or [openbabel.org](https://openbabel.org/) |
 
-## Repository layout
+Verify installation:
+
+```bash
+vina --version
+obabel --version
+```
+
+If Vina is installed at a non-standard path, set `VINA_BINARY` in
+`experiment/config.py` to the absolute path (e.g., `"/usr/local/bin/vina"`).
+
+> **Note:** AutoDock Vina **cannot** be installed via `pip`. Download the
+> pre-compiled binary for your platform from the link above.
+
+### 3. (Optional) MGLTools fallback
+
+If Open Babel PDB → PDBQT conversion fails, the pipeline falls back to
+MGLTools scripts (`prepare_receptor4.py`, `prepare_ligand4.py`). Install from
+[ccsb.scripps.edu/mgltools](https://ccsb.scripps.edu/mgltools/).
+
+---
+
+## Usage
+
+All commands are invoked from the `experiment/` directory via `main.py`:
 
 ```
-experiment/                              # the pipeline (steps 1–5 + config + diagram)
-Literature_Review_B-factors_and_Docking.docx
-Paper_Outline_B-factors_and_Docking.docx
+python main.py <command> [args]
 ```
 
-Downloaded structures, docking results, and generated figures are produced at
-runtime and are not tracked in git (see `.gitignore`).
+### Command Reference
 
-## colab
-- emily
-- lola
-- lucas
-- james
+| Command | Argument | Description |
+|---------|----------|-------------|
+| `survey` | `<target_name>` | Search the PDB for all X-ray structures of a protein target |
+| `download` | — | Download PDB files listed in `config.TARGET_PDB_IDS` |
+| `bfactors` | — | Extract per-residue B-factors for binding-site residues |
+| `prepare` | — | Convert PDB → PDBQT (receptor + ligand) for Vina docking |
+| `dock` | — | Run all-vs-all rigid cross-docking with AutoDock Vina |
+| `analyze` | — | Correlation analysis (B-factor vs RMSD) + statistical tests + figures |
+| `ensemble` | — | Calculate BFIbs, select ensembles, compare strategies |
+| `all` | — | Run `bfactors → prepare → dock → analyze → ensemble` in sequence |
+
+### Step-by-step walkthrough
+
+#### `survey <target_name>` — Find structures
+
+Queries the [RCSB PDB Search API](https://search.rcsb.org) for all structures
+matching the target name. Filters to X-ray crystallography with resolution
+≤ 3.0 Å. Prints a table sorted by resolution and a ready-to-paste
+`TARGET_PDB_IDS` list.
+
+**Example output:**
+
+```
+$ python main.py survey CDK2
+============================================================
+Surveying PDB for: CDK2
+============================================================
+Found 148 total entries
+After filtering (X-ray, ≤3.0Å): 49 structures
+
+PDB ID     Resolution   Title
+----------------------------------------------------------------------
+1AQ1       1.80 Å       CYCLIN-DEPENDENT KINASE 2 (CDK2)...
+1B38       1.90 Å       HUMAN CYCLIN-DEPENDENT KINASE 2...
+...
+# Add these to config.py TARGET_PDB_IDS:
+TARGET_PDB_IDS = ["1AQ1", "1B38", ...]
+```
+
+Copy the printed list into `TARGET_PDB_IDS` in `config.py`.
+
+#### `download` — Fetch PDB files
+
+Downloads `.pdb` files from [files.rcsb.org](https://files.rcsb.org) for every
+ID in `config.TARGET_PDB_IDS`. Skips files already cached in `data/pdb_files/`.
+
+#### `bfactors` — Extract binding-site B-factors
+
+For each downloaded structure:
+
+1. **Identify the co-crystallized ligand** — largest non-standard, non-solvent
+   residue with ≥ 5 heavy atoms.
+2. **Find binding-site residues** — all protein residues with any atom within
+   `BINDING_SITE_DISTANCE` Å (default 5.0) of the ligand.
+3. **Extract per-residue B-factors** — average of all atoms + Cα only.
+4. **Compute relative B-factor** — \( B_{\text{relative}} = B_{\text{residue}} / B_{\text{pocket average}} \).
+
+| Output file | Content |
+|-------------|---------|
+| `output/bfactor_summary.csv` | Per-residue: `pdb_id`, `chain`, `resseq`, `resname`, `avg_bfactor`, `relative_bfactor`, `ca_bfactor` |
+| `output/bfactor_per_structure.csv` | Per-structure: `pdb_id`, `ligand`, `pocket_avg_bfactor`, `pocket_std_bfactor`, `n_binding_site_residues` |
+
+#### `prepare` — Generate Vina inputs
+
+For each structure in `data/pdb_files/`:
+
+1. Strip non-protein atoms → clean receptor PDB.
+2. Extract ligand HETATM records → ligand PDB.
+3. Convert both to PDBQT format using Open Babel (`obabel`), with MGLTools
+   fallback.
+
+| Output directory | Content |
+|-----------------|---------|
+| `data/vina_inputs/` | `{pdb_id}_receptor.pdbqt`, `{pdb_id}_ligand.pdbqt` |
+
+#### `dock` — Cross-docking
+
+For every pair (receptor *i*, ligand *j*, *i* ≠ *j*):
+
+1. Define search box centered on the co-crystallized ligand position.
+2. Run `vina` with `exhaustiveness=64`, `num_modes=9`.
+3. Compute heavy-atom RMSD between the best docked pose and the crystal pose.
+
+| Output file | Content |
+|-------------|---------|
+| `output/cross_docking_results.csv` | `receptor`, `ligand_from`, `rmsd`, `affinity`, `status` |
+
+> **Runtime:** O(N²). With 12 structures, ~132 pairs × ~60s ≈ 2.2 hours at
+> exhaustiveness=64 on a modern laptop.
+
+#### `analyze` — Statistical analysis
+
+Merges B-factor data with cross-docking results:
+
+- **Pearson & Spearman** correlation: pocket avg/max/std B-factor vs RMSD.
+- **t-test**: B-factor distribution of successful (RMSD < 2 Å) vs failed pairs.
+- **Figures:** scatter (B-factor vs RMSD), histogram (success vs failure), RMSD distribution.
+
+| Output file | Content |
+|-------------|---------|
+| `output/analysis_summary.csv` | Per-pair metrics with high-B-factor residues |
+| `output/statistical_tests.txt` | Pearson/Spearman r, p-values, t-test |
+| `figures/bfactor_vs_rmsd.png` | Scatter plot with linear fit |
+| `figures/bfactor_distribution.png` | Histogram: success vs failure B-factor distributions |
+| `figures/rmsd_distribution.png` | Overall RMSD distribution |
+
+#### `ensemble` — Ensemble docking comparison
+
+1. **Compute BFIbs** — \( \text{BFIbs} = \text{median}(B_{\text{pocket}}) / \text{median}(B_{\text{protein}}) \) for each structure (Halip et al., 2021).
+   - BFIbs < 1: binding site more rigid than protein average.
+   - BFIbs ≈ 1: balanced flexibility (preferred).
+   - BFIbs > 1: binding site more flexible than average.
+2. **Select ensembles** using three strategies at sizes *n* = {2, 3, 5}:
+   - `bfactor_guided` — structures with BFIbs closest to 1.0.
+   - `random` — 20 random draws for statistical comparison.
+   - `lowest_bfactor` — most rigid binding sites.
+3. **Evaluate ensembles** — for each ligand, dock against all ensemble members
+   and take the best pose (lowest RMSD).
+4. **Compare strategies** — success rates with standard deviations.
+
+| Output file | Content |
+|-------------|---------|
+| `output/bfibs_scores.csv` | BFIbs + pocket/protein B-factor medians per structure |
+| `output/ensemble_selections.csv` | Which PDB IDs in each ensemble, with BFIbs values |
+| `output/ensemble_docking_results.csv` | Per-ensemble success rates and RMSD statistics |
+| `output/ensemble_comparison.csv` | Strategy × size comparison summary |
+| `figures/ensemble_comparison.png` | Grouped bar chart with error bars |
+
+---
+
+## Configuration Reference
+
+All parameters live in [`experiment/config.py`](experiment/config.py):
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `TARGET_PDB_IDS` | `[]` | List of PDB IDs to download and analyze |
+| `BINDING_SITE_DISTANCE` | `5.0` | Å — max distance from ligand atom to pocket residue |
+| `VINA_BINARY` | `"vina"` | Path to Vina executable |
+| `VINA_BOX_SIZE` | `(25, 25, 25)` | Å³ — docking search box dimensions |
+| `VINA_EXHAUSTIVENESS` | `64` | Higher = more thorough conformational search, slower |
+| `VINA_NUM_MODES` | `9` | Number of binding poses Vina generates |
+| `RMSD_SUCCESS_THRESHOLD` | `2.0` | Å — docked pose with RMSD below this = "success" |
+| `BFACTOR_HIGH_PERCENTILE` | `75` | Percentile cutoff for "high B-factor" residues |
+| `ENSEMBLE_SIZES` | `[2, 3, 5]` | Ensemble sizes to test |
+| `ENSEMBLE_STRATEGIES` | `["bfactor_guided", "random", "lowest_bfactor"]` | Selection strategies |
+| `NUM_RANDOM_ENSEMBLES` | `20` | Random draws for statistical comparison |
+| `FIGURE_DPI` | `150` | Output figure resolution |
+| `FIGURE_STYLE` | `"seaborn-v0_8-whitegrid"` | Matplotlib style |
+
+---
+
+## Pipeline Architecture
+
+```
+survey ──→ download ──→ bfactors ──→ prepare ──→ dock ──→ analyze
+                                                    │         │
+                                                    └──→ ensemble ──→ compare
+```
+
+| Step | Script | Core functions |
+|------|--------|---------------|
+| Survey + Download | `step1_download_structures.py` | `search_pdb()`, `get_structure_info()`, `download_pdb()` |
+| B-factor extraction | `step2_extract_bfactors.py` | `identify_ligand()`, `extract_bfactors()`, `compute_relative_bfactors()` |
+| Cross-docking | `step3_cross_docking.py` | `prepare_receptor_pdb()`, `prepare_ligand_pdb()`, `pdb_to_pdbqt()`, `run_vina()`, `compute_rmsd()` |
+| Analysis | `step4_analyze.py` | `analyze()` — correlation tests, t-test, figure generation |
+| Ensemble docking | `step5_ensemble_docking.py` | `calculate_bfibs()`, `select_ensemble_bfactor_guided()`, `run_ensemble_docking()`, `compare_strategies()` |
+
+The orchestrator [`experiment/main.py`](experiment/main.py) ties everything
+together with a CLI that wraps each module's entry point.
+
+---
+
+## Relation to EnOpt
+
+[EnOpt](https://github.com/durrantlab/EnOpt) (Bhatt et al., 2024) is a
+machine-learning-based ensemble optimizer that takes a pre-computed docking
+score matrix (compounds × conformations) and uses random forest or XGBoost
+models to identify the most predictive sub-ensemble and a weighted consensus
+score. It answers: *given docking scores, which ensemble members are most
+useful?*
+
+BFIbs-Ensemble asks a complementary upstream question: *before running
+large-scale virtual screening, can B-factors alone predict which crystal
+structures will form the best ensemble?* The two approaches could be combined:
+
+```
+BFIbs-Ensemble                    EnOpt
+─────────────────                 ─────────────────
+B-factors → BFIbs → select        Docking scores → ML → weighted
+ensemble members                  consensus score
+```
+
+Our `bfactor_guided` strategy provides a physics-based (B-factor) prior for
+ensemble selection. Future work could export our cross-docking score matrix in
+EnOpt's CSV format and benchmark BFIbs-guided selection against EnOpt's ML-based
+selection on the same data — testing whether simple crystallographic information
+can match or complement machine learning for ensemble curation.
+
+**Key differences from EnOpt:**
+
+| Aspect | EnOpt (Bhatt et al., 2024) | BFIbs-Ensemble |
+|--------|---------------------------|----------------|
+| Input | Docking score matrix (compounds × conformations) | PDB structures + B-factors |
+| Method | Random Forest / XGBoost | BFIbs index (Halip et al., 2021) |
+| Output | Weighted consensus score, best sub-ensemble | Ensemble success rate comparison |
+| Requires docking first? | Yes | Yes (cross-docking for evaluation) |
+| Interpretability | Feature importance from trees | Directly interpretable (B-factor = atomic displacement) |
+
+---
+
+## Repository Layout
+
+```
+.
+├── README.md                                   # This file
+├── .gitignore
+├── Checkpoint_1.md                             # Topic intro + key references
+├── Checkpoint_2.md                             # Code check-in progress report
+├── Literature_Review_B-factors_and_Docking.md  # Annotated literature review (18 refs)
+├── Paper_Outline_B-factors_and_Docking.md      # Paper outline with thesis statement
+├── Project_Plan.md                             # Project plan with timeline
+├── experiment/
+│   ├── config.py                               # All tunable parameters
+│   ├── main.py                                 # CLI orchestrator (survey → ensemble)
+│   ├── pipeline_diagram.png                    # Visual overview
+│   ├── step1_download_structures.py            # PDB survey + download
+│   ├── step2_extract_bfactors.py               # Per-residue B-factor extraction
+│   ├── step3_cross_docking.py                  # Vina cross-docking + RMSD
+│   ├── step4_analyze.py                        # Correlation + figures
+│   ├── step5_ensemble_docking.py               # BFIbs + ensemble comparison
+│   ├── data/pdb_files/                         # Downloaded .pdb (gitignored)
+│   ├── data/vina_inputs/                       # PDBQT files (gitignored)
+│   ├── data/docking_results/                   # Vina output (gitignored)
+│   ├── output/                                 # All CSVs (gitignored)
+│   └── figures/                                # All plots (gitignored)
+```
+
+Runtime data (`data/`, `output/`, `figures/`) is regenerated by the pipeline
+and excluded from version control via `.gitignore`.
+
+---
+
+## Troubleshooting
+
+### "Vina not found"
+Set the full path in `config.py`:
+```python
+VINA_BINARY = "/usr/local/bin/vina"
+```
+
+### "obabel: command not found"
+Install Open Babel:
+- **macOS:** `brew install open-babel`
+- **Ubuntu/Debian:** `sudo apt install openbabel`
+- Or use MGLTools as fallback (see [Setup](#3-optional-mgltools-fallback)).
+
+### "No PDB files found in data/pdb_files/"
+Run `python main.py download` first. Make sure `TARGET_PDB_IDS` in `config.py`
+is populated (use `python main.py survey <target>` to generate the list).
+
+### PDBQT conversion fails for some structures
+Some PDB files have non-standard formatting. The pipeline will skip them and
+continue. Check `data/vina_inputs/` to verify which structures were converted.
+
+### Cross-docking takes too long
+Reduce `VINA_EXHAUSTIVENESS` in `config.py` (e.g., from 64 to 16) for faster
+but less thorough docking. Reduce the number of structures in
+`TARGET_PDB_IDS`.
+
+---
+
+## References
+
+1. **Halip, L., Avram, S., & Neanu, C. (2021).** The B-factor index for the binding site (BFIbs) to prioritize crystal protein structures for docking. *Structural Chemistry*, 32(4), 1693–1699. [doi:10.1007/s11224-021-01755-5](https://doi.org/10.1007/s11224-021-01755-5)
+2. **Bhatt, R., Wang, A., & Durrant, J. D. (2024).** Teaching old docks new tricks with machine learning enhanced ensemble docking. *Scientific Reports*, 14, 22489. [doi:10.1038/s41598-024-71699-3](https://doi.org/10.1038/s41598-024-71699-3)
+3. **De Paris, R., Vahl Quevedo, C., Ruiz, D. D., Gargano, F., & de Souza, O. N. (2018).** A selective method for optimizing ensemble docking-based experiments on an InhA fully-flexible receptor model. *BMC Bioinformatics*, 19, 235. [doi:10.1186/s12859-018-2228-9](https://doi.org/10.1186/s12859-018-2228-9)
+4. **Bolstad, A. C., & Anderson, A. C. (2009).** In pursuit of virtual lead optimization: Pruning ensembles of receptor structures for increased efficiency and accuracy during docking. *Journal of Computer-Aided Molecular Design*, 23(11), 755–763. [doi:10.1007/s10822-009-9220-9](https://doi.org/10.1007/s10822-009-9220-9)
+5. **Amaro, R. E., Baudry, J., Chodera, J., Demir, Ö., McCammon, J. A., Miao, Y., & Smith, J. C. (2018).** Ensemble docking in drug discovery. *Biophysical Journal*, 114(10), 2271–2278. [doi:10.1016/j.bpj.2018.02.038](https://doi.org/10.1016/j.bpj.2018.02.038)
+6. **Korb, O., Olsson, T. S. G., Bowden, S. J., Hall, R. J., Verdonk, M. L., Liebeschuetz, J. W., & Cole, J. C. (2012).** Potential and limitations of ensemble docking. *Journal of Chemical Information and Modeling*, 52(5), 1292–1304. [doi:10.1021/ci300064d](https://doi.org/10.1021/ci300064d)
+
+---
+
+## Contributors
+
+| Name | Role |
+|------|------|
+| Lucas | Pipeline architecture, cross-docking (step3), ensemble docking (step5) |
+| James | PDB survey (step1), B-factor extraction (step2), analysis (step4) |
+| Lola | Literature review, paper outline, reference formatting |
+| Emily | Test data preparation, presentation slides |
+
+---
+
+*Group 6 — Computational Biology Final Project, Carnegie Mellon University*

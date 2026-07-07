@@ -159,6 +159,7 @@ def analyze():
     # T-test: B-factor of successful vs failed pairs
     success_bf = [a["receptor_pocket_avg_bfactor"] for a in analysis if a["success"]]
     fail_bf = [a["receptor_pocket_avg_bfactor"] for a in analysis if not a["success"]]
+    t_stat, t_pval = None, None
     if len(success_bf) > 1 and len(fail_bf) > 1:
         t_stat, t_pval = stats.ttest_ind(success_bf, fail_bf)
         print(f"\nT-test: B-factor (success vs failure)")
@@ -189,8 +190,11 @@ def analyze():
         f.write(f"Pocket avg B-factor vs RMSD:\n")
         f.write(f"  Pearson r = {r_pearson:.4f}, p = {p_pearson:.4f}\n")
         f.write(f"  Spearman ρ = {r_spearman:.4f}, p = {p_spearman:.4f}\n\n")
-        f.write(f"T-test (success vs failure B-factors):\n")
-        f.write(f"  t = {t_stat:.4f}, p = {t_pval:.4f}\n")
+        if t_stat is not None:
+            f.write(f"T-test (success vs failure B-factors):\n")
+            f.write(f"  t = {t_stat:.4f}, p = {t_pval:.4f}\n")
+        else:
+            f.write(f"T-test: skipped (insufficient data in one or both groups)\n")
     print(f"Saved: {txt_path}")
 
     # === Generate figures ===

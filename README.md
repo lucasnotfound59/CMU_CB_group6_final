@@ -83,3 +83,5 @@ runtime and are not tracked in git (see `.gitignore`).
 
 ## colab
 - emily
+- lola
+- lucas

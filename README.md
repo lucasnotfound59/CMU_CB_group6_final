@@ -85,3 +85,4 @@ runtime and are not tracked in git (see `.gitignore`).
 - emily
 - lola
 - lucas
+- james

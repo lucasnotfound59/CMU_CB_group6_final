@@ -27,8 +27,38 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 
 def cmd_survey(target):
+    import re
     from step1_download_structures import survey_target
-    survey_target(target)
+
+    results = survey_target(target)
+    if not results:
+        print("No valid structures found.")
+        return
+
+    # Build PDB ID list (top 30, sorted by resolution)
+    pdb_ids = [r["pdb_id"] for r in results[:30]]
+
+    # Auto-update config.py
+    config_path = os.path.join(os.path.dirname(__file__), "config.py")
+    with open(config_path, "r") as f:
+        content = f.read()
+
+    # Format the new TARGET_PDB_IDS block
+    lines = ["TARGET_PDB_IDS = [\n"]
+    for i in range(0, len(pdb_ids), 6):
+        chunk = ", ".join(repr(pid) for pid in pdb_ids[i:i+6])
+        lines.append(f"    {chunk},\n")
+    lines.append("]")
+    new_block = "".join(lines)
+
+    # Replace the TARGET_PDB_IDS block in config.py
+    pattern = r"TARGET_PDB_IDS = \[[^\]]*\]"
+    content = re.sub(pattern, new_block, content, flags=re.DOTALL)
+
+    with open(config_path, "w") as f:
+        f.write(content)
+
+    print(f"\n✓ Updated config.py with {len(pdb_ids)} PDB IDs")
 
 
 def cmd_download():

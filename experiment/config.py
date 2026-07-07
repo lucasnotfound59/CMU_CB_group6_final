@@ -23,9 +23,11 @@ for d in [PDB_DIR, VINA_DIR, RESULTS_DIR, FIGURES_DIR, OUTPUT_DIR]:
 # CDK2: 49+ holo structures, well-studied, moderate flexibility
 # Change this list after running step1 to survey available structures.
 TARGET_PDB_IDS = [
-    # Example IDs — replace after PDB survey
-    # "1HCK", "1FIN", "1E1X", "1AQ1", "1B3C",
-    # "1DI8", "1E1Y", "1FVV", "1GZ1", "1H1S",
+    '5MHQ', '3RM6', '3PXZ', '3QQJ', '3R73', '3RAI',
+    '3PY0', '3QQF', '3QRT', '3QWJ', '3QX2', '3QXO',
+    '3QZG', '3QZI', '3R28', '3R6X', '3R71', '3R7U',
+    '3R83', '3ROY', '3RPO', '3PXY', '3PXF', '3R1S',
+    '3R1Y', '3R8M', '3R8P', '3QQL', '3QWK', '3R1Q',
 ]
 
 # === Binding site parameters ===

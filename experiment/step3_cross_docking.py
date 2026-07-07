@@ -27,7 +27,7 @@ import subprocess
 import sys
 
 import numpy as np
-from Bio.PDB import PDBParser, PDBIO
+from Bio.PDB import PDBParser, PDBIO, Select
 
 sys.path.insert(0, os.path.dirname(__file__))
 from config import (PDB_DIR, VINA_DIR, RESULTS_DIR, OUTPUT_DIR,
@@ -57,7 +57,7 @@ def prepare_receptor_pdb(pdb_path: str, ligand_resname: str, output_path: str):
     io = PDBIO()
     io.set_structure(structure)
 
-    class ProteinOnly:
+    class ProteinOnly(Select):
         def accept_residue(self, residue):
             return residue.get_resname().strip() in AA3
 

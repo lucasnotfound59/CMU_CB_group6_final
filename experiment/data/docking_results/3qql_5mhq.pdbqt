@@ -1,0 +1,657 @@
+MODEL 1
+REMARK VINA RESULT:     0.000      0.000      0.000
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      11.490  -7.509  17.178  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      11.103  -6.916  14.949  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301       9.952  -7.708  14.977  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301       8.125  -8.715  14.672  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      12.261  -7.324  18.262  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      11.860  -6.843  16.057  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301       8.972  -7.962  14.016  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301       8.496  -9.028  15.952  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301       9.662  -8.328  16.179  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      10.392  -8.288  17.310  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      12.973  -6.645  18.228  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301       7.731  -9.809  16.938  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301       6.981 -10.906  16.228  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301       6.817  -8.915  17.766  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      11.448  -6.239  13.851  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      11.599  -6.746  13.021  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      11.613  -4.794  13.812  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      10.213  -3.320  15.288  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      10.325  -4.086  14.153  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301       9.225  -4.176  13.340  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301       8.073  -3.512  13.668  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301       8.051  -2.773  14.802  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301       9.100  -2.660  15.633  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      12.084  -8.094  19.493  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      14.602  -7.905  19.288  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      13.448  -8.545  20.011  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      11.262  -7.319  20.545  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      11.620  -5.853  20.582  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301       9.859  -7.365  20.298  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301       9.607  -8.262  20.030  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 2
+REMARK VINA RESULT:     0.000      4.254      6.243
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      13.438  -6.427  13.550  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      13.040  -6.631  11.254  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      11.934  -5.792  11.408  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      10.274  -4.504  11.238  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      14.258  -6.730  14.570  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      13.767  -6.944  12.341  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      11.018  -5.279  10.489  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      10.582  -4.514  12.572  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      11.702  -5.311  12.684  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      12.398  -5.600  13.800  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      15.099  -7.204  14.377  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301       9.958  -3.714  13.638  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301       8.488  -3.557  13.345  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      10.666  -2.378  13.817  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      13.379  -7.114  10.056  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      12.716  -7.654   9.568  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      14.672  -6.885   9.429  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      15.917  -4.742   9.841  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      14.912  -5.416   9.188  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      14.142  -4.702   8.306  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      14.392  -3.371   8.098  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      15.407  -2.788   8.778  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      16.183  -3.444   9.657  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      13.949  -6.383  15.957  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      14.993  -8.681  16.158  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      14.248  -7.577  16.858  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      14.667  -5.091  16.401  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      16.077  -5.010  15.868  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      14.017  -3.908  15.947  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      14.481  -3.130  16.293  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 3
+REMARK VINA RESULT:     0.000      7.215      8.585
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      17.875 -10.234  12.030  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      17.680  -8.873  10.139  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      16.507  -9.556   9.812  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      14.678 -10.286   9.058  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      18.565 -10.488  13.154  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      18.352  -9.238  11.244  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      15.596  -9.399   8.766  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      14.939 -11.051  10.163  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      16.105 -10.543  10.695  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      16.746 -10.946  11.809  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      19.299  -9.881  13.407  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      14.076 -12.084  10.758  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      13.350 -12.817   9.659  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      13.127 -11.489  11.790  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      18.131  -7.872   9.377  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      18.330  -8.061   8.431  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      18.344  -6.518   9.865  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      16.880  -5.583  11.680  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      17.056  -5.904  10.356  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      16.020  -5.638   9.498  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      14.867  -5.068   9.971  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      14.781  -4.778  11.290  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      15.766  -5.026  12.169  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      18.270 -11.631  14.017  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      20.800 -11.528  14.043  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      19.574 -12.314  14.421  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      17.395 -11.231  15.224  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      17.797  -9.895  15.803  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      16.014 -11.106  14.895  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      15.639 -11.986  14.735  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 4
+REMARK VINA RESULT:     0.000      7.579      9.636
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      12.835  -1.887  12.046  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      14.069  -3.752  11.361  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      13.347  -3.746  10.166  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      12.540  -3.994   8.234  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      12.665  -0.950  12.993  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      13.787  -2.821  12.289  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      13.422  -4.549   9.027  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      11.852  -2.941   8.775  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      12.412  -2.737  10.019  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      12.092  -1.789  10.920  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      13.299  -0.916  13.746  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      10.845  -2.097   8.113  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      10.031  -2.945   7.169  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      11.489  -0.903   7.420  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      15.027  -4.656  11.585  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      14.781  -5.609  11.557  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      16.412  -4.313  11.866  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      17.437  -2.256  10.852  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      17.035  -3.563  10.715  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      17.230  -4.159   9.496  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      17.810  -3.457   8.473  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      18.182  -2.175   8.697  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      18.006  -1.546   9.870  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      11.575   0.024  12.949  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      11.720  -0.567  15.407  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      10.941   0.141  14.332  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      12.037   1.381  12.376  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      13.413   1.767  12.862  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      12.117   1.387  10.953  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      12.816   0.779  10.666  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 5
+REMARK VINA RESULT:     0.000      6.618      9.461
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      16.980 -10.146  14.395  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      15.921  -8.746  15.941  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      16.594  -9.422  16.961  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      17.489 -10.136  18.731  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      17.178 -10.423  13.096  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      16.120  -9.134  14.669  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      16.613  -9.243  18.345  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      17.997 -10.923  17.733  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      17.459 -10.427  16.564  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      17.686 -10.852  15.307  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      16.791  -9.822  12.419  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      19.026 -11.969  17.855  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      18.858 -12.677  19.175  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      20.425 -11.395  17.671  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      15.097  -7.730  16.213  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      14.331  -7.899  16.808  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      15.269  -6.386  15.682  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      17.572  -5.489  15.232  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      16.576  -5.782  16.132  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      16.813  -5.497  17.452  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      18.005  -4.936  17.830  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      18.929  -4.674  16.876  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      18.745  -4.941  15.573  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      17.947 -11.583  12.648  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      16.041 -11.479  10.984  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      17.206 -12.274  11.507  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      19.401 -11.208  12.290  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      19.487  -9.884  11.571  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      20.241 -11.079  13.434  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      21.156 -10.933  13.148  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 6
+REMARK VINA RESULT:     0.000      5.499      8.122
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      13.993  -8.297  12.829  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      13.989  -7.351  10.691  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      14.102  -6.093  11.287  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      14.358  -4.068  11.814  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      13.996  -9.434  13.545  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      13.925  -8.435  11.483  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      14.210  -4.810  10.746  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      14.292  -4.740  13.005  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      14.180  -6.073  12.668  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      14.114  -7.129  13.500  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      14.062 -10.294  13.069  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      14.471  -4.184  14.356  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      13.891  -2.794  14.401  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      15.932  -4.224  14.784  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      13.952  -7.484   9.362  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      13.234  -7.024   8.869  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      14.912  -8.270   8.602  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      17.290  -8.468   9.388  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      16.311  -7.731   8.764  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      16.659  -6.493   8.289  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      17.942  -6.035   8.439  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      18.844  -6.830   9.060  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      18.550  -8.046   9.548  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      13.904  -9.445  15.004  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      12.464 -11.413  14.321  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      12.907 -10.514  15.443  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      15.289  -9.598  15.668  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      16.170 -10.578  14.931  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      16.024  -8.378  15.710  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      16.578  -8.361  16.506  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 7
+REMARK VINA RESULT:     0.000      9.431     13.023
+REMARK INTER + INTRA:          -1.478
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.478
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      17.038  -0.762   7.131  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      17.233   0.255   9.228  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      15.845   0.413   9.240  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      13.803   0.738   9.649  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      17.680  -1.393   6.134  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      17.806  -0.324   8.158  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      14.975   0.943  10.195  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      13.832   0.181   8.399  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      15.161  -0.086   8.147  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      15.691  -0.667   7.053  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      18.636  -1.605   6.246  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      12.681  -0.207   7.567  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      11.563   0.782   7.775  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      12.254  -1.643   7.845  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      17.983   0.661  10.256  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      17.946   1.612  10.510  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      18.851  -0.221  11.021  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      18.227  -2.632  11.351  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      18.061  -1.313  11.699  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      17.158  -1.030  12.690  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      16.464  -2.044  13.297  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      16.695  -3.316  12.897  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      17.564  -3.642  11.926  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      17.016  -1.778   4.890  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      19.292  -0.990   4.108  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      17.907  -1.418   3.705  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      16.589  -3.262   4.900  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      17.628  -4.150   5.540  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      15.387  -3.491   5.630  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      15.181  -4.438   5.626  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 8
+REMARK VINA RESULT:     0.001      4.998      7.736
+REMARK INTER + INTRA:          -1.477
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.477
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301      10.786  -5.395   9.351  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301       9.816  -3.981  10.942  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301       9.340  -5.115  11.606  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301       8.545  -6.568  12.910  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301      11.562  -5.476   8.258  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      10.524  -4.148   9.812  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301       8.610  -5.266  12.786  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301       9.110  -7.279  11.885  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301       9.681  -6.337  11.055  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      10.382  -6.551   9.926  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301      11.988  -4.656   7.917  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301       9.232  -8.742  11.773  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301       8.009  -9.388  12.371  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      10.526  -9.241  12.403  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301       9.581  -2.755  11.415  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301       8.644  -2.473  11.532  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      10.630  -1.811  11.768  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      12.827  -2.638  12.663  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      11.500  -2.349  12.877  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      11.002  -2.561  14.136  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      11.820  -3.038  15.126  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      13.117  -3.290  14.830  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      13.648  -3.105  13.611  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301      11.799  -6.735   7.553  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301      11.576  -5.055   5.671  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301      11.669  -6.508   6.049  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301      13.143  -7.378   7.957  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301      14.240  -6.353   8.118  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301      13.078  -8.069   9.201  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301      12.221  -8.517   9.278  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL
+MODEL 9
+REMARK VINA RESULT:     0.001      8.586     11.608
+REMARK INTER + INTRA:          -1.477
+REMARK INTER:                   0.000
+REMARK INTRA:                  -1.477
+REMARK UNBOUND:                -1.478
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/5mhq_ligand.pdb
+REMARK  12 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C14_2  and  N6_20
+REMARK    2  A    between atoms: C14_2  and  C15_21
+REMARK    3  A    between atoms: C14_2  and  C16_22
+REMARK    4  A    between atoms: C5_3  and  N3_15
+REMARK    5  A    between atoms: C6_4  and  C7_6
+REMARK    6  A    between atoms: C6_4  and  N3_15
+REMARK    7  A    between atoms: N1_12  and  C3_14
+REMARK    8  A    between atoms: C3_14  and  C2_17
+REMARK    9  A    between atoms: C3_14  and  C18_25
+REMARK   10  A    between atoms: C1_16  and  C2_17
+REMARK   11  A    between atoms: C18_25  and  C19_26
+REMARK   12  A    between atoms: C18_25  and  O1_27
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C4   QT    301       9.911 -16.336  14.610  1.00  0.00    +0.239 A 
+ATOM      2 C5   QT    301      11.701 -16.990  15.965  1.00  0.00    +0.172 A 
+ATOM      3 C12  QT    301      11.908 -18.073  15.107  1.00  0.00    +0.150 A 
+ATOM      4 C13  QT    301      12.573 -19.743  14.005  1.00  0.00    +0.180 A 
+ATOM      5 N1   QT    301       8.970 -15.406  14.380  1.00  0.00    -0.203 N 
+ATOM      6 N2   QT    301      10.689 -16.145  15.703  1.00  0.00    -0.194 NA
+ATOM      7 N5   QT    301      12.867 -19.088  15.100  1.00  0.00    -0.219 NA
+ATOM      8 N6   QT    301      11.472 -19.287  13.331  1.00  0.00    -0.296 N 
+ATOM      9 C17  QT    301      11.064 -18.160  14.015  1.00  0.00    +0.168 A 
+ATOM     10 N7   QT    301      10.037 -17.342  13.715  1.00  0.00    -0.193 NA
+ATOM     11  H   QT    301       8.963 -14.591  14.932  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   8  12
+ATOM     12 C14  QT    301      10.935 -19.787  12.056  1.00  0.00    +0.088 C 
+ATOM     13 C15  QT    301      11.123 -21.281  11.990  1.00  0.00    +0.025 C 
+ATOM     14 C16  QT    301      11.559 -19.065  10.869  1.00  0.00    +0.025 C 
+ENDBRANCH   8  12
+BRANCH   2  15
+ATOM     15 N3   QT    301      12.490 -16.789  17.025  1.00  0.00    -0.214 N 
+ATOM     16  H   QT    301      12.551 -17.502  17.700  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C6   QT    301      13.264 -15.575  17.236  1.00  0.00    +0.142 C 
+BRANCH  17  19
+ATOM     18 C11  QT    301      14.167 -14.295  15.272  1.00  0.00    +0.096 A 
+ATOM     19 C7   QT    301      14.267 -15.366  16.129  1.00  0.00    +0.019 A 
+ATOM     20 C8   QT    301      15.315 -16.229  15.942  1.00  0.00    +0.001 A 
+ATOM     21 C9   QT    301      16.218 -16.006  14.936  1.00  0.00    +0.020 A 
+ATOM     22 C10  QT    301      16.048 -14.922  14.142  1.00  0.00    +0.099 A 
+ATOM     23 N4   QT    301      15.034 -14.053  14.281  1.00  0.00    -0.243 NA
+ENDBRANCH  17  19
+ENDBRANCH  15  17
+ENDBRANCH   2  15
+BRANCH   5  24
+ATOM     24 C3   QT    301       7.954 -15.557  13.338  1.00  0.00    +0.126 C 
+BRANCH  24  26
+ATOM     25 C1   QT    301       6.669 -14.498  15.247  1.00  0.00    +0.002 C 
+ATOM     26 C2   QT    301       6.590 -15.158  13.897  1.00  0.00    +0.024 C 
+ENDBRANCH  24  26
+BRANCH  24  27
+ATOM     27 C18  QT    301       8.330 -14.793  12.051  1.00  0.00    +0.172 C 
+ATOM     28 C19  QT    301       8.955 -13.451  12.346  1.00  0.00    +0.037 C 
+BRANCH  27  29
+ATOM     29 O1   QT    301       9.279 -15.489  11.248  1.00  0.00    -0.221 OA
+ATOM     30  H   QT    301       8.853 -15.787  10.428  1.00  0.00    +0.000 HD
+ENDBRANCH  27  29
+ENDBRANCH  24  27
+ENDBRANCH   5  24
+TORSDOF 8
+ENDMDL

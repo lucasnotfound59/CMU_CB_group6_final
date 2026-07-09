@@ -1,0 +1,51 @@
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3pxz_ligand.pdb
+REMARK  6 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  N_9
+REMARK    2  A    between atoms: N_9  and  C11_13
+REMARK    3  A    between atoms: S_10  and  C9_11
+REMARK    4  A    between atoms: S_10  and  O1_19
+REMARK    5  A    between atoms: S_10  and  O2_20
+REMARK    6  A    between atoms: S_10  and  O3_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   AN    299     123.044  99.324  28.785  1.00  0.00    +0.072 A 
+ATOM      2 C2   AN    299     123.411  98.131  28.070  1.00  0.00    +0.017 A 
+ATOM      3 C3   AN    299     122.437  97.304  27.470  1.00  0.00    +0.001 A 
+ATOM      4 C4   AN    299     121.067  97.607  27.531  1.00  0.00    +0.000 A 
+ATOM      5 C5   AN    299     120.612  98.768  28.209  1.00  0.00    +0.003 A 
+ATOM      6 C6   AN    299     119.201  99.098  28.274  1.00  0.00    +0.000 A 
+ATOM      7 C7   AN    299     118.761 100.247  28.945  1.00  0.00    +0.001 A 
+ATOM      8 C8   AN    299     119.674 101.110  29.579  1.00  0.00    +0.019 A 
+ATOM      9 C9   AN    299     121.070 100.867  29.567  1.00  0.00    +0.114 A 
+ATOM     10 C10  AN    299     121.623  99.696  28.885  1.00  0.00    +0.033 A 
+ENDROOT
+BRANCH   1  11
+ATOM     11 N    AN    299     123.977 100.071  29.328  1.00  0.00    -0.212 N 
+ATOM     12  H   AN    299     123.965 101.025  29.085  1.00  0.00    +0.000 HD
+BRANCH  11  13
+ATOM     13 C11  AN    299     124.930  99.695  30.162  1.00  0.00    +0.070 A 
+ATOM     14 C12  AN    299     124.905  98.457  30.901  1.00  0.00    +0.017 A 
+ATOM     15 C13  AN    299     125.971  98.126  31.788  1.00  0.00    +0.001 A 
+ATOM     16 C14  AN    299     127.060  99.017  31.948  1.00  0.00    +0.000 A 
+ATOM     17 C15  AN    299     127.092 100.239  31.226  1.00  0.00    +0.001 A 
+ATOM     18 C16  AN    299     126.035 100.575  30.340  1.00  0.00    +0.017 A 
+ENDBRANCH  11  13
+ENDBRANCH   1  11
+BRANCH   9  19
+ATOM     19 S    AN    299     122.080 102.055  30.431  1.00  0.00    +0.042 S 
+BRANCH  19  20
+ATOM     20 O1   AN    299     123.036 102.627  29.517  1.00  0.00    -0.065 OA
+ATOM     21  H   AN    299     122.566 103.094  28.808  1.00  0.00    +0.000 HD
+ENDBRANCH  19  20
+BRANCH  19  22
+ATOM     22 O2   AN    299     122.740 101.346  31.509  1.00  0.00    -0.065 OA
+ATOM     23  H   AN    299     123.287 100.635  31.141  1.00  0.00    +0.000 HD
+ENDBRANCH  19  22
+BRANCH  19  24
+ATOM     24 O3   AN    299     121.156 103.257  31.065  1.00  0.00    -0.065 OA
+ATOM     25  H   AN    299     120.711 103.736  30.348  1.00  0.00    +0.000 HD
+ENDBRANCH  19  24
+ENDBRANCH   9  19
+TORSDOF 6

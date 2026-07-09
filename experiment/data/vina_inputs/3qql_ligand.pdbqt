@@ -1,0 +1,67 @@
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3qql_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C5_5  and  C6_6
+REMARK    2  A    between atoms: N7_7  and  N8_8
+REMARK    3  A    between atoms: C10_10  and  C11_11
+REMARK    4  A    between atoms: C11_11  and  C12_12
+REMARK    5  A    between atoms: C12_12  and  C13_13
+REMARK    6  A    between atoms: C12_12  and  C14_14
+REMARK    7  A    between atoms: C14_14  and  C15_15
+REMARK    8  A    between atoms: C14_14  and  C17_17
+REMARK    9  A    between atoms: C14_14  and  C18_18
+REMARK   10  A    between atoms: C15_15  and  C16_16
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C6   03    299      50.405 -64.010 101.908  1.00  0.00    +0.287 C 
+ATOM      2 N7   03    299      49.372 -64.214 102.751  1.00  0.00    -0.090 N 
+ATOM      3 O9   03    299      50.585 -62.887 101.406  1.00  0.00    -0.269 OA
+ATOM      4  H   03    299      49.239 -65.108 103.141  1.00  0.00    +0.000 HD
+ENDROOT
+BRANCH   1   9
+ATOM      5 N1   03    299      51.236 -66.388 102.039  1.00  0.00    -0.162 NA
+ATOM      6 N2   03    299      52.300 -67.162 101.493  1.00  0.00    -0.151 NA
+ATOM      7 C3   03    299      53.059 -66.338 100.695  1.00  0.00    +0.120 C 
+ATOM      8 C4   03    299      52.510 -65.073 100.707  1.00  0.00    +0.031 C 
+ATOM      9 C5   03    299      51.322 -65.127 101.586  1.00  0.00    +0.227 C 
+ENDBRANCH   1   9
+BRANCH   2  10
+ATOM     10 N8   03    299      48.463 -63.158 103.093  1.00  0.00    +0.007 NA
+ATOM     11  H   03    299      48.738 -62.303 102.610  1.00  0.00    +0.000 HD
+ATOM     12  H   03    299      48.487 -63.002 104.101  1.00  0.00    +0.000 HD
+ENDBRANCH   2  10
+TORSDOF 2
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3qql_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C5_5  and  C6_6
+REMARK    2  A    between atoms: N7_7  and  N8_8
+REMARK    3  A    between atoms: C10_10  and  C11_11
+REMARK    4  A    between atoms: C11_11  and  C12_12
+REMARK    5  A    between atoms: C12_12  and  C13_13
+REMARK    6  A    between atoms: C12_12  and  C14_14
+REMARK    7  A    between atoms: C14_14  and  C15_15
+REMARK    8  A    between atoms: C14_14  and  C17_17
+REMARK    9  A    between atoms: C14_14  and  C18_18
+REMARK   10  A    between atoms: C15_15  and  C16_16
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C14  03    299      54.586 -63.001 -97.826  1.00  0.00    +0.000 C 
+ATOM      2 C17  03    299      54.223 -61.670 -98.591  1.00  0.00    +0.000 C 
+ATOM      3 C18  03    299      56.145 -63.056 -97.741  1.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   1   4
+ATOM      4 C12  03    299      53.952 -64.317 -98.614  1.00  0.00    +0.000 C 
+ATOM      5 C13  03    299      53.115 -63.893 -99.915  1.00  0.00    +0.000 C 
+BRANCH   4   7
+ATOM      6 C10  03    299      54.337 -66.692 -99.884  1.00  0.00    +0.000 C 
+ATOM      7 C11  03    299      54.992 -65.464 -99.090  1.00  0.00    +0.000 C 
+ENDBRANCH   4   7
+ENDBRANCH   1   4
+BRANCH   1   8
+ATOM      8 C15  03    299      54.024 -62.941 -96.309  1.00  0.00    +0.000 C 
+ATOM      9 C16  03    299      54.412 -64.220 -95.669  1.00  0.00    +0.000 C 
+ENDBRANCH   1   8
+TORSDOF 3

@@ -1,0 +1,711 @@
+MODEL 1
+REMARK VINA RESULT:     0.000      0.000      0.000
+REMARK INTER + INTRA:          -3.266
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.266
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -60.430 -48.028 -12.350  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -61.260 -48.667 -11.382  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -62.484 -48.041 -10.957  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -62.847 -46.761 -11.512  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -62.009 -46.111 -12.487  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -60.792 -46.752 -12.916  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -62.410 -44.785 -13.032  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -62.595 -43.781 -12.100  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -62.545 -44.545 -14.218  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -62.861 -42.880 -12.394  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -62.461 -43.968 -11.142  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -63.314 -48.645 -10.027  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -63.505 -48.058  -8.953  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -63.840 -49.744 -10.303  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -59.970 -46.138 -13.872  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -60.393 -45.788 -14.690  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -58.514 -45.984 -13.727  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -57.601 -42.953 -10.693  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -56.884 -44.189 -10.711  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -57.166 -45.182 -11.689  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -58.180 -44.936 -12.664  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -58.895 -43.702 -12.646  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -58.609 -42.708 -11.661  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -60.873 -49.899 -10.852  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -61.393 -50.701 -11.087  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -59.732 -50.041  -9.968  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -60.186 -49.687  -8.565  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -59.394 -48.509  -8.030  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -60.403 -45.039  -9.302  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -59.505 -46.279  -9.105  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -60.233 -47.325  -8.224  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -60.634 -46.734  -6.844  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -61.530 -45.489  -7.033  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -61.751 -45.207  -8.540  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 2
+REMARK VINA RESULT:     0.000      2.693      4.869
+REMARK INTER + INTRA:          -3.265
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.265
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -58.571 -45.931  -9.632  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -58.322 -47.240  -9.124  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -57.714 -48.236  -9.967  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -57.377 -47.893 -11.326  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -57.631 -46.573 -11.843  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -58.228 -45.579 -10.988  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -57.279 -46.257 -13.254  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -57.904 -47.026 -14.218  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -56.520 -45.365 -13.587  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -57.715 -46.869 -15.172  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -58.537 -47.731 -13.951  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -57.451 -49.511  -9.495  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -58.023 -50.463 -10.046  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -56.649 -49.657  -8.548  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -58.473 -44.286 -11.472  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -57.747 -43.828 -11.955  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -59.749 -43.573 -11.304  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -62.830 -45.344 -13.872  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -63.130 -45.017 -12.513  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -62.142 -44.440 -11.667  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -60.837 -44.186 -12.187  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -60.539 -44.513 -13.543  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -61.533 -45.092 -14.388  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -58.674 -47.545  -7.808  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -57.959 -47.702  -7.150  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -60.055 -47.638  -7.375  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -60.541 -49.042  -7.675  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -61.737 -49.006  -8.606  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -60.973 -48.185 -12.269  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -61.535 -47.968 -10.848  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -61.213 -49.196  -9.960  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -61.785 -50.508 -10.564  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -61.230 -50.730 -11.990  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -60.278 -49.573 -12.383  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 3
+REMARK VINA RESULT:     0.001      5.045      8.401
+REMARK INTER + INTRA:          -3.264
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.264
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -64.003 -41.510 -14.245  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -62.876 -41.703 -13.392  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -61.660 -40.971 -13.629  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -61.596 -40.058 -14.743  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -62.731 -39.865 -15.609  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -63.949 -40.592 -15.356  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -62.626 -38.921 -16.756  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -61.655 -39.218 -17.694  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -63.350 -37.956 -16.916  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -61.534 -38.634 -18.478  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -61.086 -40.013 -17.579  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -60.555 -41.131 -12.809  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -60.655 -40.779 -11.625  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -59.511 -41.626 -13.285  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -65.066 -40.407 -16.183  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -65.333 -39.485 -16.400  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -65.862 -41.509 -16.747  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -63.653 -43.480 -19.981  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -64.357 -44.261 -19.013  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -65.080 -43.638 -17.959  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -65.100 -42.212 -17.871  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -64.397 -41.434 -18.837  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -63.672 -42.064 -19.894  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -62.965 -42.605 -12.331  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -62.958 -42.257 -11.410  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -63.067 -44.037 -12.535  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -61.667 -44.575 -12.756  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -61.556 -45.230 -14.119  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -61.221 -42.897 -17.139  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -61.874 -43.948 -16.216  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -60.949 -44.236 -15.007  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -59.547 -44.727 -15.461  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -58.887 -43.681 -16.391  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -59.829 -42.467 -16.590  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 4
+REMARK VINA RESULT:     0.001      4.133      6.790
+REMARK INTER + INTRA:          -3.264
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.264
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -64.048 -47.386 -10.957  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -64.158 -48.783 -10.692  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -63.472 -49.731 -11.530  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -62.691 -49.249 -12.642  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -62.582 -47.839 -12.915  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -63.261 -46.896 -12.062  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -61.775 -47.378 -14.077  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -62.178 -47.843 -15.315  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -60.832 -46.612 -13.994  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -61.687 -47.575 -16.125  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -62.956 -48.442 -15.385  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -63.553 -51.093 -11.288  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -64.073 -51.807 -12.157  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -63.097 -51.549 -10.217  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -63.156 -45.520 -12.308  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -62.260 -45.146 -12.471  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -64.304 -44.601 -12.338  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -66.642 -45.206 -15.997  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -67.305 -45.046 -14.741  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -66.561 -44.846 -13.545  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -65.135 -44.806 -13.605  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -64.475 -44.966 -14.859  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -65.225 -45.166 -16.057  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -64.934 -49.219  -9.617  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -64.485 -49.624  -8.840  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -66.379 -49.096  -9.602  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -66.952 -50.268 -10.373  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -67.758 -49.782 -11.562  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -65.783 -48.625 -14.634  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -66.716 -48.501 -13.411  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -66.876 -49.882 -12.727  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -67.429 -50.950 -13.712  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -66.502 -51.076 -14.942  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -65.308 -50.095 -14.821  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 5
+REMARK VINA RESULT:     0.001      5.398      8.835
+REMARK INTER + INTRA:          -3.263
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.263
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -67.769 -49.356 -11.460  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -67.548 -48.776 -12.743  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -67.421 -49.619 -13.903  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -67.507 -51.049 -13.743  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -67.726 -51.639 -12.447  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -67.865 -50.786 -11.294  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -67.799 -53.120 -12.318  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -66.681 -53.817 -12.734  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -68.750 -53.719 -11.849  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -66.665 -54.800 -12.676  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -65.902 -53.332 -13.090  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -67.217 -49.080 -15.163  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -68.110 -48.367 -15.641  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -66.147 -49.324 -15.762  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -68.089 -51.343 -10.027  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -68.785 -52.034  -9.942  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -67.347 -50.958  -8.817  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -63.275 -52.578  -8.951  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -63.498 -51.233  -8.522  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -64.813 -50.693  -8.470  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -65.921 -51.508  -8.853  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -65.697 -52.850  -9.282  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -64.376 -53.389  -9.332  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -67.454 -47.388 -12.863  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -68.171 -46.902 -13.331  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -66.339 -46.635 -12.322  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -65.203 -46.705 -13.323  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -63.983 -47.357 -12.702  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -64.038 -51.173 -12.375  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -64.019 -49.703 -11.905  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -63.998 -48.757 -13.131  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -62.778 -49.036 -14.052  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -62.787 -50.508 -14.524  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -64.007 -51.257 -13.929  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 6
+REMARK VINA RESULT:     0.002      5.535      8.413
+REMARK INTER + INTRA:          -3.263
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.263
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -59.281 -41.057 -16.204  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -59.287 -42.138 -15.275  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -59.655 -43.460 -15.710  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -60.028 -43.666 -17.087  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -60.027 -42.575 -18.027  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -59.645 -41.258 -17.585  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -60.428 -42.823 -19.439  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -61.705 -43.319 -19.626  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -59.722 -42.586 -20.402  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -62.032 -43.505 -20.536  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -62.286 -43.487 -18.849  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -59.659 -44.531 -14.831  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -58.578 -44.877 -14.334  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -60.741 -45.098 -14.567  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -59.628 -40.187 -18.489  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -59.185 -40.322 -19.358  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -60.234 -38.874 -18.219  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -64.606 -39.147 -18.423  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -63.981 -38.413 -17.367  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -62.565 -38.313 -17.288  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -61.760 -38.955 -18.278  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -62.385 -39.687 -19.331  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -63.807 -39.785 -19.407  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -58.935 -41.903 -13.944  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -58.094 -42.283 -13.602  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -59.764 -41.120 -13.048  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -60.847 -42.030 -12.504  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -62.221 -41.511 -12.883  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -63.380 -42.146 -16.479  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -62.941 -41.326 -15.247  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -62.642 -42.275 -14.060  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -63.872 -43.153 -13.702  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -64.320 -43.975 -14.932  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -63.410 -43.667 -16.147  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 7
+REMARK VINA RESULT:     0.002      3.655      7.942
+REMARK INTER + INTRA:          -3.263
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.263
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -58.179 -46.618  -4.807  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -58.191 -45.350  -5.459  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -59.294 -44.447  -5.257  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -60.383 -44.850  -4.403  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -60.375 -46.132  -3.746  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -59.261 -47.023  -3.944  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -61.522 -46.518  -2.879  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -62.758 -46.556  -3.495  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -61.418 -46.824  -1.705  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -63.559 -46.804  -2.977  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -62.839 -46.333  -4.450  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -59.326 -43.205  -5.870  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -58.459 -42.379  -5.551  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -60.212 -42.968  -6.718  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -59.233 -48.271  -3.304  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -59.444 -48.302  -2.342  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -58.908 -49.535  -3.981  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -62.244 -50.792  -6.534  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -60.900 -50.880  -7.014  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -59.806 -50.479  -6.198  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -60.059 -49.982  -4.883  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -61.400 -49.895  -4.405  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -62.495 -50.299  -5.228  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -57.129 -44.996  -6.292  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -56.524 -44.272  -6.009  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -56.883 -45.655  -7.561  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -57.787 -45.018  -8.597  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -58.724 -46.050  -9.195  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -61.740 -47.081  -7.069  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -60.397 -47.246  -7.812  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -59.998 -45.910  -8.487  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -61.093 -45.415  -9.472  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -62.443 -45.250  -8.736  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -62.293 -45.636  -7.242  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 8
+REMARK VINA RESULT:     0.002      9.185     11.534
+REMARK INTER + INTRA:          -3.263
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.263
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -71.395 -44.658 -10.671  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -70.622 -45.847 -10.820  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -71.057 -47.072 -10.203  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -72.272 -47.073  -9.427  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -73.053 -45.873  -9.271  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -72.616 -44.654  -9.903  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -74.297 -45.908  -8.453  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -74.140 -46.283  -7.132  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -75.399 -45.602  -8.871  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -74.923 -46.326  -6.537  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -73.246 -46.506  -6.787  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -70.331 -48.243 -10.341  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -70.223 -48.729 -11.476  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -69.809 -48.758  -9.329  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -73.370 -43.480  -9.770  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -74.342 -43.534  -9.921  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -72.798 -42.171  -9.416  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -71.701 -42.088  -5.172  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -70.816 -41.542  -6.153  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -71.158 -41.559  -7.533  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -72.402 -42.130  -7.940  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -73.284 -42.675  -6.961  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -72.937 -42.656  -5.576  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -69.442 -45.810 -11.566  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -69.408 -46.290 -12.425  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -68.264 -45.089 -11.121  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -67.514 -45.981 -10.151  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -67.407 -45.319  -8.791  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -70.532 -45.399  -6.577  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -69.413 -44.778  -7.439  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -68.475 -45.892  -7.968  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -67.854 -46.719  -6.808  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -68.969 -47.340  -5.936  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -70.365 -46.944  -6.482  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL
+MODEL 9
+REMARK VINA RESULT:     0.002      9.224     11.034
+REMARK INTER + INTRA:          -3.262
+REMARK INTER:                   0.000
+REMARK INTRA:                  -3.262
+REMARK UNBOUND:                -3.266
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3rai_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  N15_15
+REMARK    2  A    between atoms: C3_3  and  N10_10
+REMARK    3  A    between atoms: C5_5  and  C7_7
+REMARK    4  A    between atoms: C6_6  and  N13_13
+REMARK    5  A    between atoms: N13_13  and  C14_14
+REMARK    6  A    between atoms: C14_14  and  C28_28
+REMARK    7  A    between atoms: N15_15  and  C16_16
+REMARK    8  A    between atoms: C16_16  and  C17_17
+REMARK    9  A    between atoms: C17_17  and  C18_18
+REMARK   10  A    between atoms: C18_18  and  N21_21
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   85    923     -70.265 -48.729  -9.025  1.00  0.00    +0.034 A 
+ATOM      2 C2   85    923     -71.446 -49.195  -8.375  1.00  0.00    +0.089 A 
+ATOM      3 C3   85    923     -72.740 -48.807  -8.870  1.00  0.00    +0.158 A 
+ATOM      4 C4   85    923     -72.821 -47.935 -10.016  1.00  0.00    +0.031 A 
+ATOM      5 C5   85    923     -71.630 -47.459 -10.671  1.00  0.00    +0.073 A 
+ATOM      6 C6   85    923     -70.338 -47.864 -10.176  1.00  0.00    +0.072 A 
+ENDROOT
+BRANCH   5   7
+ATOM      7 C7   85    923     -71.751 -46.552 -11.845  1.00  0.00    +0.285 C 
+ATOM      8 N8   85    923     -72.405 -45.356 -11.618  1.00  0.00    -0.084 N 
+ATOM      9 O9   85    923     -71.288 -46.792 -12.945  1.00  0.00    -0.267 OA
+ATOM     10  H   85    923     -72.519 -44.710 -12.353  1.00  0.00    +0.000 HD
+ATOM     11  H   85    923     -72.757 -45.150 -10.722  1.00  0.00    +0.000 HD
+ENDBRANCH   5   7
+BRANCH   3  12
+ATOM     12 N10  85    923     -73.904 -49.254  -8.265  1.00  0.00    +0.059 N 
+ATOM     13 O11  85    923     -74.653 -48.410  -7.754  1.00  0.00    -0.126 OA
+ATOM     14 O12  85    923     -74.157 -50.478  -8.263  1.00  0.00    -0.126 OA
+ENDBRANCH   3  12
+BRANCH   6  15
+ATOM     15 N13  85    923     -69.169 -47.418 -10.809  1.00  0.00    -0.233 N 
+ATOM     16  H   85    923     -69.120 -47.484 -11.790  1.00  0.00    +0.000 HD
+BRANCH  15  17
+ATOM     17 C14  85    923     -68.011 -46.857 -10.096  1.00  0.00    +0.140 C 
+BRANCH  17  21
+ATOM     18 C25  85    923     -68.923 -42.815  -8.662  1.00  0.00    +0.099 A 
+ATOM     19 N26  85    923     -68.246 -43.742  -7.811  1.00  0.00    -0.243 NA
+ATOM     20 C27  85    923     -67.941 -45.057  -8.261  1.00  0.00    +0.096 A 
+ATOM     21 C28  85    923     -68.318 -45.450  -9.581  1.00  0.00    +0.019 A 
+ATOM     22 C29  85    923     -68.993 -44.523 -10.430  1.00  0.00    +0.001 A 
+ATOM     23 C30  85    923     -69.297 -43.205  -9.974  1.00  0.00    +0.020 A 
+ENDBRANCH  17  21
+ENDBRANCH  15  17
+ENDBRANCH   6  15
+BRANCH   2  24
+ATOM     24 N15  85    923     -71.334 -50.026  -7.259  1.00  0.00    -0.236 N 
+ATOM     25  H   85    923     -71.619 -50.965  -7.336  1.00  0.00    +0.000 HD
+BRANCH  24  26
+ATOM     26 C16  85    923     -70.813 -49.556  -5.990  1.00  0.00    +0.114 C 
+BRANCH  26  27
+ATOM     27 C17  85    923     -71.944 -48.869  -5.251  1.00  0.00    +0.041 C 
+BRANCH  27  28
+ATOM     28 C18  85    923     -71.600 -47.417  -4.979  1.00  0.00    +0.074 C 
+BRANCH  28  31
+ATOM     29 C19  85    923     -71.932 -44.980  -7.916  1.00  0.00    +0.159 C 
+ATOM     30 C20  85    923     -71.222 -45.797  -6.816  1.00  0.00    +0.105 C 
+ATOM     31 N21  85    923     -72.259 -46.633  -6.026  1.00  0.00    -0.268 NA
+ATOM     32 C22  85    923     -73.359 -45.736  -5.394  1.00  0.00    +0.105 C 
+ATOM     33 C23  85    923     -74.073 -44.910  -6.490  1.00  0.00    +0.159 C 
+ATOM     34 O24  85    923     -73.469 -45.226  -7.882  1.00  0.00    -0.351 OA
+ENDBRANCH  28  31
+ENDBRANCH  27  28
+ENDBRANCH  26  27
+ENDBRANCH  24  26
+ENDBRANCH   2  24
+TORSDOF 10
+ENDMDL

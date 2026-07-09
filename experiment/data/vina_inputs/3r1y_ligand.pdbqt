@@ -1,0 +1,40 @@
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/vina_inputs/3r1y_ligand.pdb
+REMARK  4 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N01_1  and  C06_6
+REMARK    2  A    between atoms: N01_1  and  C11_11
+REMARK    3  A    between atoms: C05_5  and  C10_10
+REMARK    4  A    between atoms: C11_11  and  C12_12
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C04  76    488     122.351 -26.904 -48.934  1.00  0.00    +0.006 A 
+ATOM      2 C05  76    488     121.070 -26.420 -49.358  1.00  0.00    +0.071 A 
+ATOM      3 C06  76    488     119.941 -26.541 -48.460  1.00  0.00    +0.070 A 
+ATOM      4 C07  76    488     120.142 -27.151 -47.163  1.00  0.00    +0.016 A 
+ATOM      5 C08  76    488     121.421 -27.622 -46.768  1.00  0.00    +0.001 A 
+ATOM      6 C09  76    488     122.524 -27.498 -47.652  1.00  0.00    +0.000 A 
+ENDROOT
+BRANCH   2   8
+ATOM      7 N02  76    488     121.744 -26.315 -51.656  1.00  0.00    -0.084 N 
+ATOM      8 C10  76    488     120.952 -25.855 -50.626  1.00  0.00    +0.285 C 
+ATOM      9 O17  76    488     120.155 -24.970 -50.856  1.00  0.00    -0.267 OA
+ATOM     10  H   76    488     121.664 -25.918 -52.554  1.00  0.00    +0.000 HD
+ATOM     11  H   76    488     122.390 -27.040 -51.494  1.00  0.00    +0.000 HD
+ENDBRANCH   2   8
+BRANCH   3  12
+ATOM     12 N01  76    488     118.770 -26.104 -48.833  1.00  0.00    -0.233 N 
+ATOM     13  H   76    488     118.721 -25.571 -49.659  1.00  0.00    +0.000 HD
+BRANCH  12  14
+ATOM     14 C11  76    488     117.497 -26.357 -48.091  1.00  0.00    +0.140 C 
+BRANCH  14  16
+ATOM     15 N03  76    488     117.201 -22.988 -46.274  1.00  0.00    -0.243 NA
+ATOM     16 C12  76    488     117.277 -25.332 -47.004  1.00  0.00    +0.019 A 
+ATOM     17 C13  76    488     117.392 -23.945 -47.249  1.00  0.00    +0.096 A 
+ATOM     18 C14  76    488     116.881 -23.420 -45.007  1.00  0.00    +0.099 A 
+ATOM     19 C15  76    488     116.744 -24.782 -44.666  1.00  0.00    +0.020 A 
+ATOM     20 C16  76    488     116.948 -25.744 -45.689  1.00  0.00    +0.001 A 
+ENDBRANCH  14  16
+ENDBRANCH  12  14
+ENDBRANCH   3  12
+TORSDOF 4

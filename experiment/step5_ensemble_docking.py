@@ -315,6 +315,8 @@ def run_ensemble_docking(ensembles: dict):
     with open(crossdock_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
+            if not row.get('rmsd'):
+                continue
             key = (row['receptor'], row['ligand_from'])
             results_lookup[key] = float(row['rmsd'])
     

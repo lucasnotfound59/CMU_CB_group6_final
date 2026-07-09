@@ -96,7 +96,7 @@ def export_enopt_matrix() -> str:
     
     # EnOpt expects first column = ligand names
     matrix = matrix.reset_index()
-    matrix = matrix.rename(columns={'index': 'Ligand'})
+    matrix = matrix.rename(columns={'index': 'Ligand', 'ligand': 'Ligand'})
     # Use original ligand name (keep PDB ID as ligand identifier)
     matrix['Ligand'] = matrix['Ligand'].apply(lambda x: f"ligand_{x}")
     
@@ -217,12 +217,14 @@ def parse_enopt_ensemble(out_prefix: str) -> dict:
     
     # Extract Best subens. rows (rows 1, 3, 5 → index 1, 3, 5)
     best_rows = conf_df.iloc[[1, 3, 5]]  # Best subens. Model 1, 2, 3
+    best_rows = best_rows.replace({'True': True, 'False': False}).astype(bool)
     
     # Sum True votes across models (True=1, False=0)
     vote_counts = best_rows.sum(axis=0)
     
     # Rank conformations by votes (descending), tie-break by weight sum
     weight_rows = conf_df.iloc[[0, 2, 4]]  # Conformation weight Model 1, 2, 3
+    weight_rows = weight_rows.apply(pd.to_numeric, errors='coerce').fillna(0)
     weight_sums = weight_rows.sum(axis=0)
     
     # Sort: first by votes (desc), then by weight sum (desc)

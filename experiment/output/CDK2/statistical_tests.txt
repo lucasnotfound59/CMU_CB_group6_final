@@ -2,10 +2,11 @@ B-factor vs Docking RMSD: Statistical Analysis
 ==================================================
 
 N pairs: 841
-Success rate (RMSD < 2.0Å): 0/841
+Success rate (RMSD < 2.0Å): 448/841
 
 Pocket avg B-factor vs RMSD:
-  Pearson r = -0.0292, p = 0.3985
-  Spearman ρ = -0.0434, p = 0.2083
+  Pearson r = -0.0034, p = 0.9213
+  Spearman ρ = -0.0031, p = 0.9289
 
-T-test: skipped (insufficient data in one or both groups)
+T-test (success vs failure B-factors):
+  t = 0.2202, p = 0.8258

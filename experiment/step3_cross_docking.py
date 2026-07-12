@@ -223,6 +223,8 @@ def run_vina(receptor_pdbqt: str, ligand_pdbqt: str, output_pdbqt: str,
 def compute_rmsd(ref_path: str, docked_path: str, ref_resname: str) -> float | None:
     """
     Compute heavy-atom RMSD between reference ligand and best docked pose.
+    Uses atom-name matching + Kabsch alignment. Only reads first MODEL
+    from the Vina output (ignores alternative poses).
     """
     parser = PDBParser(QUIET=True)
 
@@ -232,44 +234,59 @@ def compute_rmsd(ref_path: str, docked_path: str, ref_resname: str) -> float | N
     except Exception:
         return None
 
-    # Reference ligand coords
-    ref_coords = []
-    for model in ref_struct:
-        for chain in model:
-            for residue in chain:
-                if residue.get_resname().strip() == ref_resname:
-                    for atom in residue:
-                        if atom.element != 'H':
-                            ref_coords.append(atom.get_coord())
-                    break
-            break
+    # Reference ligand atoms: {atom_name: coord}
+    ref_atoms = {}
+    for chain in ref_struct[0]:
+        for residue in chain:
+            if residue.get_resname().strip() == ref_resname:
+                for atom in residue:
+                    if atom.element != 'H':
+                        ref_atoms[atom.get_name().strip()] = atom.get_coord()
+                break
+        break
 
-    # Docked ligand coords (first model, first chain, first residue)
-    dock_coords = []
-    for model in dock_struct:
-        for chain in model:
-            for residue in chain:
-                resname = residue.get_resname().strip()
-                if resname not in AA3 and resname not in COMMON_LIGANDS:
-                    for atom in residue:
-                        if atom.element != 'H':
-                            dock_coords.append(atom.get_coord())
-                    break
-            break
-
-    if not ref_coords or not dock_coords:
+    if not ref_atoms:
         return None
 
-    ref_arr = np.array(ref_coords)
-    dock_arr = np.array(dock_coords)
+    # Docked ligand atoms: first MODEL only, match by atom name
+    dock_atoms = {}
+    first_model = dock_struct[0]
+    for chain in first_model:
+        for residue in chain:
+            resname = residue.get_resname().strip()
+            if resname not in AA3 and resname not in COMMON_LIGANDS:
+                for atom in residue:
+                    if atom.element != 'H':
+                        dock_atoms[atom.get_name().strip()] = atom.get_coord()
+                break
+        break
 
-    # Must have same number of atoms
-    n = min(len(ref_arr), len(dock_arr))
-    if n == 0:
+    # Match atoms by name (robust to obabel reordering)
+    common_names = sorted(set(ref_atoms.keys()) & set(dock_atoms.keys()))
+    if len(common_names) < 3:
         return None
 
-    diff = ref_arr[:n] - dock_arr[:n]
-    rmsd = np.sqrt(np.mean(np.sum(diff ** 2, axis=1)))
+    ref_coords = np.array([ref_atoms[n] for n in common_names])
+    dock_coords = np.array([dock_atoms[n] for n in common_names])
+
+    # Kabsch alignment: translate then rotate docked onto reference
+    ref_center = ref_coords.mean(axis=0)
+    dock_center = dock_coords.mean(axis=0)
+    ref_centered = ref_coords - ref_center
+    dock_centered = dock_coords - dock_center
+
+    H = dock_centered.T @ ref_centered
+    U, S, Vt = np.linalg.svd(H)
+    R = Vt.T @ U.T
+
+    # Correct for possible reflection
+    if np.linalg.det(R) < 0:
+        Vt[-1] *= -1
+        R = Vt.T @ U.T
+
+    dock_aligned = dock_centered @ R.T + ref_center
+
+    rmsd = np.sqrt(np.mean(np.sum((ref_coords - dock_aligned) ** 2, axis=1)))
     return round(rmsd, 3)
 
 

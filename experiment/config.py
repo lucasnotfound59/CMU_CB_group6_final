@@ -28,6 +28,11 @@ for d in [PDB_DIR, VINA_DIR, RESULTS_DIR, FIGURES_DIR, OUTPUT_DIR]:
 
 # === Target PDB IDs ===
 TARGET_PDB_IDS_BY_NAME = {
+    # CDK1: Cyclin-Dependent Kinase 1, 8 holo X-ray structures (limited availability)
+    "CDK1": [
+        '6GU2', '6GU3', '6GU4', '6GU6', '6GU7',
+        '4Y72', '5HQ0', '5LQF',
+    ],
     # CDK2: 49+ holo structures, well-studied, moderate flexibility
     "CDK2": [
         '5MHQ', '3RM6', '3PXZ', '3QQJ', '3R73', '3RAI',

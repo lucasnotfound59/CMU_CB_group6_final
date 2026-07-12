@@ -11,6 +11,7 @@ Usage:
     python main.py prepare              # Prepare Vina inputs (PDBQT files)
     python main.py dock                 # Run cross-docking
     python main.py analyze              # Analyze B-factor vs RMSD correlation
+    python main.py positive             # Positive control: pocket Cα RMSD vs docking
     python main.py ensemble             # Run ensemble docking (all strategies)
     python main.py enopt                # Run EnOpt ML-based ensemble selection
     python main.py all                  # Run everything (except survey)
@@ -91,6 +92,12 @@ def cmd_dock():
 def cmd_analyze():
     import step4_analyze
     step4_analyze.analyze()
+
+
+def cmd_positive():
+    """Run positive control analysis: pocket Cα RMSD vs cross-docking RMSD."""
+    import step4b_pocket_rmsd
+    step4b_pocket_rmsd.run_positive_control()
 
 
 def cmd_ensemble():
@@ -213,6 +220,8 @@ if __name__ == "__main__":
         cmd_dock()
     elif command == "analyze":
         cmd_analyze()
+    elif command == "positive":
+        cmd_positive()
     elif command == "ensemble":
         cmd_ensemble()
     elif command == "enopt":

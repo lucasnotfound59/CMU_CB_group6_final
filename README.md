@@ -48,8 +48,8 @@ experiment/output/<protein>/
 experiment/figures/<protein>/
 ```
 
-Current completed targets in this repo: `CDK2` and `Trypsin`. Empty folder
-templates are also present for `CDK1`, `CDK6`, and `ERK2`.
+Current completed targets in this repo: `CDK1`, `CDK2`, and `Trypsin`. Empty
+folder templates are also present for `CDK6` and `ERK2`.
 
 ---
 
@@ -59,9 +59,9 @@ The repository currently includes two completed protein datasets:
 
 | Protein | Status | Main output folder | Notes |
 |---------|--------|--------------------|-------|
-| `CDK2` | Completed | `experiment/output/CDK2/` | Original cross-docking/B-factor experiment |
-| `Trypsin` | Completed | `experiment/output/Trypsin/` | Added as a second target; cross-docking success was 0% at RMSD < 2 Å |
-| `CDK1` | Folder template only | `experiment/output/CDK1/` | No structures/results yet |
+| `CDK1` | Completed | `experiment/output/CDK1/` | 8 holo X-ray structures; cross-docking + positive control analysis |
+| `CDK2` | Completed | `experiment/output/CDK2/` | 30 structures; largest dataset (841 pairs); primary positive control |
+| `Trypsin` | Completed | `experiment/output/Trypsin/` | 15 structures; serine protease (non-kinase) comparison |
 | `CDK6` | Folder template only | `experiment/output/CDK6/` | No structures/results yet |
 | `ERK2` | Folder template only | `experiment/output/ERK2/` | No structures/results yet |
 
@@ -77,14 +77,16 @@ experiment/figures/<protein>/               # generated plots
 
 ### Current result snapshot
 
-| Protein | Docking pairs analyzed | Cross-docking success | Pocket avg B-factor vs RMSD | Ensemble comparison |
-|---------|------------------------|-----------------------|------------------------------|--------------------|
-| `CDK2` | 841 | 0/841 at RMSD < 2 Å | Pearson r = -0.0292, p = 0.3985; Spearman rho = -0.0434, p = 0.2083 | All tested strategies had 0.0 success rate |
-| `Trypsin` | 120 | 0/120 at RMSD < 2 Å | Pearson r = -0.0011, p = 0.9908; Spearman rho = -0.0121, p = 0.8959 | All tested strategies had 0.0 success rate |
+| Protein | Pairs | Success rate | B-factor Spearman ρ | Pocket Cα RMSD Spearman ρ |
+|---------|-------|-------------|---------------------|--------------------------|
+| `CDK1` | 56 | 49/56 (87.5%) | -0.0596 (p=0.66) | -0.1345 (p=0.32) |
+| `CDK2` | 841 | 448/841 (53.3%) | -0.0031 (p=0.93) | **-0.3278 (p≈0)** |
+| `Trypsin` | 120 | 120/120 (100%) | +0.0095 (p=0.92) | +0.0924 (p=0.36) |
 
-Interpretation: in the completed runs, pocket B-factor did **not** show a
-meaningful relationship with docking RMSD. Since there were no RMSD < 2 Å
-successes, the success-vs-failure B-factor t-test was skipped.
+**Key finding:** Pocket structural similarity (Cα RMSD between binding sites)
+strongly predicts cross-docking accuracy (CDK2: ρ = -0.33, p ≈ 0). B-factor,
+measured on the exact same dataset, shows zero correlation (ρ ≈ 0, p > 0.8).
+CDK1 is underpowered (56 pairs); Trypsin hits a ceiling effect (100% success).
 
 ---
 
@@ -190,6 +192,7 @@ BFIBS_TARGET_NAME=Trypsin python main.py analyze
 | `prepare` | — | Convert PDB → PDBQT (receptor + ligand) for Vina docking |
 | `dock` | — | Run all-vs-all rigid cross-docking with AutoDock Vina |
 | `analyze` | — | Correlation analysis (B-factor vs RMSD) + statistical tests + figures |
+| `positive` | — | **Positive control:** pocket Cα RMSD vs cross-docking RMSD (step4b) |
 | `ensemble` | — | Calculate BFIbs, select ensembles, compare strategies (incl. EnOpt) |
 | `enopt` | — | Run EnOpt ML-based ensemble selection benchmark |
 | `all` | — | Run `bfactors → prepare → dock → analyze → ensemble → enopt` in sequence |
@@ -302,6 +305,26 @@ Merges B-factor data with cross-docking results:
 | `figures/<protein>/bfactor_distribution.png` | Histogram: success vs failure B-factor distributions |
 | `figures/<protein>/rmsd_distribution.png` | Overall RMSD distribution |
 
+#### `positive` — Positive control: pocket similarity
+
+Tests whether pocket structural similarity predicts docking accuracy better
+than B-factor. Runs `step4b_pocket_rmsd.py`:
+
+1. **Extract binding-site residues** for each pair of structures.
+2. **Align pocket Cα atoms** via Kabsch superposition, compute pairwise RMSD.
+3. **Run Spearman correlation**: pocket Cα RMSD vs cross-docking RMSD.
+4. **Side-by-side comparison** with B-factor correlation on the same dataset.
+
+| Output file | Content |
+|-------------|---------|
+| `output/<protein>/pocket_pairwise_rmsd.csv` | All pairwise pocket Cα RMSD values |
+| `output/<protein>/positive_control_analysis.csv` | Merged: pocket RMSD + docking RMSD + B-factor |
+| `figures/<protein>/positive_control_comparison.png` | Side-by-side scatter: pocket similarity vs B-factor |
+
+> **Why this matters:** If B-factor were a useful predictor, it should outperform
+> or at least match simple pocket structural similarity. On CDK2 (841 pairs),
+> pocket Cα RMSD gives ρ = -0.33 (p ≈ 0) while B-factor gives ρ ≈ 0.
+
 #### `ensemble` — Ensemble docking comparison
 
 1. **Compute BFIbs** — \( \text{BFIbs} = \text{median}(B_{\text{pocket}}) / \text{median}(B_{\text{protein}}) \) for each structure (Halip et al., 2021).
@@ -374,7 +397,7 @@ All parameters live in [`experiment/config.py`](experiment/config.py):
 ## Pipeline Architecture
 
 ```
-survey ──→ download ──→ bfactors ──→ prepare ──→ dock ──→ analyze
+survey ──→ download ──→ bfactors ──→ prepare ──→ dock ──→ analyze ──→ positive
                                                     │         │
                                                     └──→ ensemble ──→ compare
                                                           │
@@ -387,6 +410,7 @@ survey ──→ download ──→ bfactors ──→ prepare ──→ dock �
 | B-factor extraction | `step2_extract_bfactors.py` | `identify_ligand()`, `extract_bfactors()`, `compute_relative_bfactors()` |
 | Cross-docking | `step3_cross_docking.py` | `prepare_receptor_pdb()`, `prepare_ligand_pdb()`, `pdb_to_pdbqt()`, `run_vina()`, `compute_rmsd()` |
 | Analysis | `step4_analyze.py` | `analyze()` — correlation tests, t-test, figure generation |
+| Positive control | `step4b_pocket_rmsd.py` | Pocket Cα RMSD vs docking RMSD; side-by-side B-factor comparison |
 | Ensemble docking | `step5_ensemble_docking.py` | `calculate_bfibs()`, `select_ensemble_bfactor_guided()`, `run_ensemble_docking()`, `compare_strategies()` |
 | EnOpt benchmark | `step6_enopt.py` | `export_enopt_matrix()`, `run_enopt()`, `parse_enopt_ensemble()` |
 

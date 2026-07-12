@@ -19,17 +19,72 @@ docking performance (see [Relation to EnOpt](#relation-to-enopt)).
 ```bash
 cd experiment
 
-# 1. Find structures for your target (auto-updates config.py)
+# 1. Find structures for your target
 python main.py survey CDK2
 
-# 2. Download them
+# 2. Download the configured structures for the active target
 python main.py download
 
-# 3. Run the full pipeline (includes EnOpt ML benchmark)
+# 3. Run the full pipeline
 python main.py all
+
+# 4. Optional: include EnOpt in the final ensemble comparison
+python main.py ensemble
 ```
 
-Results appear in `experiment/output/` (CSVs) and `experiment/figures/` (plots).
+By default, the active target is `CDK2`. To run another configured target, set
+`BFIBS_TARGET_NAME`:
+
+```bash
+BFIBS_TARGET_NAME=Trypsin python main.py download
+BFIBS_TARGET_NAME=Trypsin python main.py all
+```
+
+Results are separated by protein name:
+
+```text
+experiment/data/<protein>/
+experiment/output/<protein>/
+experiment/figures/<protein>/
+```
+
+Current completed targets in this repo: `CDK2` and `Trypsin`. Empty folder
+templates are also present for `CDK1`, `CDK6`, and `ERK2`.
+
+---
+
+## Current Data
+
+The repository currently includes two completed protein datasets:
+
+| Protein | Status | Main output folder | Notes |
+|---------|--------|--------------------|-------|
+| `CDK2` | Completed | `experiment/output/CDK2/` | Original cross-docking/B-factor experiment |
+| `Trypsin` | Completed | `experiment/output/Trypsin/` | Added as a second target; cross-docking success was 0% at RMSD < 2 Å |
+| `CDK1` | Folder template only | `experiment/output/CDK1/` | No structures/results yet |
+| `CDK6` | Folder template only | `experiment/output/CDK6/` | No structures/results yet |
+| `ERK2` | Folder template only | `experiment/output/ERK2/` | No structures/results yet |
+
+For each completed protein:
+
+```text
+experiment/data/<protein>/pdb_files/        # downloaded crystal structures
+experiment/data/<protein>/vina_inputs/      # extracted receptors/ligands and PDBQT files
+experiment/data/<protein>/docking_results/  # Vina docked poses
+experiment/output/<protein>/                # CSV and text analysis outputs
+experiment/figures/<protein>/               # generated plots
+```
+
+### Current result snapshot
+
+| Protein | Docking pairs analyzed | Cross-docking success | Pocket avg B-factor vs RMSD | Ensemble comparison |
+|---------|------------------------|-----------------------|------------------------------|--------------------|
+| `CDK2` | 841 | 0/841 at RMSD < 2 Å | Pearson r = -0.0292, p = 0.3985; Spearman rho = -0.0434, p = 0.2083 | All tested strategies had 0.0 success rate |
+| `Trypsin` | 120 | 0/120 at RMSD < 2 Å | Pearson r = -0.0011, p = 0.9908; Spearman rho = -0.0121, p = 0.8959 | All tested strategies had 0.0 success rate |
+
+Interpretation: in the completed runs, pocket B-factor did **not** show a
+meaningful relationship with docking RMSD. Since there were no RMSD < 2 Å
+successes, the success-vs-failure B-factor t-test was skipped.
 
 ---
 
@@ -114,6 +169,17 @@ All commands are invoked from the `experiment/` directory via `main.py`:
 python main.py <command> [args]
 ```
 
+The active protein target is controlled by `BFIBS_TARGET_NAME`. If it is unset,
+the pipeline uses `CDK2`.
+
+```bash
+# CDK2, default
+python main.py analyze
+
+# Trypsin
+BFIBS_TARGET_NAME=Trypsin python main.py analyze
+```
+
 ### Command Reference
 
 | Command | Argument | Description |
@@ -127,6 +193,10 @@ python main.py <command> [args]
 | `ensemble` | — | Calculate BFIbs, select ensembles, compare strategies (incl. EnOpt) |
 | `enopt` | — | Run EnOpt ML-based ensemble selection benchmark |
 | `all` | — | Run `bfactors → prepare → dock → analyze → ensemble → enopt` in sequence |
+
+Because `all` runs `ensemble` before `enopt`, rerun `python main.py ensemble`
+afterward if you want the final comparison table to include the EnOpt-selected
+ensemble.
 
 ### Step-by-step walkthrough
 
@@ -161,13 +231,16 @@ PDB ID     Resolution   Title
 TARGET_PDB_IDS = ["1AQ1", "1B38", ...]
 ```
 
-The survey **automatically updates** `TARGET_PDB_IDS` in `config.py` with the
-best-resolution structures. No manual copy needed.
+For configured targets, structure IDs live in
+`TARGET_PDB_IDS_BY_NAME` inside `experiment/config.py`. The active list is chosen
+from `BFIBS_TARGET_NAME`, so CDK2 and Trypsin outputs do not overwrite each
+other.
 
 #### `download` — Fetch PDB files
 
 Downloads `.pdb` files from [files.rcsb.org](https://files.rcsb.org) for every
-ID in `config.TARGET_PDB_IDS`. Skips files already cached in `data/pdb_files/`.
+ID in `config.TARGET_PDB_IDS`. Skips files already cached in
+`data/<protein>/pdb_files/`.
 
 #### `bfactors` — Extract binding-site B-factors
 
@@ -182,12 +255,12 @@ For each downloaded structure:
 
 | Output file | Content |
 |-------------|---------|
-| `output/bfactor_summary.csv` | Per-residue: `pdb_id`, `chain`, `resseq`, `resname`, `avg_bfactor`, `relative_bfactor`, `ca_bfactor` |
-| `output/bfactor_per_structure.csv` | Per-structure: `pdb_id`, `ligand`, `pocket_avg_bfactor`, `pocket_std_bfactor`, `n_binding_site_residues` |
+| `output/<protein>/bfactor_summary.csv` | Per-residue: `pdb_id`, `chain`, `resseq`, `resname`, `avg_bfactor`, `relative_bfactor`, `ca_bfactor` |
+| `output/<protein>/bfactor_per_structure.csv` | Per-structure: `pdb_id`, `ligand`, `pocket_avg_bfactor`, `pocket_std_bfactor`, `n_binding_site_residues` |
 
 #### `prepare` — Generate Vina inputs
 
-For each structure in `data/pdb_files/`:
+For each structure in `data/<protein>/pdb_files/`:
 
 1. Strip non-protein atoms → clean receptor PDB.
 2. Extract ligand HETATM records → ligand PDB.
@@ -196,7 +269,7 @@ For each structure in `data/pdb_files/`:
 
 | Output directory | Content |
 |-----------------|---------|
-| `data/vina_inputs/` | `{pdb_id}_receptor.pdbqt`, `{pdb_id}_ligand.pdbqt` |
+| `data/<protein>/vina_inputs/` | `{pdb_id}_receptor.pdbqt`, `{pdb_id}_ligand.pdbqt` |
 
 #### `dock` — Cross-docking
 
@@ -208,7 +281,7 @@ For every pair (receptor *i*, ligand *j*, *i* ≠ *j*):
 
 | Output file | Content |
 |-------------|---------|
-| `output/cross_docking_results.csv` | `receptor`, `ligand_from`, `rmsd`, `affinity`, `status` |
+| `output/<protein>/cross_docking_results.csv` | `receptor`, `ligand_from`, `rmsd`, `affinity`, `status` |
 
 > **Runtime:** O(N²). With 12 structures, ~132 pairs × ~60s ≈ 2.2 hours at
 > exhaustiveness=64 on a modern laptop.
@@ -223,11 +296,11 @@ Merges B-factor data with cross-docking results:
 
 | Output file | Content |
 |-------------|---------|
-| `output/analysis_summary.csv` | Per-pair metrics with high-B-factor residues |
-| `output/statistical_tests.txt` | Pearson/Spearman r, p-values, t-test |
-| `figures/bfactor_vs_rmsd.png` | Scatter plot with linear fit |
-| `figures/bfactor_distribution.png` | Histogram: success vs failure B-factor distributions |
-| `figures/rmsd_distribution.png` | Overall RMSD distribution |
+| `output/<protein>/analysis_summary.csv` | Per-pair metrics with high-B-factor residues |
+| `output/<protein>/statistical_tests.txt` | Pearson/Spearman r, p-values, t-test |
+| `figures/<protein>/bfactor_vs_rmsd.png` | Scatter plot with linear fit |
+| `figures/<protein>/bfactor_distribution.png` | Histogram: success vs failure B-factor distributions |
+| `figures/<protein>/rmsd_distribution.png` | Overall RMSD distribution |
 
 #### `ensemble` — Ensemble docking comparison
 
@@ -246,12 +319,12 @@ Merges B-factor data with cross-docking results:
 
 | Output file | Content |
 |-------------|---------|
-| `output/bfibs_scores.csv` | BFIbs + pocket/protein B-factor medians per structure |
-| `output/ensemble_selections.csv` | Which PDB IDs in each ensemble, with BFIbs values |
-| `output/ensemble_docking_results.csv` | Per-ensemble success rates and RMSD statistics |
-| `output/ensemble_comparison.csv` | Strategy × size comparison summary |
-| `output/enopt_ensemble.csv` | EnOpt-selected ensemble members per size |
-| `figures/ensemble_comparison.png` | Grouped bar chart with error bars (4 strategies) |
+| `output/<protein>/bfibs_scores.csv` | BFIbs + pocket/protein B-factor medians per structure |
+| `output/<protein>/ensemble_selections.csv` | Which PDB IDs in each ensemble, with BFIbs values |
+| `output/<protein>/ensemble_docking_results.csv` | Per-ensemble success rates and RMSD statistics |
+| `output/<protein>/ensemble_comparison.csv` | Strategy × size comparison summary |
+| `output/<protein>/enopt_ensemble.csv` | EnOpt-selected ensemble members per size |
+| `figures/<protein>/ensemble_comparison.png` | Grouped bar chart with error bars (4 strategies) |
 
 #### `enopt` — ML-based ensemble selection
 
@@ -264,7 +337,7 @@ Runs EnOpt (Bhatt et al., 2024) as an ML benchmark:
 3. **Run EnOpt** — Random Forest/XGBoost identifies the most predictive
    receptor conformations via 3-fold CV.
 4. **Parse ensemble** — ranks conformations by cross-model votes, saves
-   selections to `output/enopt_ensemble.csv`.
+   selections to `output/<protein>/enopt_ensemble.csv`.
 
 After running `enopt`, re-run `ensemble` — the EnOpt-selected ensemble is
 automatically included in the strategy comparison.
@@ -279,7 +352,10 @@ All parameters live in [`experiment/config.py`](experiment/config.py):
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `TARGET_PDB_IDS` | `[]` | List of PDB IDs to download and analyze |
+| `TARGET_NAME` | `"CDK2"` | Active protein target; overridden with `BFIBS_TARGET_NAME` |
+| `TARGET_SLUG` | sanitized target name | Folder-safe protein name used in paths |
+| `TARGET_PDB_IDS_BY_NAME` | CDK2 + Trypsin IDs | Configured PDB ID lists by protein target |
+| `TARGET_PDB_IDS` | active target list | List of PDB IDs to download and analyze for `TARGET_NAME` |
 | `BINDING_SITE_DISTANCE` | `5.0` | Å — max distance from ligand atom to pocket residue |
 | `VINA_BINARY` | `os.path.join(BASE_DIR, "vina")` | Path to Vina executable (auto-detected in `experiment/`) |
 | `VINA_BOX_SIZE` | `(25, 25, 25)` | Å³ — docking search box dimensions |
@@ -381,15 +457,35 @@ machine learning for ensemble curation?*
 │   ├── step5_ensemble_docking.py               # BFIbs + ensemble comparison
 │   ├── step6_enopt.py                           # EnOpt ML benchmark integration
 │   ├── enopt/                                   # EnOpt source (cloned from durrantlab/EnOpt)
-│   ├── data/pdb_files/                         # Downloaded .pdb (gitignored)
-│   ├── data/vina_inputs/                       # PDBQT files (gitignored)
-│   ├── data/docking_results/                   # Vina output (gitignored)
-│   ├── output/                                 # All CSVs (gitignored)
-│   └── figures/                                # All plots (gitignored)
+│   ├── data/
+│   │   ├── CDK2/
+│   │   │   ├── pdb_files/                      # Downloaded CDK2 structures
+│   │   │   ├── vina_inputs/                    # CDK2 receptors/ligands/PDBQT files
+│   │   │   └── docking_results/                # CDK2 Vina docked poses
+│   │   ├── Trypsin/
+│   │   │   ├── pdb_files/                      # Downloaded Trypsin structures
+│   │   │   ├── vina_inputs/                    # Trypsin receptors/ligands/PDBQT files
+│   │   │   └── docking_results/                # Trypsin Vina docked poses
+│   │   ├── CDK1/                               # Empty template
+│   │   ├── CDK6/                               # Empty template
+│   │   └── ERK2/                               # Empty template
+│   ├── output/
+│   │   ├── CDK2/                               # CDK2 CSV/text outputs
+│   │   ├── Trypsin/                            # Trypsin CSV/text outputs
+│   │   ├── CDK1/                               # Empty template
+│   │   ├── CDK6/                               # Empty template
+│   │   └── ERK2/                               # Empty template
+│   └── figures/
+│       ├── CDK2/                               # CDK2 plots
+│       ├── Trypsin/                            # Trypsin plots
+│       ├── CDK1/                               # Empty template
+│       ├── CDK6/                               # Empty template
+│       └── ERK2/                               # Empty template
 ```
 
-Runtime data (`data/`, `output/`, `figures/`) is regenerated by the pipeline
-and excluded from version control via `.gitignore`.
+Runtime data under `data/`, `output/`, and `figures/` is generated by the
+pipeline. The repo currently tracks the completed CDK2 and Trypsin datasets plus
+empty target templates for CDK1, CDK6, and ERK2.
 
 ---
 
@@ -415,13 +511,19 @@ Install Open Babel:
 - **Ubuntu/Debian:** `sudo apt install openbabel`
 - Or use MGLTools as fallback (see [Setup](#3-optional-mgltools-fallback)).
 
-### "No PDB files found in data/pdb_files/"
-Run `python main.py download` first. Make sure `TARGET_PDB_IDS` in `config.py`
-is populated (use `python main.py survey <target>` to generate the list).
+### "No PDB files found in data/<protein>/pdb_files/"
+Run `python main.py download` first. Make sure the active target has entries in
+`TARGET_PDB_IDS_BY_NAME` in `config.py`. If running a non-default target, include
+the environment variable:
+
+```bash
+BFIBS_TARGET_NAME=Trypsin python main.py download
+```
 
 ### PDBQT conversion fails for some structures
 Some PDB files have non-standard formatting. The pipeline will skip them and
-continue. Check `data/vina_inputs/` to verify which structures were converted.
+continue. Check `data/<protein>/vina_inputs/` to verify which structures were
+converted.
 
 ### Cross-docking takes too long
 Reduce `VINA_EXHAUSTIVENESS` in `config.py` (e.g., from 64 to 16) for faster

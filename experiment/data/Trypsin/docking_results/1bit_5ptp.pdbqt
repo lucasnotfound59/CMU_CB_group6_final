@@ -1,0 +1,513 @@
+MODEL 1
+REMARK VINA RESULT:     0.000      0.000      0.000
+REMARK INTER + INTRA:          -0.800
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.800
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      25.910  12.295  20.308  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      25.832  13.559  21.196  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      26.114  12.951  22.531  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      24.570  14.123  21.146  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      24.476  14.769  21.864  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      27.000  14.393  20.771  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      27.064  15.697  20.193  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      27.267  16.721  21.334  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      28.013  15.936  19.093  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      25.108  12.099  19.155  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      25.929  12.419  17.916  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      27.374  12.474  18.184  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      27.870  12.704  17.324  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      27.691  11.568  18.527  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      25.423  13.744  17.384  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      24.557  14.346  17.979  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 2
+REMARK VINA RESULT:     0.000      4.555      5.498
+REMARK INTER + INTRA:          -0.800
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.800
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      29.420  12.328  17.838  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      30.072  13.711  17.600  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      29.140  14.256  16.567  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      31.358  13.576  17.109  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      31.470  14.150  16.335  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      29.876  14.450  18.887  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      30.818  14.983  19.817  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      31.049  16.472  19.468  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      30.564  14.811  21.257  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      30.161  11.158  18.147  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      30.088  10.903  19.644  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      29.016  11.662  20.304  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      28.516  11.052  20.950  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      28.367  12.017  19.601  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      31.442  11.263  20.219  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      32.306  11.712  19.499  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 3
+REMARK VINA RESULT:     0.000      7.898      9.275
+REMARK INTER + INTRA:          -0.800
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.800
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      24.842  14.584  29.063  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      23.403  15.018  29.430  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      23.342  14.527  30.840  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      22.473  14.385  28.627  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      21.826  15.034  28.308  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      23.446  16.514  29.426  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      22.747  17.472  28.631  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      21.486  17.915  29.410  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      23.486  18.636  28.115  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      25.222  14.160  27.763  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      25.912  15.309  27.047  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      26.335  16.383  27.958  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      25.876  17.254  27.692  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      27.347  16.500  27.900  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      24.940  15.828  26.008  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      23.830  15.350  25.923  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 4
+REMARK VINA RESULT:     0.001      7.656      9.604
+REMARK INTER + INTRA:          -0.799
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.799
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      22.167   8.677  16.023  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      21.793   7.240  16.455  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      20.558   7.525  17.247  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      22.786   6.682  17.238  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      22.747   5.715  17.170  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      21.418   6.547  15.182  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      21.988   5.416  14.524  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      21.203   4.158  14.963  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      22.148   5.456  13.061  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      23.505   9.123  15.868  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      23.864   9.114  14.391  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      22.688   9.022  13.514  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      22.982   9.101  12.541  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      22.039   9.778  13.735  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      24.798   7.941  14.173  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      25.070   7.203  15.093  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 5
+REMARK VINA RESULT:     0.001      7.108      8.685
+REMARK INTER + INTRA:          -0.799
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.799
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      26.091  16.510  28.543  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      26.238  16.547  27.003  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      26.646  17.972  26.821  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      25.033  16.275  26.382  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      24.806  15.341  26.511  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      27.405  15.654  26.712  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      27.498  14.445  25.959  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      27.936  14.808  24.520  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      28.309  13.340  26.495  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      25.127  15.716  29.216  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      25.798  14.457  29.743  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      27.265  14.554  29.760  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      27.572  15.193  29.027  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      27.669  13.631  29.597  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      25.338  13.313  28.864  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      24.613  13.528  27.918  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 6
+REMARK VINA RESULT:     0.001     12.015     13.077
+REMARK INTER + INTRA:          -0.799
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.799
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      38.789  15.355  22.719  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      39.367  15.295  24.152  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      40.178  16.549  24.152  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      40.158  14.173  24.322  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      40.673  14.261  25.140  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      38.180  15.470  25.047  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      37.608  14.606  26.030  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      38.194  14.991  27.408  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      36.143  14.482  26.094  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      38.539  14.203  21.929  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      37.056  13.874  21.984  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      36.240  14.985  22.494  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      35.847  14.730  23.400  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      35.483  15.180  21.839  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      36.910  12.645  22.858  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      37.884  12.162  23.392  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 7
+REMARK VINA RESULT:     0.001      4.623      5.557
+REMARK INTER + INTRA:          -0.799
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.799
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      21.675  16.285  18.432  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      20.929  16.659  19.735  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      19.534  16.294  19.344  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      21.048  18.010  20.005  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      20.959  18.158  20.959  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      21.432  15.684  20.753  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      22.148  15.883  21.973  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      21.121  15.940  23.129  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      23.259  14.973  22.296  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      22.807  16.991  17.949  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      24.066  16.220  18.310  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      23.795  14.830  18.703  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      23.486  14.805  19.674  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      24.646  14.276  18.603  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      24.742  16.981  19.431  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      24.222  17.974  19.890  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 8
+REMARK VINA RESULT:     0.001      6.024      7.661
+REMARK INTER + INTRA:          -0.799
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.799
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      25.516  17.249  23.685  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      25.391  18.728  24.123  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      25.329  19.385  22.783  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      26.503  19.130  24.840  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      26.393  18.886  25.772  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      24.050  18.816  24.783  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      23.681  19.153  26.121  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      23.349  20.663  26.162  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      22.632  18.362  26.784  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      26.264  16.282  24.406  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      25.314  15.441  25.244  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      23.910  15.576  24.829  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      23.318  15.022  25.447  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      23.805  15.243  23.870  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      25.499  15.871  26.684  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      26.262  16.773  26.954  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL
+MODEL 9
+REMARK VINA RESULT:     0.003      7.360      8.904
+REMARK INTER + INTRA:          -0.796
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.796
+REMARK UNBOUND:                -0.800
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      21.093   9.361  21.996  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      19.626   9.850  21.956  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      19.141   9.102  20.757  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      19.564  11.218  21.767  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      20.127  11.467  21.017  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      19.001   9.274  23.189  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      18.411   9.904  24.326  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      16.885   9.996  24.087  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      18.705   9.365  25.664  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      22.175  10.171  22.427  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      22.532   9.805  23.859  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      21.959   8.518  24.282  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      21.104   8.338  23.757  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      21.745   8.552  25.279  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      22.039  10.935  24.737  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      21.437  11.865  24.248  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8
+ENDMDL

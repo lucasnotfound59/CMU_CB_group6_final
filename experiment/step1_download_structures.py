@@ -15,14 +15,18 @@ This script:
 import argparse
 import json
 import os
+import ssl
 import sys
 import urllib.request
 import urllib.parse
 
+import certifi
 from Bio.PDB import PDBParser, MMCIFParser, PDBIO, Select
 
 sys.path.insert(0, os.path.dirname(__file__))
 from config import PDB_DIR, TARGET_PDB_IDS
+
+HTTPS_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 # === RCSB API ===
@@ -47,7 +51,7 @@ def search_pdb(query: str, rows: int = 500) -> list[dict]:
         data=json.dumps(payload).encode(),
         headers={"Content-Type": "application/json"}
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, context=HTTPS_CONTEXT) as resp:
         data = json.loads(resp.read())
 
     results = []
@@ -82,7 +86,7 @@ def get_structure_info(pdb_id: str) -> dict:
         data=json.dumps(payload).encode(),
         headers={"Content-Type": "application/json"}
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, context=HTTPS_CONTEXT) as resp:
         data = json.loads(resp.read())
 
     entry = data["data"]["entry"]
@@ -110,7 +114,9 @@ def download_pdb(pdb_id: str, output_dir: str) -> str:
         return out_path
 
     print(f"  [download] {pdb_id} ...")
-    urllib.request.urlretrieve(url, out_path)
+    with urllib.request.urlopen(url, context=HTTPS_CONTEXT) as resp:
+        with open(out_path, "wb") as f:
+            f.write(resp.read())
     return out_path
 
 

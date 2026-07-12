@@ -1,0 +1,558 @@
+MODEL 1
+REMARK VINA RESULT:     0.000      0.000      0.000
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195      11.881   3.306   3.353  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195      11.129   2.658   4.618  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195      10.173   2.645   4.455  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195      11.738   4.898   3.225  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195      11.097   5.219   3.879  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195      11.109   2.517   2.157  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      13.339   3.825  -0.678  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195      12.328   3.733   0.275  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      14.163   2.743  -0.929  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      14.048   1.598  -0.153  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195      13.064   1.533   0.826  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195      12.216   2.600   1.053  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195      13.420   2.926   3.465  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195      14.506   3.837   3.776  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195      15.377   4.022   2.517  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195      16.741   3.666   2.801  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195      16.837   2.651   2.786  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195      16.999   4.020   3.722  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195      15.247   5.471   2.066  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195      14.179   6.087   2.201  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 2
+REMARK VINA RESULT:     0.000      8.517     10.078
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       8.489  -3.214   9.698  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       7.330  -3.631  10.731  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       7.637  -4.368  11.281  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       8.999  -4.396   8.740  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       9.415  -4.016   7.951  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195       9.629  -2.743  10.759  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      12.065  -1.367   8.133  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195      11.386  -2.239   8.980  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      11.864  -0.002   8.230  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      10.903   0.490   9.104  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195      10.200  -0.393   9.912  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195      10.426  -1.754   9.842  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       7.930  -2.022   8.806  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       7.579  -2.098   7.400  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195       8.600  -1.279   6.587  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195       7.926  -0.271   5.815  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195       7.331  -0.718   5.118  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195       8.617   0.316   5.346  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195       9.380  -2.246   5.705  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195       9.645  -3.393   6.096  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 3
+REMARK VINA RESULT:     0.000     12.249     14.261
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       3.435   1.867  10.439  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       4.255   0.499  10.651  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       4.000   0.097  11.495  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       4.294   3.207  10.639  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       4.679   3.474   9.790  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195       2.306   1.677  11.596  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195       0.222   4.746  10.615  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195       1.201   3.941  11.191  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      -0.838   4.178   9.933  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      -0.869   2.804   9.733  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195       0.137   2.013  10.274  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195       1.177   2.577  10.987  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       2.837   1.843   8.967  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       3.268   2.671   7.855  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195       2.152   3.681   7.525  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195       1.752   3.549   6.151  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195       1.396   4.443   5.813  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195       1.019   2.842   6.077  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195       2.678   5.078   7.833  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195       3.457   5.270   8.780  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 4
+REMARK VINA RESULT:     0.000      9.528     10.790
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       9.826  -4.616   6.756  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       9.031  -5.719   5.895  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       9.645  -6.416   5.618  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       9.428  -3.095   6.437  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       8.992  -3.049   5.572  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195      11.346  -4.969   6.292  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      13.069  -2.600   8.771  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195      12.422  -3.088   7.639  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      13.507  -3.469   9.754  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      13.207  -4.821   9.658  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195      12.522  -5.291   8.545  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195      12.116  -4.429   7.545  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       9.551  -4.919   8.292  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       8.742  -4.117   9.190  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195       9.665  -3.442  10.224  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195       9.258  -3.794  11.557  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195       9.798  -3.251  12.231  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195       9.423  -4.789  11.711  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195       9.611  -1.937   9.989  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195       9.487  -1.476   8.844  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 5
+REMARK VINA RESULT:     0.000     13.655     15.470
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       2.528   7.791   6.904  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       3.879   6.954   7.152  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       4.647   7.513   6.958  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       1.759   7.441   5.540  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       1.473   8.263   5.110  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195       3.150   9.295   6.895  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      -0.227  11.112   6.775  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195       0.929  10.442   6.385  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      -0.385  11.529   8.085  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195       0.567  11.183   9.035  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195       1.696  10.476   8.643  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195       1.872  10.091   7.328  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       1.562   7.517   8.135  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       0.336   6.740   8.105  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195      -0.861   7.692   8.295  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195      -1.647   7.284   9.427  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195      -1.637   6.266   9.498  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195      -2.607   7.608   9.309  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195      -1.674   7.687   7.005  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195      -1.117   7.569   5.902  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 6
+REMARK VINA RESULT:     0.000      4.177      5.101
+REMARK INTER + INTRA:          -0.687
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.687
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195      13.708   1.281   5.615  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195      12.375   1.153   6.506  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195      12.284   0.242   6.823  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195      13.480   1.858   4.136  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195      13.351   1.122   3.518  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195      14.168  -0.280   5.606  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      17.542   0.317   3.881  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195      16.183   0.098   4.089  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      18.432   0.241   4.937  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      17.952   0.051   6.226  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195      16.590  -0.121   6.428  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195      15.703  -0.083   5.369  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195      14.717   2.229   6.397  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195      15.093   3.578   6.016  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195      16.567   3.575   5.565  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195      17.329   4.507   6.350  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195      17.959   5.029   5.741  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195      17.873   3.999   7.048  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195      16.603   3.916   4.080  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195      15.699   3.540   3.318  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 7
+REMARK VINA RESULT:     0.000     14.941     16.589
+REMARK INTER + INTRA:          -0.686
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.686
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       1.676   4.950  14.856  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       1.208   6.472  15.079  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       0.240   6.515  15.088  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       0.739   3.847  15.548  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       1.260   3.050  15.733  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195       3.151   5.026  15.540  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195       4.251   1.503  14.489  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195       3.673   2.552  15.200  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195       5.085   1.762  13.417  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195       5.262   3.070  12.985  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195       4.646   4.105  13.674  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195       3.841   3.851  14.768  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       1.723   4.689  13.289  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       0.809   3.853  12.533  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195       1.566   2.603  12.042  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195       1.481   2.501  10.611  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195       2.369   2.162  10.241  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195       1.276   3.419  10.216  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195       0.965   1.388  12.738  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195       0.541   1.464  13.902  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 8
+REMARK VINA RESULT:     0.000      6.846      9.072
+REMARK INTER + INTRA:          -0.686
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.686
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195      15.592   0.970   9.857  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195      15.326  -0.613   9.747  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195      15.790  -1.069  10.466  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195      17.055   1.442   9.399  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195      17.329   0.935   8.618  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195      15.350   1.166  11.454  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      15.554   4.998  11.411  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195      15.916   3.654  11.453  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      14.223   5.366  11.489  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      13.240   4.385  11.501  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195      13.610   3.047  11.496  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195      14.941   2.678  11.457  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195      14.501   1.702   8.961  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195      14.745   2.388   7.706  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195      14.549   3.902   7.919  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195      13.556   4.407   7.011  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195      13.951   4.460   6.072  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195      13.264   5.338   7.310  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195      15.899   4.582   7.725  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195      16.951   4.017   8.065  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL
+MODEL 9
+REMARK VINA RESULT:     0.000     11.259     13.064
+REMARK INTER + INTRA:          -0.686
+REMARK INTER:                   0.000
+REMARK INTRA:                  -0.686
+REMARK UNBOUND:                -0.687
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1pqa_ligand.pdb
+REMARK  9 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_1  and  CA_15
+REMARK    2  A    between atoms: N_2  and  CA_15
+REMARK    3  A    between atoms: CZ_8  and  CE_9
+REMARK    4  A    between atoms: CE_9  and  SD_12
+REMARK    5  A    between atoms: OD2_10  and  SD_12
+REMARK    6  A    between atoms: OD1_11  and  SD_12
+REMARK    7  A    between atoms: SD_12  and  OG_13
+REMARK    8  A    between atoms: OG_13  and  CB_14
+REMARK    9  A    between atoms: CB_14  and  CA_15
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 SD   EB    195       3.262   5.757   2.924  1.00  0.00    -0.003 S 
+ENDROOT
+BRANCH   1   2
+ATOM      2 OD2  EB    195       4.474   5.264   1.989  1.00  0.00    -0.071 OA
+ATOM      3  H   EB    195       4.421   5.710   1.129  1.00  0.00    +0.000 HD
+ENDBRANCH   1   2
+BRANCH   1   4
+ATOM      4 OD1  EB    195       3.695   6.250   4.388  1.00  0.00    -0.071 OA
+ATOM      5  H   EB    195       4.656   6.380   4.414  1.00  0.00    +0.000 HD
+ENDBRANCH   1   4
+BRANCH   1   6
+ATOM      6 CE   EB    195       2.390   4.383   2.967  1.00  0.00    +0.181 C 
+BRANCH   6  12
+ATOM      7 CI2  EB    195      -0.622   5.890   4.805  1.00  0.00    -0.000 A 
+ATOM      8 CH2  EB    195       0.615   5.305   4.551  1.00  0.00    -0.003 A 
+ATOM      9 CJ   EB    195      -1.537   6.062   3.781  1.00  0.00    -0.000 A 
+ATOM     10 CI1  EB    195      -1.177   5.746   2.478  1.00  0.00    -0.000 A 
+ATOM     11 CH1  EB    195       0.077   5.204   2.230  1.00  0.00    -0.003 A 
+ATOM     12 CZ   EB    195       0.978   4.997   3.257  1.00  0.00    +0.002 A 
+ENDBRANCH   6  12
+ENDBRANCH   1   6
+BRANCH   1  13
+ATOM     13 OG   EB    195       2.526   6.945   2.168  1.00  0.00    -0.240 OA
+BRANCH  13  14
+ATOM     14 CB   EB    195       2.551   8.346   2.546  1.00  0.00    +0.199 C 
+BRANCH  14  15
+ATOM     15 CA   EB    195       1.151   8.751   3.050  1.00  0.00    +0.188 C 
+BRANCH  15  16
+ATOM     16 N    EB    195       0.648   9.856   2.283  1.00  0.00    -0.122 NA
+ATOM     17  H   EB    195       1.374  10.188   1.648  1.00  0.00    +0.000 HD
+ATOM     18  H   EB    195       0.375  10.611   2.913  1.00  0.00    +0.000 HD
+ENDBRANCH  15  16
+BRANCH  15  19
+ATOM     19 C    EB    195       1.266   9.090   4.531  1.00  0.00    +0.229 C 
+ATOM     20 O    EB    195       2.060   8.480   5.265  1.00  0.00    -0.287 OA
+ENDBRANCH  15  19
+ENDBRANCH  14  15
+ENDBRANCH  13  14
+ENDBRANCH   1  13
+TORSDOF 9
+ENDMDL

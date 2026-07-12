@@ -1,0 +1,24 @@
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/1utj_ligand.pdb
+REMARK  2 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  C_2
+REMARK    2  A    between atoms: C_2  and  C1_3
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 C1   BN    246      23.752  16.138  58.090  1.00  0.00    -0.007 A 
+ATOM      2 C2   BN    246      24.298  14.856  58.080  1.00  0.00    -0.003 A 
+ATOM      3 C3   BN    246      23.670  13.808  58.762  1.00  0.00    -0.000 A 
+ATOM      4 C4   BN    246      22.489  14.049  59.456  1.00  0.00    -0.000 A 
+ATOM      5 C5   BN    246      21.942  15.323  59.469  1.00  0.00    -0.000 A 
+ATOM      6 C6   BN    246      22.573  16.359  58.788  1.00  0.00    -0.003 A 
+ENDROOT
+BRANCH   1   7
+ATOM      7 C    BN    246      24.438  17.262  57.372  1.00  0.00    +0.092 C 
+BRANCH   7   8
+ATOM      8 N    BN    246      25.896  17.395  57.673  1.00  0.00    -0.317 NA
+ATOM      9 HN1  BN    246      26.395  16.520  57.412  1.00  0.00    +0.119 HD
+ATOM     10 HN2  BN    246      26.040  17.589  58.680  1.00  0.00    +0.119 HD
+ENDBRANCH   7   8
+ENDBRANCH   1   7
+TORSDOF 2

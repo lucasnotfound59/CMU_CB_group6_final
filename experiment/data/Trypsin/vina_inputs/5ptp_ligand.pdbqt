@@ -1,0 +1,50 @@
+REMARK  Name = /Users/jimbo.x337/Desktop/CMU_CB_group6_final/experiment/data/Trypsin/vina_inputs/5ptp_ligand.pdb
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  CB_3
+REMARK    3  A    between atoms: CA_2  and  C_12
+REMARK    4  A    between atoms: CB_3  and  OG_4
+REMARK    5  A    between atoms: OG_4  and  P_5
+REMARK    6  A    between atoms: P_5  and  O1P_6
+REMARK    7  A    between atoms: P_5  and  O3P_8
+REMARK    8  A    between atoms: O3P_8  and  C1_9
+REMARK    9  A    between atoms: C1_9  and  C2_10
+REMARK   10  A    between atoms: C1_9  and  C3_11
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 OG   IS    195      27.016  14.453  22.189  1.00  0.00    -0.270 OA
+ENDROOT
+BRANCH   1   2
+ATOM      2 P    IS    195      28.243  13.515  22.101  1.00  0.00    +0.506 P 
+ATOM      3 O2P  IS    195      27.638  12.255  22.629  1.00  0.00    -0.225 OA
+BRANCH   2   4
+ATOM      4 O1P  IS    195      29.272  13.966  22.907  1.00  0.00    -0.116 OA
+ATOM      5  H   IS    195      29.640  14.783  22.535  1.00  0.00    +0.000 HD
+ENDBRANCH   2   4
+BRANCH   2   6
+ATOM      6 O3P  IS    195      28.502  13.366  20.634  1.00  0.00    -0.274 OA
+BRANCH   6   7
+ATOM      7 C1   IS    195      29.002  14.292  19.669  1.00  0.00    +0.126 C 
+ATOM      8 C2   IS    195      29.864  13.508  18.652  1.00  0.00    +0.033 C 
+ATOM      9 C3   IS    195      28.049  15.179  18.982  1.00  0.00    +0.033 C 
+ENDBRANCH   6   7
+ENDBRANCH   2   6
+ENDBRANCH   1   2
+BRANCH   1  10
+ATOM     10 CB   IS    195      26.665  15.172  23.361  1.00  0.00    +0.181 C 
+BRANCH  10  11
+ATOM     11 CA   IS    195      27.008  16.640  23.166  1.00  0.00    +0.186 C 
+BRANCH  11  12
+ATOM     12 N    IS    195      28.456  16.893  23.141  1.00  0.00    -0.122 NA
+ATOM     13  H   IS    195      28.879  16.370  22.375  1.00  0.00    +0.000 HD
+ATOM     14  H   IS    195      28.869  16.595  24.025  1.00  0.00    +0.000 HD
+ENDBRANCH  11  12
+BRANCH  11  15
+ATOM     15 C    IS    195      26.342  17.401  24.293  1.00  0.00    +0.229 C 
+ATOM     16 O    IS    195      26.880  17.475  25.376  1.00  0.00    -0.287 OA
+ENDBRANCH  11  15
+ENDBRANCH  10  11
+ENDBRANCH   1  10
+TORSDOF 8

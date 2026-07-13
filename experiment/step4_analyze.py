@@ -204,6 +204,9 @@ def analyze():
 
 def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     """Generate analysis figures."""
+    ligands = [a["ligand_from"] for a in analysis]
+    unique_ligands = sorted(set(ligands))
+    ligand_colors = _make_category_colors(unique_ligands)
 
     # --- Figure 1: B-factor vs RMSD scatter ---
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -227,6 +230,83 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {fig_path}")
+
+    # --- Figure 1b: B-factor vs RMSD, colored by original ligand structure ---
+    fig, ax = plt.subplots(figsize=(10, 7))
+    for ligand in unique_ligands:
+        ligand_rows = [a for a in analysis if a["ligand_from"] == ligand]
+        x = [a["receptor_pocket_avg_bfactor"] for a in ligand_rows]
+        y = [a["rmsd"] for a in ligand_rows]
+        ax.scatter(
+            x, y,
+            color=ligand_colors[ligand],
+            alpha=0.75,
+            s=32,
+            edgecolors="gray",
+            linewidth=0.4,
+            label=ligand,
+        )
+
+    ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
+    ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
+    ax.set_title("B-factor vs Docking RMSD by Original Ligand Structure", fontsize=14)
+    ax.axhline(
+        y=RMSD_SUCCESS_THRESHOLD,
+        color="gray",
+        linestyle="--",
+        alpha=0.6,
+        label=f"RMSD = {RMSD_SUCCESS_THRESHOLD:g}Å",
+    )
+    _add_ligand_legend(ax, unique_ligands)
+
+    fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_rmsd_by_ligand.png")
+    fig.savefig(fig_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {fig_path}")
+
+    # --- Figure 1c: Docking score / affinity vs B-factor ---
+    score_rows = [
+        a for a in analysis
+        if a.get("affinity") not in (None, "")
+        and a.get("receptor_pocket_avg_bfactor") is not None
+    ]
+    if score_rows:
+        fig, ax = plt.subplots(figsize=(10, 7))
+        for ligand in unique_ligands:
+            ligand_rows = [a for a in score_rows if a["ligand_from"] == ligand]
+            if not ligand_rows:
+                continue
+            x = [a["receptor_pocket_avg_bfactor"] for a in ligand_rows]
+            y = [float(a["affinity"]) for a in ligand_rows]
+            ax.scatter(
+                x, y,
+                color=ligand_colors[ligand],
+                alpha=0.75,
+                s=32,
+                edgecolors="gray",
+                linewidth=0.4,
+                label=ligand,
+            )
+
+        score_bfactors = [a["receptor_pocket_avg_bfactor"] for a in score_rows]
+        scores = [float(a["affinity"]) for a in score_rows]
+        if len(score_bfactors) > 2 and len(set(score_bfactors)) > 1:
+            z = np.polyfit(score_bfactors, scores, 1)
+            p = np.poly1d(z)
+            x_line = np.linspace(min(score_bfactors), max(score_bfactors), 100)
+            ax.plot(x_line, p(x_line), "k--", alpha=0.5, label="Linear fit")
+
+        ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
+        ax.set_ylabel("Vina Affinity / Docking Score (kcal/mol)", fontsize=12)
+        ax.set_title("Docking Score vs B-factor by Original Ligand Structure", fontsize=14)
+        _add_ligand_legend(ax, unique_ligands)
+
+        fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_docking_score_by_ligand.png")
+        fig.savefig(fig_path, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved: {fig_path}")
+    else:
+        print("Skipped: no affinity values available for score-vs-B-factor figure")
 
     # --- Figure 2: B-factor distribution (success vs failure) ---
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -253,6 +333,42 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {fig_path}")
+
+
+def _make_category_colors(labels):
+    """Return stable matplotlib colors for categorical ligand labels."""
+    if not labels:
+        return {}
+
+    cmap_name = "tab20" if len(labels) <= 20 else "nipy_spectral"
+    cmap = plt.get_cmap(cmap_name, max(len(labels), 1))
+    return {label: cmap(i) for i, label in enumerate(labels)}
+
+
+def _add_ligand_legend(ax, labels):
+    """Add a compact outside legend when ligand count is reasonable."""
+    if len(labels) <= 20:
+        ncol = 1 if len(labels) <= 12 else 2
+        ax.legend(
+            title="Original ligand structure",
+            bbox_to_anchor=(1.02, 1),
+            loc="upper left",
+            borderaxespad=0,
+            fontsize=8,
+            ncol=ncol,
+        )
+    else:
+        # Too many ligands for a readable legend; color still encodes ligand identity.
+        ax.text(
+            0.99,
+            0.01,
+            f"{len(labels)} ligand structures colored",
+            transform=ax.transAxes,
+            ha="right",
+            va="bottom",
+            fontsize=9,
+            color="dimgray",
+        )
 
 
 if __name__ == "__main__":

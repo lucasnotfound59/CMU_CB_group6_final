@@ -380,6 +380,112 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     plt.close(fig)
     print(f"Saved: {fig_path}")
 
+    # --- Figure 4: B-factor vs RMSD spread per receptor ---
+    # Hypothesis: higher B-factor → wider RMSD variance across ligands
+    from collections import defaultdict
+    rec_rmsds = defaultdict(list)
+    rec_bfactor = {}
+    for a in analysis:
+        rec = a["receptor"]
+        rec_rmsds[rec].append(a["rmsd"])
+        if rec not in rec_bfactor:
+            rec_bfactor[rec] = a["receptor_pocket_avg_bfactor"]
+
+    rec_list = sorted(rec_bfactor, key=lambda r: rec_bfactor[r])
+    bf_vals = [rec_bfactor[r] for r in rec_list]
+    rmsd_stds = [np.std(rec_rmsds[r]) for r in rec_list]
+    rmsd_means = [np.mean(rec_rmsds[r]) for r in rec_list]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+    # 4a: B-factor vs RMSD std
+    ax1.scatter(bf_vals, rmsd_stds, c="coral", s=50, edgecolors="gray", linewidth=0.5, alpha=0.8)
+    for i, r in enumerate(rec_list):
+        ax1.annotate(r, (bf_vals[i], rmsd_stds[i]), fontsize=5, alpha=0.6,
+                     xytext=(3, 2), textcoords="offset points")
+    if len(bf_vals) > 2:
+        z = np.polyfit(bf_vals, rmsd_stds, 1)
+        p = np.poly1d(z)
+        x_line = np.linspace(min(bf_vals), max(bf_vals), 100)
+        ax1.plot(x_line, p(x_line), "k--", alpha=0.5, label="Linear fit")
+        r_corr, p_corr = stats.spearmanr(bf_vals, rmsd_stds)
+        ax1.set_title(f"B-factor vs RMSD Spread (Spearman ρ={r_corr:.3f}, p={p_corr:.3f})", fontsize=12)
+        ax1.legend()
+    else:
+        ax1.set_title("B-factor vs RMSD Spread", fontsize=12)
+    ax1.set_xlabel("Receptor Pocket Avg B-factor (Å²)", fontsize=11)
+    ax1.set_ylabel("RMSD Std across all ligands (Å)", fontsize=11)
+
+    # 4b: B-factor vs RMSD mean
+    ax2.scatter(bf_vals, rmsd_means, c="steelblue", s=50, edgecolors="gray", linewidth=0.5, alpha=0.8)
+    for i, r in enumerate(rec_list):
+        ax2.annotate(r, (bf_vals[i], rmsd_means[i]), fontsize=5, alpha=0.6,
+                     xytext=(3, 2), textcoords="offset points")
+    if len(bf_vals) > 2:
+        z2 = np.polyfit(bf_vals, rmsd_means, 1)
+        p2 = np.poly1d(z2)
+        ax2.plot(x_line, p2(x_line), "k--", alpha=0.5, label="Linear fit")
+        r_corr2, p_corr2 = stats.spearmanr(bf_vals, rmsd_means)
+        ax2.set_title(f"B-factor vs Mean RMSD (Spearman ρ={r_corr2:.3f}, p={p_corr2:.3f})", fontsize=12)
+        ax2.legend()
+    else:
+        ax2.set_title("B-factor vs Mean RMSD", fontsize=12)
+    ax2.set_xlabel("Receptor Pocket Avg B-factor (Å²)", fontsize=11)
+    ax2.set_ylabel("Mean RMSD across all ligands (Å)", fontsize=11)
+
+    fig.tight_layout()
+    fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_rmsd_spread.png")
+    fig.savefig(fig_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {fig_path}")
+
+    # --- Figure 5: Self-docking vs Cross-docking RMSD per receptor ---
+    self_rows = [a for a in analysis if a["receptor"] == a["ligand_from"]]
+    cross_rows = [a for a in analysis if a["receptor"] != a["ligand_from"]]
+    if self_rows and cross_rows:
+        # Group cross-docking RMSD by receptor
+        cross_by_rec = defaultdict(list)
+        for a in cross_rows:
+            cross_by_rec[a["receptor"]].append(a["rmsd"])
+        self_by_rec = {a["receptor"]: a["rmsd"] for a in self_rows}
+
+        common_recs = sorted(set(self_by_rec) & set(cross_by_rec))
+        if common_recs:
+            fig, ax = plt.subplots(figsize=(12, 6))
+            x_pos = np.arange(len(common_recs))
+
+            self_vals = [self_by_rec[r] for r in common_recs]
+            cross_means = [np.mean(cross_by_rec[r]) for r in common_recs]
+            cross_stds = [np.std(cross_by_rec[r]) for r in common_recs]
+
+            ax.bar(x_pos - 0.2, self_vals, 0.4, color="#2196F3", alpha=0.8, label="Self-docking RMSD")
+            ax.bar(x_pos + 0.2, cross_means, 0.4, yerr=cross_stds, capsize=3,
+                   color="#FF9800", alpha=0.8, label="Cross-docking mean ± std")
+
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels(common_recs, rotation=90, fontsize=6)
+            ax.axhline(y=RMSD_SUCCESS_THRESHOLD, color="red", linestyle="--", alpha=0.5,
+                       label=f"RMSD = {RMSD_SUCCESS_THRESHOLD}Å")
+            ax.set_xlabel("Receptor (PDB ID)", fontsize=11)
+            ax.set_ylabel("RMSD (Å)", fontsize=11)
+            ax.set_title("Self-Docking vs Cross-Docking RMSD per Receptor", fontsize=13)
+            ax.legend(fontsize=9)
+
+            fig.tight_layout()
+            fig_path = os.path.join(FIGURES_DIR, "self_vs_cross_docking.png")
+            fig.savefig(fig_path, dpi=150, bbox_inches="tight")
+            plt.close(fig)
+            print(f"Saved: {fig_path}")
+
+            # Print summary stats
+            self_success = sum(1 for r in common_recs if self_by_rec[r] < RMSD_SUCCESS_THRESHOLD)
+            cross_success = sum(1 for r in common_recs
+                                if np.mean(cross_by_rec[r]) < RMSD_SUCCESS_THRESHOLD)
+            print(f"  Self-docking success: {self_success}/{len(common_recs)}")
+            print(f"  Cross-docking mean success: {cross_success}/{len(common_recs)}")
+    else:
+        print("Skipped self-vs-cross figure: no self-docking data found")
+
 
 def _make_category_colors(labels):
     """Return stable matplotlib colors for categorical ligand labels."""

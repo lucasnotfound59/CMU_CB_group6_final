@@ -49,6 +49,12 @@ TARGET_PDB_IDS_BY_NAME = {
         '1MBQ', '1UTJ', '1BIT', '7JR2', '1AVX', '6DWF',
         '1YF4', '6DWH', '2FPZ', '7JR1', '1UHB', '1TX6',
     ],
+    # CDK6: X-ray structures from RCSB full-text survey, resolution <= 3.0 A.
+    "CDK6": [
+        '1BLX', '6OQO', '5L2S', '4AUA', '5L2T', '3NUP',
+        '3NUX', '4EZ5', '6OQL', '5L2I', '8I0M', '1BI8',
+        '2F2C', '4TTH', '1G3N', '1XO2', '2EUF',
+    ],
 }
 
 TARGET_PDB_IDS = TARGET_PDB_IDS_BY_NAME.get(TARGET_NAME, TARGET_PDB_IDS_BY_NAME["CDK2"])

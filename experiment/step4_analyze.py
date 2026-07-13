@@ -49,6 +49,7 @@ def load_csv(path: str) -> list[dict]:
 def analyze():
     # === Load data ===
     bfactor_path = os.path.join(OUTPUT_DIR, "bfactor_summary.csv")
+    structure_path = os.path.join(OUTPUT_DIR, "bfactor_per_structure.csv")
     docking_path = os.path.join(OUTPUT_DIR, "cross_docking_results.csv")
 
     if not os.path.exists(bfactor_path):
@@ -59,6 +60,7 @@ def analyze():
         sys.exit(1)
 
     bfactors = load_csv(bfactor_path)
+    structures = load_csv(structure_path) if os.path.exists(structure_path) else []
     docking = load_csv(docking_path)
 
     print(f"Loaded {len(bfactors)} residue records, {len(docking)} docking pairs\n")
@@ -71,6 +73,11 @@ def analyze():
         if pdb not in bf_by_pdb:
             bf_by_pdb[pdb] = []
         bf_by_pdb[pdb].append(r)
+
+    native_ligand_by_pdb = {
+        r["pdb_id"]: r.get("ligand", "")
+        for r in structures
+    }
 
     # === Merge: for each docking pair, get receptor B-factor stats ===
     analysis = []
@@ -100,7 +107,9 @@ def analyze():
 
         analysis.append({
             "receptor": rec,
+            "receptor_native_ligand": native_ligand_by_pdb.get(rec, ""),
             "ligand_from": pair["ligand_from"],
+            "docked_ligand_native_ligand": native_ligand_by_pdb.get(pair["ligand_from"], ""),
             "rmsd": rmsd,
             "affinity": pair.get("affinity"),
             "receptor_pocket_avg_bfactor": round(np.mean(avg_bf), 2) if avg_bf else None,
@@ -169,7 +178,8 @@ def analyze():
 
     # === Save analysis CSV ===
     csv_path = os.path.join(OUTPUT_DIR, "analysis_summary.csv")
-    fieldnames = ["receptor", "ligand_from", "rmsd", "affinity",
+    fieldnames = ["receptor", "receptor_native_ligand", "ligand_from",
+                  "docked_ligand_native_ligand", "rmsd", "affinity",
                   "receptor_pocket_avg_bfactor", "receptor_pocket_max_bfactor",
                   "receptor_pocket_std_bfactor", "receptor_mean_relative_bfactor",
                   "n_high_bfactor_residues", "high_bfactor_residues", "success"]
@@ -231,7 +241,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     plt.close(fig)
     print(f"Saved: {fig_path}")
 
-    # --- Figure 1b: B-factor vs RMSD, colored by original ligand structure ---
+    # --- Figure 1b: B-factor vs RMSD, labeled by receptor-native ligand ---
     fig, ax = plt.subplots(figsize=(10, 7))
     for ligand in unique_ligands:
         ligand_rows = [a for a in analysis if a["ligand_from"] == ligand]
@@ -248,7 +258,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
         )
         for a in ligand_rows:
             ax.annotate(
-                a["ligand_from"],
+                _native_ligand_label(a),
                 (
                     a["receptor_pocket_avg_bfactor"],
                     a["rmsd"],
@@ -262,7 +272,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
 
     ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
     ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
-    ax.set_title("B-factor vs Docking RMSD by Original Ligand Structure", fontsize=14)
+    ax.set_title("B-factor vs Docking RMSD (labels = receptor native ligand)", fontsize=14)
     ax.axhline(
         y=RMSD_SUCCESS_THRESHOLD,
         color="gray",
@@ -302,7 +312,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
             )
             for a in ligand_rows:
                 ax.annotate(
-                    a["ligand_from"],
+                    _native_ligand_label(a),
                     (
                         a["receptor_pocket_avg_bfactor"],
                         float(a["affinity"]),
@@ -324,7 +334,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
 
         ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
         ax.set_ylabel("Vina Affinity / Docking Score (kcal/mol)", fontsize=12)
-        ax.set_title("Docking Score vs B-factor by Original Ligand Structure", fontsize=14)
+        ax.set_title("Docking Score vs B-factor (labels = receptor native ligand)", fontsize=14)
         _add_ligand_legend(ax, unique_ligands)
 
         fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_docking_score_by_ligand.png")
@@ -395,6 +405,12 @@ def _add_ligand_legend(ax, labels):
             fontsize=9,
             color="dimgray",
         )
+
+
+def _native_ligand_label(row):
+    """Label a point with the receptor structure and its own co-crystal ligand."""
+    ligand = row.get("receptor_native_ligand") or "native?"
+    return f"{row['receptor']}:{ligand}"
 
 
 if __name__ == "__main__":

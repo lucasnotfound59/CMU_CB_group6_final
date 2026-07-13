@@ -246,6 +246,19 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
             linewidth=0.4,
             label=ligand,
         )
+        for a in ligand_rows:
+            ax.annotate(
+                a["ligand_from"],
+                (
+                    a["receptor_pocket_avg_bfactor"],
+                    a["rmsd"],
+                ),
+                xytext=(3, 2),
+                textcoords="offset points",
+                fontsize=5,
+                alpha=0.65,
+                color="black",
+            )
 
     ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
     ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
@@ -287,6 +300,19 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
                 linewidth=0.4,
                 label=ligand,
             )
+            for a in ligand_rows:
+                ax.annotate(
+                    a["ligand_from"],
+                    (
+                        a["receptor_pocket_avg_bfactor"],
+                        float(a["affinity"]),
+                    ),
+                    xytext=(3, 2),
+                    textcoords="offset points",
+                    fontsize=5,
+                    alpha=0.65,
+                    color="black",
+                )
 
         score_bfactors = [a["receptor_pocket_avg_bfactor"] for a in score_rows]
         scores = [float(a["affinity"]) for a in score_rows]

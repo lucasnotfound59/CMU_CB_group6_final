@@ -164,6 +164,12 @@ def analyze():
     fail_rmsds = [a["rmsd"] for a in analysis if not a["success"]]
     print(f"\nCross-docking success rate: {len(success_rmsds)}/{len(analysis)} "
           f"({100*len(success_rmsds)/len(analysis):.1f}%)")
+    native_rows = [a for a in analysis if _is_native_interaction(a)]
+    if native_rows:
+        print(f"Native/self interactions available for labeling: {len(native_rows)}")
+    else:
+        print("Native/self interactions available for labeling: 0 "
+              "(cross-docking excludes receptor == ligand_from)")
 
     # T-test: B-factor of successful vs failed pairs
     success_bf = [a["receptor_pocket_avg_bfactor"] for a in analysis if a["success"]]
@@ -241,7 +247,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     plt.close(fig)
     print(f"Saved: {fig_path}")
 
-    # --- Figure 1b: B-factor vs RMSD, labeled by receptor-native ligand ---
+    # --- Figure 1b: B-factor vs RMSD, colored by original ligand structure ---
     fig, ax = plt.subplots(figsize=(10, 7))
     for ligand in unique_ligands:
         ligand_rows = [a for a in analysis if a["ligand_from"] == ligand]
@@ -257,22 +263,24 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
             label=ligand,
         )
         for a in ligand_rows:
-            ax.annotate(
-                _native_ligand_label(a),
-                (
-                    a["receptor_pocket_avg_bfactor"],
-                    a["rmsd"],
-                ),
-                xytext=(3, 2),
-                textcoords="offset points",
-                fontsize=5,
-                alpha=0.65,
-                color="black",
-            )
+            if _is_native_interaction(a):
+                ax.annotate(
+                    _native_ligand_label(a),
+                    (
+                        a["receptor_pocket_avg_bfactor"],
+                        a["rmsd"],
+                    ),
+                    xytext=(4, 3),
+                    textcoords="offset points",
+                    fontsize=8,
+                    fontweight="bold",
+                    alpha=0.9,
+                    color="black",
+                )
 
     ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
     ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
-    ax.set_title("B-factor vs Docking RMSD (labels = receptor native ligand)", fontsize=14)
+    ax.set_title("B-factor vs Docking RMSD by Original Ligand Structure", fontsize=14)
     ax.axhline(
         y=RMSD_SUCCESS_THRESHOLD,
         color="gray",
@@ -311,18 +319,20 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
                 label=ligand,
             )
             for a in ligand_rows:
-                ax.annotate(
-                    _native_ligand_label(a),
-                    (
-                        a["receptor_pocket_avg_bfactor"],
-                        float(a["affinity"]),
-                    ),
-                    xytext=(3, 2),
-                    textcoords="offset points",
-                    fontsize=5,
-                    alpha=0.65,
-                    color="black",
-                )
+                if _is_native_interaction(a):
+                    ax.annotate(
+                        _native_ligand_label(a),
+                        (
+                            a["receptor_pocket_avg_bfactor"],
+                            float(a["affinity"]),
+                        ),
+                        xytext=(4, 3),
+                        textcoords="offset points",
+                        fontsize=8,
+                        fontweight="bold",
+                        alpha=0.9,
+                        color="black",
+                    )
 
         score_bfactors = [a["receptor_pocket_avg_bfactor"] for a in score_rows]
         scores = [float(a["affinity"]) for a in score_rows]
@@ -334,7 +344,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
 
         ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
         ax.set_ylabel("Vina Affinity / Docking Score (kcal/mol)", fontsize=12)
-        ax.set_title("Docking Score vs B-factor (labels = receptor native ligand)", fontsize=14)
+        ax.set_title("Docking Score vs B-factor by Original Ligand Structure", fontsize=14)
         _add_ligand_legend(ax, unique_ligands)
 
         fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_docking_score_by_ligand.png")
@@ -411,6 +421,11 @@ def _native_ligand_label(row):
     """Label a point with the receptor structure and its own co-crystal ligand."""
     ligand = row.get("receptor_native_ligand") or "native?"
     return f"{row['receptor']}:{ligand}"
+
+
+def _is_native_interaction(row):
+    """True when the docked ligand comes from the same structure as the receptor."""
+    return row.get("receptor", "").upper() == row.get("ligand_from", "").upper()
 
 
 if __name__ == "__main__":

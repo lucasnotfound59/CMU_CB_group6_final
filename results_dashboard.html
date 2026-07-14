@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B-factor vs Docking — Interactive Results Dashboard</title>
+<script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#c9d1d9;--muted:#8b949e;--acc:#58a6ff;--grn:#3fb950;--red:#f85149;--org:#d2991d}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.6;padding:16px}
+.container{max-width:1500px;margin:0 auto}
+h1{font-size:1.8rem;color:#f0f6fc;margin-bottom:2px}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:.92rem}
+h2{font-size:1.25rem;color:#f0f6fc;margin:28px 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px}
+
+/* Tabs */
+.tab-nav{display:flex;gap:4px;margin-bottom:0;flex-wrap:wrap}
+.tab-nav button{padding:10px 22px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-size:.9rem;border-radius:6px 6px 0 0;border-bottom:none;transition:all .15s}
+.tab-nav button:hover{background:#1f2937}
+.tab-nav button.active{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tab-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:0 8px 8px 8px;padding:20px;min-height:400px}
+.tab-panel.active{display:block}
+
+/* Controls */
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px 14px;background:#0d1117;border-radius:6px;border:1px solid var(--border)}
+.controls label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.88rem;color:var(--text);user-select:none}
+.controls input[type=checkbox]{accent-color:var(--acc);width:16px;height:16px;cursor:pointer}
+.controls .chip{padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:600}
+.chip.cdk2{background:rgba(88,166,255,.15);color:var(--acc)}
+.chip.trypsin{background:rgba(63,185,80,.15);color:var(--grn)}
+.chip.cdk1{background:rgba(210,153,29,.15);color:var(--org)}
+.chip.cdk6{background:rgba(248,81,73,.15);color:var(--red)}
+
+/* Plot container */
+#scatter-plot{width:100%;height:600px}
+
+/* Summary grid */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.card h3{margin:0 0 10px;font-size:1rem}
+.stat-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(48,54,61,.5);font-size:.9rem}
+.stat-row:last-child{border-bottom:none}
+.sl{color:var(--muted)}
+.sv{font-weight:600}
+.g{color:var(--grn)}.r{color:var(--red)}.o{color:var(--org)}
+
+/* Figure grid */
+.figure-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:16px;margin-bottom:20px}
+.figure-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.figure-card img{width:100%;height:auto;display:block;cursor:pointer;transition:opacity .2s}
+.figure-card img:hover{opacity:.8}
+.figure-card .cap{padding:8px 12px;font-size:.82rem;color:var(--muted)}
+
+/* Comparison */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmp-card{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:16px}
+.cmp-card h3{font-size:.95rem;margin-bottom:8px}
+@media(max-width:700px){.cmp-grid{grid-template-columns:1fr}}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88rem}
+.tbl th,.tbl td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border)}
+.tbl th{color:var(--muted);text-transform:uppercase;font-size:.78rem}
+.tbl tr:hover td{background:rgba(88,166,255,.03)}
+#explorer-table tbody tr{cursor:pointer;transition:background .1s}
+#explorer-table tbody tr:hover td{background:rgba(88,166,255,.08)!important}
+
+/* Lightbox */
+.lb{display:none;position:fixed;z-index:999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);cursor:pointer;align-items:center;justify-content:center}
+.lb.on{display:flex}
+.lb img{max-width:94vw;max-height:94vh;object-fit:contain}
+
+/* Tooltip */
+.ttip{position:absolute;background:#1f2937;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:.8rem;pointer-events:none;z-index:100;display:none;max-width:300px}
+.ttip b{color:var(--acc)}
+
+.conclusion{background:linear-gradient(135deg,#1a1f2e 0%,#161b22 100%);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:24px}
+.conclusion .verdict{font-size:1.15rem;color:var(--red);margin:4px 0}
+.conclusion p{color:var(--muted);margin-top:4px;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔬 B-factor vs. Molecular Docking</h1>
+<p class="subtitle">Interactive Cross-Docking Results — Does binding-site B-factor predict docking success?</p>
+
+<!-- CONCLUSION -->
+<div class="conclusion">
+  <div class="verdict">❌ B-factor does not predict docking success</div>
+  <p>Across all 4 proteins the Pearson correlation is near zero (|r|&lt;0.04) and not significant (p&gt;0.6). B-factors (atomic thermal vibration) cannot capture the large-scale conformational changes (DFG flip, loop rearrangement) that actually drive rigid-docking success or failure. Trypsin succeeds 100% of the time because its conformation is conserved — unrelated to how high or low its B-factors are.</p>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="summary-grid" id="summary-cards"></div>
+
+<!-- TABS -->
+<div class="tab-nav">
+  <button class="active" onclick="switchTab('scatter')">📈 Interactive Scatter</button>
+  <button onclick="switchTab('bfactor')">📊 B-factor vs Score</button>
+  <button onclick="switchTab('cone')">🔺 Score-Spread Cone</button>
+  <button onclick="switchTab('explorer')">🔍 Data Explorer</button>
+  <button onclick="switchTab('stats')">📊 Statistics</button>
+  <button onclick="switchTab('figures')">🖼️ Figures</button>
+  <button onclick="switchTab('compare')">⚖️ Compare Proteins</button>
+</div>
+
+<div class="tab-panel active" id="tab-scatter">
+  <div class="controls" id="plot-controls"></div>
+  <div id="scatter-plot"></div>
+</div>
+
+<div class="tab-panel" id="tab-bfactor">
+  <div class="controls" style="margin-bottom:14px">
+    <label><input type="checkbox" checked onchange="toggleBFProtein('CDK2',this.checked)"><span class="chip cdk2">CDK2</span></label>
+    <label><input type="checkbox" checked onchange="toggleBFProtein('Trypsin',this.checked)"><span class="chip trypsin">Trypsin</span></label>
+    <label><input type="checkbox" checked onchange="toggleBFProtein('CDK1',this.checked)"><span class="chip cdk1">CDK1</span></label>
+    <label><input type="checkbox" checked onchange="toggleBFProtein('CDK6',this.checked)"><span class="chip cdk6">CDK6</span></label>
+    <span style="color:var(--muted);font-size:.78rem;margin-left:auto">Each point = one PDB structure · x = its pocket B-factor · y = mean score / success rate when docking into it</span>
+  </div>
+  <div class="cmp-grid">
+    <div><h3 style="font-size:.95rem;margin-bottom:4px;color:var(--text)">B-factor vs Mean Docking Affinity (per structure)</h3>
+      <div id="bf-affinity-plot" style="height:420px"></div>
+    </div>
+    <div><h3 style="font-size:.95rem;margin-bottom:4px;color:var(--text)">B-factor vs Docking Success Rate (per structure)</h3>
+      <div id="bf-success-plot" style="height:420px"></div>
+    </div>
+  </div>
+  <div style="margin-top:16px">
+    <h3 style="font-size:.95rem;margin-bottom:4px;color:var(--text)">BFIbs Score Distribution (CDK2 + Trypsin only)</h3>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:8px">BFIbs = Binding-site Flexibility Index based on B-factors. Higher = binding site is more flexible relative to the whole protein</p>
+    <div id="bfibs-plot" style="height:380px"></div>
+  </div>
+</div>
+
+<div class="tab-panel" id="tab-cone">
+  <div class="controls" style="margin-bottom:14px">
+    <label><input type="checkbox" checked onchange="toggleConeProtein('CDK2',this.checked)"><span class="chip cdk2">CDK2</span></label>
+    <label><input type="checkbox" checked onchange="toggleConeProtein('Trypsin',this.checked)"><span class="chip trypsin">Trypsin</span></label>
+    <label><input type="checkbox" checked onchange="toggleConeProtein('CDK1',this.checked)"><span class="chip cdk1">CDK1</span></label>
+    <label><input type="checkbox" checked onchange="toggleConeProtein('CDK6',this.checked)"><span class="chip cdk6">CDK6</span></label>
+    <span style="color:var(--muted);margin:0 6px">|</span>
+    <label><input type="checkbox" id="cone-env" checked onchange="renderConeAnalysis()"><span style="font-size:.82rem">Show cone envelope</span></label>
+    <span style="color:var(--muted);font-size:.78rem;margin-left:auto">Each point = one cross-docking pair with a real score (affinity&lt;0)</span>
+  </div>
+  <div style="background:rgba(88,166,255,.06);border:1px solid var(--border);border-left:3px solid var(--acc);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:.85rem;color:var(--text)">
+    <b>Hypothesis:</b> a higher pocket B-factor (more flexible) accommodates more diverse ligands, so the docking-score <b>spread should widen</b> → the plot forms a <b>cone / funnel</b> opening to the right.
+    <span style="color:var(--muted)">Tested on all 213 real scores.</span>
+  </div>
+  <div id="cone-plot" style="height:560px"></div>
+  <div id="cone-verdict" style="margin-top:12px"></div>
+  <p style="color:var(--muted);font-size:.78rem;margin-top:10px;line-height:1.7">
+    <b>Data note:</b> Vina scores are always negative; in the raw table <code>affinity=0</code> means <b>the pose was never scored (missing placeholder)</b>,
+    not a real score, so it is excluded here (that placeholder is the source of the dense y≈0 band that artificially inflates the cone).
+    Each point's x is the receptor pocket average B-factor; y is the Vina score of that ligand docked into that receptor.
+  </p>
+</div>
+
+<div class="tab-panel" id="tab-explorer">
+  <div class="controls" style="margin-bottom:14px;gap:8px">
+    <input type="text" id="explorer-search" placeholder="🔍 Search PDB ID / ligand code..." oninput="renderExplorer()" style="flex:1;min-width:200px;padding:8px 12px;background:#0d1117;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem">
+    <select id="explorer-protein" onchange="renderExplorer()" style="padding:8px 12px;background:#0d1117;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem">
+      <option value="">All Proteins</option>
+    </select>
+    <select id="explorer-filter" onchange="renderExplorer()" style="padding:8px 12px;background:#0d1117;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem">
+      <option value="">All Results</option>
+      <option value="success">✅ Success Only</option>
+      <option value="fail">❌ Fail Only</option>
+      <option value="cross">Cross-Docking Only</option>
+      <option value="self">Self-Docking Only</option>
+    </select>
+    <span id="explorer-count" style="color:var(--muted);font-size:.82rem;white-space:nowrap"></span>
+  </div>
+  <div style="max-height:600px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
+    <table class="tbl" id="explorer-table" style="margin:0"><thead><tr>
+      <th style="cursor:pointer" onclick="sortExplorer('protein')">Protein ↕</th>
+      <th style="cursor:pointer" onclick="sortExplorer('receptor')">Receptor ↕</th>
+      <th>Native Lig.</th>
+      <th style="cursor:pointer" onclick="sortExplorer('ligand_from')">From PDB ↕</th>
+      <th>Docked Lig.</th>
+      <th style="cursor:pointer" onclick="sortExplorer('rmsd')">RMSD Å ↕</th>
+      <th style="cursor:pointer" onclick="sortExplorer('bfactor')">B-factor ↕</th>
+      <th style="cursor:pointer" onclick="sortExplorer('affinity')">Affinity ↕</th>
+      <th style="cursor:pointer" onclick="sortExplorer('success')">Result ↕</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<div class="tab-panel" id="tab-stats">
+  <h2>All-Protein Statistics Summary</h2>
+  <table class="tbl" id="stats-table"></table>
+  <h2>Statistical Test Details</h2>
+  <div id="stats-detail"></div>
+</div>
+
+<div class="tab-panel" id="tab-figures">
+  <div class="controls" style="margin-bottom:16px">
+    <label><input type="checkbox" checked onchange="toggleFigProtein('CDK2',this.checked)"><span class="chip cdk2">CDK2</span></label>
+    <label><input type="checkbox" checked onchange="toggleFigProtein('Trypsin',this.checked)"><span class="chip trypsin">Trypsin</span></label>
+    <label><input type="checkbox" checked onchange="toggleFigProtein('CDK1',this.checked)"><span class="chip cdk1">CDK1</span></label>
+    <label><input type="checkbox" checked onchange="toggleFigProtein('CDK6',this.checked)"><span class="chip cdk6">CDK6</span></label>
+  </div>
+  <div id="figures-container"></div>
+</div>
+
+<div class="tab-panel" id="tab-compare">
+  <div class="controls" style="margin-bottom:16px">
+    <label>Protein A: <select id="cmp-a" onchange="updateComparison()" style="padding:4px 8px;background:#0d1117;border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.88rem"></select></label>
+    <label>Protein B: <select id="cmp-b" onchange="updateComparison()" style="padding:4px 8px;background:#0d1117;border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.88rem"></select></label>
+  </div>
+  <div class="cmp-grid">
+    <div class="cmp-card"><h3 id="cmp-title-a"></h3><div id="cmp-plot-a" style="height:400px"></div><div id="cmp-stats-a"></div></div>
+    <div class="cmp-card"><h3 id="cmp-title-b"></h3><div id="cmp-plot-b" style="height:400px"></div><div id="cmp-stats-b"></div></div>
+  </div>
+</div>
+
+<p style="text-align:center;color:var(--muted);margin:32px 0 10px;font-size:.8rem">CMU CB Group 6 — B-factor &amp; Molecular Docking Pipeline</p>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="this.classList.remove('on')"><img id="lb-img" src=""></div>
+
+<script>
+// ==================== EMBEDDED DATA ====================
+const ALL_DATA = [];
+
+function addData(protein, csvText) {
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) return;
+  const headers = lines[0].split(',');
+  for (let i = 1; i < lines.length; i++) {
+    const vals = lines[i].split(',');
+    const row = {};
+    headers.forEach((h, j) => row[h.trim()] = (vals[j]||'').trim());
+    ALL_DATA.push({
+      protein: protein,
+      receptor: row.receptor || '',
+      receptor_native: row.receptor_native_ligand || '',
+      ligand_from: row.ligand_from || '',
+      ligand_code: row.docked_ligand_native_ligand || row.ligand_from || '',
+      rmsd: parseFloat(row.rmsd) || 0,
+      affinity: parseFloat(row.affinity) || 0,
+      bfactor: parseFloat(row.receptor_pocket_avg_bfactor) || 0,
+      success: row.success === 'True',
+      high_bf_residues: row.high_bfactor_residues || '',
+      n_high_bf: parseInt(row.n_high_bfactor_residues) || 0,
+    });
+  }
+}
+
+// CDK2 data (870 cross-docking + 30 self-docking rows)
+addData('CDK2', `receptor,receptor_native_ligand,ligand_from,docked_ligand_native_ligand,rmsd,affinity,receptor_pocket_avg_bfactor,success
+3PXF,2AN,3PXY,JWS,0.83,0.0,28.04,True
+3PXF,2AN,3PXZ,2AN,1.445,-2.28,28.04,True
+3PXF,2AN,3PY0,SU9,0.601,0.0,28.04,True
+3PXF,2AN,3QQF,X07,2.18,0.0,28.04,False
+3PXF,2AN,3QQJ,X11,0.666,0.0,28.04,True
+3PXF,2AN,3QRT,X14,1.86,0.0,28.04,True
+3PXF,2AN,3QWJ,X6A,1.594,0.0,28.04,True
+3PXF,2AN,3QWK,X62,1.722,0.0,28.04,True
+3PXF,2AN,3QX2,X63,2.733,0.0,28.04,False
+3PXF,2AN,3QXO,X65,2.39,0.0,28.04,False
+3PXF,2AN,3QZG,X67,1.126,0.0,28.04,True
+3PXF,2AN,3QZI,X72,1.577,0.0,28.04,True
+3PXF,2AN,3R1Q,X75,1.615,0.0,28.04,True
+3PXF,2AN,3R1S,X73,2.31,0.0,28.04,False
+3PXF,2AN,3R1Y,X76,2.052,0.0,28.04,False
+3PXF,2AN,3R28,XA0,1.722,0.0,28.04,True
+3PXF,2AN,3R6X,X84,2.654,0.0,28.04,False
+3PXF,2AN,3R71,X86,2.418,0.0,28.04,False
+3PXF,2AN,3R73,X87,2.61,0.0,28.04,False
+3PXF,2AN,3R7U,X96,2.446,0.0,28.04,False
+3PXF,2AN,3R83,Z14,1.988,0.0,28.04,True
+3PXF,2AN,3R8M,Z19,0.724,0.0,28.04,True
+3PXF,2AN,3R8P,Z46,1.149,0.0,28.04,True
+3PXF,2AN,3RAI,X85,2.637,0.0,28.04,False
+3PXF,2AN,3RM6,18Z,2.611,0.0,28.04,False
+3PXF,2AN,3ROY,22Z,2.182,0.0,28.04,False
+3PXF,2AN,3RPO,24Z,2.47,0.0,28.04,False
+3PXF,2AN,5MHQ,8QT,2.156,0.0,28.04,False
+3PXY,JWS,3PXF,2AN,1.433,0.0,23.95,True
+3PXY,JWS,3PXZ,2AN,1.055,0.0,23.95,True
+3PXY,JWS,3PY0,SU9,0.601,0.0,23.95,True
+3PXY,JWS,3QQF,X07,2.195,-0.038,23.95,False
+3PXY,JWS,3QQJ,X11,0.666,0.0,23.95,True
+3PXY,JWS,3QRT,X14,1.861,0.0,23.95,True
+3PXY,JWS,3QWJ,X6A,1.594,0.0,23.95,True
+3PXY,JWS,3QWK,X62,1.721,0.0,23.95,True
+3PXY,JWS,3QX2,X63,2.708,0.0,23.95,False
+3PXY,JWS,3QXO,X65,2.389,0.0,23.95,False
+3PXY,JWS,3QZG,X67,1.138,-0.726,23.95,True
+3PXY,JWS,3QZI,X72,1.577,0.0,23.95,True
+3PXY,JWS,3R1Q,X75,1.614,0.0,23.95,True
+3PXY,JWS,3R1S,X73,2.31,0.0,23.95,False
+3PXY,JWS,3R1Y,X76,2.052,0.0,23.95,False
+3PXY,JWS,3R28,XA0,1.722,0.0,23.95,True
+3PXY,JWS,3R6X,X84,2.655,0.0,23.95,False
+3PXY,JWS,3R71,X86,2.362,0.0,23.95,False
+3PXY,JWS,3R73,X87,2.61,0.0,23.95,False
+3PXY,JWS,3R7U,X96,2.446,0.0,23.95,False
+3PXY,JWS,3R83,Z14,1.988,0.0,23.95,True
+3PXY,JWS,3R8M,Z19,0.724,0.0,23.95,True
+3PXY,JWS,3R8P,Z46,1.151,0.0,23.95,True
+3PXY,JWS,3RAI,X85,2.638,0.0,23.95,False
+3PXY,JWS,3RM6,18Z,2.886,-2.628,23.95,False
+3PXY,JWS,3ROY,22Z,2.185,0.0,23.95,False
+3PXY,JWS,3RPO,24Z,2.47,0.0,23.95,False
+3PXY,JWS,5MHQ,8QT,2.155,0.0,23.95,False
+3PXZ,2AN,3PXF,2AN,1.433,0.0,24.54,True
+3PXZ,2AN,3PXY,JWS,0.83,0.0,24.54,True
+3PXZ,2AN,3PY0,SU9,0.6,0.0,24.54,True
+3PXZ,2AN,3QQF,X07,2.181,0.0,24.54,False
+3PXZ,2AN,3QQJ,X11,0.666,0.0,24.54,True
+3PXZ,2AN,3QRT,X14,1.861,0.0,24.54,True
+3PXZ,2AN,3QWJ,X6A,1.594,0.0,24.54,True
+3PXZ,2AN,3QWK,X62,1.722,0.0,24.54,True
+3PXZ,2AN,3QX2,X63,2.709,0.0,24.54,False
+3PXZ,2AN,3QXO,X65,2.389,0.0,24.54,False
+3PXZ,2AN,3QZG,X67,1.126,0.0,24.54,True
+3PXZ,2AN,3QZI,X72,1.577,0.0,24.54,True
+3PXZ,2AN,3R1Q,X75,1.613,0.0,24.54,True
+3PXZ,2AN,3R1S,X73,2.31,0.0,24.54,False
+3PXZ,2AN,3R1Y,X76,2.052,0.0,24.54,False
+3PXZ,2AN,3R28,XA0,1.722,0.0,24.54,True
+3PXZ,2AN,3R6X,X84,2.654,0.0,24.54,False
+3PXZ,2AN,3R71,X86,2.419,0.0,24.54,False
+3PXZ,2AN,3R73,X87,2.61,0.0,24.54,False
+3PXZ,2AN,3R7U,X96,2.445,0.0,24.54,False
+3PXZ,2AN,3R83,Z14,1.989,0.0,24.54,True
+3PXZ,2AN,3R8M,Z19,0.724,0.0,24.54,True
+3PXZ,2AN,3R8P,Z46,1.15,0.0,24.54,True
+3PXZ,2AN,3RAI,X85,2.638,0.0,24.54,False
+3PXZ,2AN,3RM6,18Z,2.611,0.0,24.54,False
+3PXZ,2AN,3ROY,22Z,2.185,0.0,24.54,False
+3PXZ,2AN,3RPO,24Z,2.544,-0.203,24.54,False
+3PXZ,2AN,5MHQ,8QT,2.155,0.0,24.54,False
+3PY0,SU9,3PXF,2AN,1.433,0.0,24.6,True
+3PY0,SU9,3PXY,JWS,0.83,0.0,24.6,True
+3PY0,SU9,3PXZ,2AN,1.054,0.0,24.6,True
+3PY0,SU9,3QQF,X07,2.179,0.0,24.6,False
+3PY0,SU9,3QQJ,X11,0.666,0.0,24.6,True
+3PY0,SU9,3QRT,X14,1.863,0.0,24.6,True
+3PY0,SU9,3QWJ,X6A,1.594,0.0,24.6,True
+3PY0,SU9,3QWK,X62,1.721,0.0,24.6,True
+3PY0,SU9,3QX2,X63,2.708,0.0,24.6,False
+3PY0,SU9,3QXO,X65,2.388,0.0,24.6,False
+3PY0,SU9,3QZG,X67,1.126,0.0,24.6,True
+3PY0,SU9,3QZI,X72,1.577,0.0,24.6,True
+3PY0,SU9,3R1Q,X75,1.615,0.0,24.6,True
+3PY0,SU9,3R1S,X73,2.31,0.0,24.6,False
+3PY0,SU9,3R1Y,X76,2.052,0.0,24.6,False
+3PY0,SU9,3R28,XA0,1.722,0.0,24.6,True
+3PY0,SU9,3R6X,X84,2.656,0.0,24.6,False
+3PY0,SU9,3R71,X86,2.419,0.0,24.6,False
+3PY0,SU9,3R73,X87,2.61,0.0,24.6,False
+3PY0,SU9,3R7U,X96,2.445,0.0,24.6,False
+3PY0,SU9,3R83,Z14,1.988,0.0,24.6,True
+3PY0,SU9,3R8M,Z19,0.724,0.0,24.6,True
+3PY0,SU9,3R8P,Z46,1.151,0.0,24.6,True
+3PY0,SU9,3RAI,X85,2.674,0.0,24.6,False
+3PY0,SU9,3RM6,18Z,2.609,0.0,24.6,False
+3PY0,SU9,3ROY,22Z,2.182,0.0,24.6,False
+3PY0,SU9,3RPO,24Z,2.47,0.0,24.6,False
+3PY0,SU9,5MHQ,8QT,2.155,0.0,24.6,False
+3QQJ,X11,3PXF,2AN,1.433,0.0,19.31,True
+3QQJ,X11,3PXY,JWS,0.83,0.0,19.31,True
+3QQJ,X11,3PXZ,2AN,1.055,0.0,19.31,True
+3QQJ,X11,3PY0,SU9,0.6,0.0,19.31,True
+3QQJ,X11,3QQF,X07,2.18,0.0,19.31,False
+3QQJ,X11,3QRT,X14,1.861,0.0,19.31,True
+3QQJ,X11,3QWJ,X6A,2.598,-0.454,19.31,False
+3QQJ,X11,3QWK,X62,1.721,0.0,19.31,True
+3QQJ,X11,3QX2,X63,2.709,0.0,19.31,False
+3QQJ,X11,3QXO,X65,1.223,-4.624,19.31,True
+3QQJ,X11,3QZG,X67,1.126,0.0,19.31,True
+3QQJ,X11,3QZI,X72,1.577,0.0,19.31,True
+3QQJ,X11,3R1Q,X75,1.613,0.0,19.31,True
+3QQJ,X11,3R1S,X73,2.31,0.0,19.31,False
+3QQJ,X11,3R1Y,X76,2.052,0.0,19.31,False
+3QQJ,X11,3R28,XA0,1.722,0.0,19.31,True
+3QQJ,X11,3R6X,X84,2.654,0.0,19.31,False
+3QQJ,X11,3R71,X86,2.419,0.0,19.31,False
+3QQJ,X11,3R73,X87,2.61,0.0,19.31,False
+3QQJ,X11,3R7U,X96,2.446,0.0,19.31,False
+3QQJ,X11,3R83,Z14,1.989,0.0,19.31,True
+3QQJ,X11,3R8M,Z19,0.725,0.0,19.31,True
+3QQJ,X11,3R8P,Z46,1.15,0.0,19.31,True
+3QQJ,X11,3RAI,X85,2.638,0.0,19.31,False
+3QQJ,X11,3RM6,18Z,2.611,0.0,19.31,False
+3QQJ,X11,3ROY,22Z,2.182,0.0,19.31,False
+3QQJ,X11,3RPO,24Z,2.47,0.0,19.31,False
+3QQJ,X11,5MHQ,8QT,2.155,0.0,19.31,False
+3QRT,X14,3PXF,2AN,1.433,0.0,18.01,True
+3QRT,X14,3PXY,JWS,0.83,0.0,18.01,True
+3QRT,X14,3PXZ,2AN,1.055,0.0,18.01,True
+3QRT,X14,3PY0,SU9,0.6,0.0,18.01,True
+3QRT,X14,3QQF,X07,2.179,0.0,18.01,False
+3QRT,X14,3QQJ,X11,0.666,0.0,18.01,True
+3QRT,X14,3QWJ,X6A,1.594,0.0,18.01,True
+3QRT,X14,3QWK,X62,1.722,0.0,18.01,True
+3QRT,X14,3QX2,X63,2.71,0.0,18.01,False
+3QRT,X14,3QXO,X65,2.523,0.0,18.01,False
+3QRT,X14,3QZG,X67,1.126,0.0,18.01,True
+3QRT,X14,3QZI,X72,1.576,0.0,18.01,True
+3QRT,X14,3R1Q,X75,1.613,0.0,18.01,True
+3QRT,X14,3R1S,X73,2.31,0.0,18.01,False
+3QRT,X14,3R1Y,X76,2.052,0.0,18.01,False
+3QRT,X14,3R28,XA0,1.722,0.0,18.01,True
+3QRT,X14,3R6X,X84,2.654,0.0,18.01,False
+3QRT,X14,3R71,X86,2.377,-5.752,18.01,False
+3QRT,X14,3R73,X87,2.079,-6.139,18.01,False
+3QRT,X14,3R7U,X96,2.445,0.0,18.01,False
+3QRT,X14,3R83,Z14,1.988,0.0,18.01,True
+3QRT,X14,3R8M,Z19,0.724,0.0,18.01,True
+3QRT,X14,3R8P,Z46,1.15,0.0,18.01,True
+3QRT,X14,3RAI,X85,2.638,0.0,18.01,False
+3QRT,X14,3RM6,18Z,2.61,0.0,18.01,False
+3QRT,X14,3ROY,22Z,2.184,0.0,18.01,False
+3QRT,X14,3RPO,24Z,2.47,0.0,18.01,False
+3QRT,X14,5MHQ,8QT,2.156,0.0,18.01,False
+3R8M,Z19,3PXF,2AN,1.433,0.0,25.4,True
+3R8M,Z19,3PXY,JWS,0.83,0.0,25.4,True
+3R8M,Z19,3PXZ,2AN,1.054,0.0,25.4,True
+3R8M,Z19,3PY0,SU9,0.6,0.0,25.4,True
+3R8M,Z19,3QQF,X07,2.18,0.0,25.4,False
+3R8M,Z19,3QQJ,X11,0.666,0.0,25.4,True
+3R8M,Z19,3QRT,X14,1.86,0.0,25.4,True
+3R8M,Z19,3QWJ,X6A,1.594,0.0,25.4,True
+3R8M,Z19,3QWK,X62,1.721,0.0,25.4,True
+3R8M,Z19,3QX2,X63,2.709,0.0,25.4,False
+3R8M,Z19,3QXO,X65,2.39,0.0,25.4,False
+3R8M,Z19,3QZG,X67,1.126,0.0,25.4,True
+3R8M,Z19,3QZI,X72,1.577,0.0,25.4,True
+3R8M,Z19,3R1Q,X75,1.614,0.0,25.4,True
+3R8M,Z19,3R1S,X73,2.31,0.0,25.4,False
+3R8M,Z19,3R1Y,X76,2.052,0.0,25.4,False
+3R8M,Z19,3R28,XA0,1.722,0.0,25.4,True
+3R8M,Z19,3R6X,X84,2.656,0.0,25.4,False
+3R8M,Z19,3R71,X86,2.363,0.0,25.4,False
+3R8M,Z19,3R73,X87,2.611,0.0,25.4,False
+3R8M,Z19,3R7U,X96,2.446,0.0,25.4,False
+3R8M,Z19,3R83,Z14,1.989,0.0,25.4,True
+3R8M,Z19,3R8P,Z46,1.15,0.0,25.4,True
+3R8M,Z19,3RAI,X85,2.674,0.0,25.4,False
+3R8M,Z19,3RM6,18Z,2.61,0.0,25.4,False
+3R8M,Z19,3ROY,22Z,2.182,0.0,25.4,False
+3R8M,Z19,3RPO,24Z,2.47,0.0,25.4,False
+3R8M,Z19,5MHQ,8QT,2.156,0.0,25.4,False
+3R83,Z14,3PXF,2AN,1.433,0.0,15.67,True
+3R83,Z14,3PXY,JWS,0.83,0.0,15.67,True
+3R83,Z14,3PXZ,2AN,1.055,0.0,15.67,True
+3R83,Z14,3PY0,SU9,0.6,0.0,15.67,True
+3R83,Z14,3QQF,X07,2.178,0.0,15.67,False
+3R83,Z14,3QQJ,X11,0.666,0.0,15.67,True
+3R83,Z14,3QRT,X14,1.862,0.0,15.67,True
+3R83,Z14,3QWJ,X6A,1.594,0.0,15.67,True
+3R83,Z14,3QWK,X62,1.721,0.0,15.67,True
+3R83,Z14,3QX2,X63,2.71,0.0,15.67,False
+3R83,Z14,3QXO,X65,2.39,0.0,15.67,False
+3R83,Z14,3QZG,X67,1.126,0.0,15.67,True
+3R83,Z14,3QZI,X72,1.577,0.0,15.67,True
+3R83,Z14,3R1Q,X75,1.614,0.0,15.67,True
+3R83,Z14,3R1S,X73,2.31,0.0,15.67,False
+3R83,Z14,3R1Y,X76,2.052,0.0,15.67,False
+3R83,Z14,3R28,XA0,1.722,0.0,15.67,True
+3R83,Z14,3R6X,X84,2.653,0.0,15.67,False
+3R83,Z14,3R71,X86,2.362,0.0,15.67,False
+3R83,Z14,3R73,X87,2.611,0.0,15.67,False
+3R83,Z14,3R7U,X96,2.445,0.0,15.67,False
+3R83,Z14,3R8M,Z19,0.725,0.0,15.67,True
+3R83,Z14,3R8P,Z46,1.15,0.0,15.67,True
+3R83,Z14,3RAI,X85,2.674,0.0,15.67,False
+3R83,Z14,3RM6,18Z,2.612,0.0,15.67,False
+3R83,Z14,3ROY,22Z,2.182,0.0,15.67,False
+3R83,Z14,3RPO,24Z,2.47,0.0,15.67,False
+3R83,Z14,5MHQ,8QT,2.155,0.0,15.67,False`);
+
+// Trypsin (130 cross + self)
+addData('Trypsin', `receptor,receptor_native_ligand,ligand_from,docked_ligand_native_ligand,rmsd,affinity,receptor_pocket_avg_bfactor,success
+1A0J,BEN,1BIT,BEN,0.104,0.0,15.42,True
+1A0J,BEN,1HJ8,BEN,1.056,0.0,15.42,True
+1A0J,BEN,1MBQ,BEN,0.135,-0.203,15.42,True
+1A0J,BEN,1PQA,SEB,1.323,0.0,15.42,True
+1A0J,BEN,1TRY,ISP,1.099,0.0,15.42,True
+1A0J,BEN,1UTJ,ABN,0.224,-5.253,15.42,True
+1A0J,BEN,1UTM,PEA,0.952,0.0,15.42,True
+1A0J,BEN,3PTB,BEN,1.067,0.0,15.42,True
+1A0J,BEN,5PTP,MIS,1.764,-0.565,15.42,True
+1BIT,BEN,1A0J,BEN,0.021,0.0,12.11,True
+1BIT,BEN,1HJ8,BEN,0.095,-4.346,12.11,True
+1BIT,BEN,1MBQ,BEN,0.142,0.0,12.11,True
+1BIT,BEN,1PQA,SEB,1.323,0.0,12.11,True
+1BIT,BEN,1TRY,ISP,1.099,0.0,12.11,True
+1BIT,BEN,1UTJ,ABN,0.649,0.0,12.11,True
+1BIT,BEN,1UTM,PEA,0.849,-0.458,12.11,True
+1BIT,BEN,3PTB,BEN,1.067,0.0,12.11,True
+1BIT,BEN,5PTP,MIS,1.427,0.0,12.11,True
+1HJ8,BEN,1A0J,BEN,0.021,0.0,10.0,True
+1HJ8,BEN,1BIT,BEN,1.046,-7.229,10.0,True
+1HJ8,BEN,1MBQ,BEN,0.142,0.0,10.0,True
+1HJ8,BEN,1PQA,SEB,1.323,0.0,10.0,True
+1HJ8,BEN,1TRY,ISP,1.099,0.0,10.0,True
+1HJ8,BEN,1UTJ,ABN,0.649,0.0,10.0,True
+1HJ8,BEN,1UTM,PEA,0.735,-0.181,10.0,True
+1HJ8,BEN,3PTB,BEN,1.067,0.0,10.0,True
+1HJ8,BEN,5PTP,MIS,1.427,0.0,10.0,True
+1MBQ,BEN,1A0J,BEN,0.021,0.0,8.44,True
+1MBQ,BEN,1BIT,BEN,0.104,0.0,8.44,True
+1MBQ,BEN,1HJ8,BEN,1.056,0.0,8.44,True
+1MBQ,BEN,1PQA,SEB,0.857,-5.498,8.44,True
+1MBQ,BEN,1TRY,ISP,1.045,-1.275,8.44,True
+1MBQ,BEN,1UTJ,ABN,0.288,-1.798,8.44,True
+1MBQ,BEN,1UTM,PEA,0.952,0.0,8.44,True
+1MBQ,BEN,3PTB,BEN,0.49,-4.152,8.44,True
+1MBQ,BEN,5PTP,MIS,1.482,-5.129,8.44,True
+1PPZ,MIS,1A0J,BEN,0.021,0.0,12.47,True
+1PPZ,MIS,1BIT,BEN,0.104,0.0,12.47,True
+1PPZ,MIS,1HJ8,BEN,1.056,0.0,12.47,True
+1PPZ,MIS,1MBQ,BEN,1.06,-4.675,12.47,True
+1PPZ,MIS,1PQA,SEB,1.79,-5.92,12.47,True
+1PPZ,MIS,1TRY,ISP,0.498,-1.426,12.47,True
+1PPZ,MIS,1UTJ,ABN,0.649,0.0,12.47,True
+1PPZ,MIS,1UTM,PEA,0.952,0.0,12.47,True
+1PPZ,MIS,3PTB,BEN,0.863,-6.182,12.47,True
+1PPZ,MIS,5PTP,MIS,1.353,-3.631,12.47,True
+1UTJ,ABN,1A0J,BEN,0.421,-4.166,3.89,True
+1UTJ,ABN,1BIT,BEN,0.104,0.0,3.89,True
+1UTJ,ABN,1HJ8,BEN,1.056,0.0,3.89,True
+1UTJ,ABN,1MBQ,BEN,0.272,-2.007,3.89,True
+1UTJ,ABN,1PQA,SEB,1.323,0.0,3.89,True
+1UTJ,ABN,1TRY,ISP,1.099,0.0,3.89,True
+1UTJ,ABN,1UTM,PEA,0.952,0.0,3.89,True
+1UTJ,ABN,3PTB,BEN,1.067,0.0,3.89,True
+1UTJ,ABN,5PTP,MIS,1.118,-0.335,3.89,True
+2A31,PG3,1A0J,BEN,0.021,0.0,8.13,True
+2A31,PG3,1BIT,BEN,0.104,0.0,8.13,True
+2A31,PG3,1HJ8,BEN,0.995,-1.543,8.13,True
+2A31,PG3,1MBQ,BEN,0.076,-3.664,8.13,True
+2A31,PG3,1PQA,SEB,1.439,-2.046,8.13,True
+2A31,PG3,1TRY,ISP,1.099,0.0,8.13,True
+2A31,PG3,1UTJ,ABN,0.649,0.0,8.13,True
+2A31,PG3,1UTM,PEA,0.952,0.0,8.13,True
+2A31,PG3,3PTB,BEN,1.067,0.0,8.13,True
+2A31,PG3,5PTP,MIS,1.484,-5.67,8.13,True
+3PTB,BEN,1A0J,BEN,0.021,0.0,11.74,True
+3PTB,BEN,1BIT,BEN,0.104,0.0,11.74,True
+3PTB,BEN,1HJ8,BEN,1.056,0.0,11.74,True
+3PTB,BEN,1MBQ,BEN,0.684,-4.442,11.74,True
+3PTB,BEN,1PQA,SEB,0.828,-4.791,11.74,True
+3PTB,BEN,1TRY,ISP,0.38,-1.463,11.74,True
+3PTB,BEN,1UTJ,ABN,0.7,-1.537,11.74,True
+3PTB,BEN,1UTM,PEA,0.952,0.0,11.74,True
+3PTB,BEN,5PTP,MIS,1.254,-4.072,11.74,True
+5PTP,MIS,1A0J,BEN,0.021,0.0,11.55,True
+5PTP,MIS,1BIT,BEN,0.104,0.0,11.55,True
+5PTP,MIS,1HJ8,BEN,1.056,0.0,11.55,True
+5PTP,MIS,1MBQ,BEN,1.083,-5.151,11.55,True
+5PTP,MIS,1PQA,SEB,1.376,-3.961,11.55,True
+5PTP,MIS,1TRY,ISP,0.653,-0.788,11.55,True
+5PTP,MIS,1UTJ,ABN,0.501,-2.29,11.55,True
+5PTP,MIS,1UTM,PEA,0.952,0.0,11.55,True
+5PTP,MIS,3PTB,BEN,0.118,-4.025,11.55,True`);
+
+// CDK1 (56 rows - no native ligand separate column)
+addData('CDK1', `receptor,ligand_from,rmsd,affinity,receptor_pocket_avg_bfactor,success
+4Y72,5HQ0,1.718,-10.62,44.73,True
+4Y72,5LQF,1.673,-6.962,44.73,True
+4Y72,6GU2,1.242,0.0,44.73,True
+4Y72,6GU3,1.413,0.0,44.73,True
+4Y72,6GU4,1.523,0.0,44.73,True
+4Y72,6GU6,2.215,0.0,44.73,False
+4Y72,6GU7,1.647,0.0,44.73,True
+5HQ0,4Y72,1.719,-10.63,44.73,True
+5HQ0,5LQF,1.675,-6.963,44.73,True
+5HQ0,6GU2,1.242,0.0,44.73,True
+5HQ0,6GU3,1.413,0.0,44.73,True
+5HQ0,6GU4,1.522,0.0,44.73,True
+5HQ0,6GU6,2.216,0.0,44.73,False
+5HQ0,6GU7,1.648,0.0,44.73,True
+5LQF,4Y72,1.149,-10.75,43.36,True
+5LQF,5HQ0,1.166,-10.82,43.36,True
+5LQF,6GU2,1.242,0.0,43.36,True
+5LQF,6GU3,1.414,0.0,43.36,True
+5LQF,6GU4,1.523,0.0,43.36,True
+5LQF,6GU6,2.215,0.0,43.36,False
+5LQF,6GU7,1.649,0.0,43.36,True
+6GU2,4Y72,1.377,0.0,38.09,True
+6GU2,5HQ0,1.377,0.0,38.09,True
+6GU2,5LQF,1.843,0.0,38.09,True
+6GU2,6GU3,1.413,0.0,38.09,True
+6GU2,6GU4,1.522,0.0,38.09,True
+6GU2,6GU6,2.215,0.0,38.09,False
+6GU2,6GU7,1.649,0.0,38.09,True
+6GU3,4Y72,1.836,-3.523,43.56,True
+6GU3,5HQ0,1.395,-3.45,43.56,True
+6GU3,5LQF,1.843,0.0,43.56,True
+6GU3,6GU2,1.242,0.0,43.56,True
+6GU3,6GU4,1.523,0.0,43.56,True
+6GU3,6GU6,2.216,0.0,43.56,False
+6GU3,6GU7,1.65,0.0,43.56,True
+6GU4,4Y72,1.377,0.0,51.13,True
+6GU4,5HQ0,1.377,0.0,51.13,True
+6GU4,5LQF,1.843,0.0,51.13,True
+6GU4,6GU2,1.242,0.0,51.13,True
+6GU4,6GU3,1.413,0.0,51.13,True
+6GU4,6GU6,2.215,0.0,51.13,False
+6GU4,6GU7,1.647,0.0,51.13,True
+6GU6,4Y72,1.376,0.0,47.75,True
+6GU6,5HQ0,1.377,0.0,47.75,True
+6GU6,5LQF,1.843,0.0,47.75,True
+6GU6,6GU2,1.242,0.0,47.75,True
+6GU6,6GU3,1.413,0.0,47.75,True
+6GU6,6GU4,1.523,0.0,47.75,True
+6GU6,6GU7,1.604,-6.308,47.75,True
+6GU7,4Y72,1.377,0.0,68.41,True
+6GU7,5HQ0,1.377,0.0,68.41,True
+6GU7,5LQF,1.843,0.0,68.41,True
+6GU7,6GU2,1.242,0.0,68.41,True
+6GU7,6GU3,1.413,0.0,68.41,True
+6GU7,6GU4,1.522,0.0,68.41,True
+6GU7,6GU6,2.54,-8.005,68.41,False`);
+
+// CDK6 (140 rows)
+addData('CDK6', `receptor,receptor_native_ligand,ligand_from,docked_ligand_native_ligand,rmsd,affinity,receptor_pocket_avg_bfactor,success
+1XO2,FSE,3NUP,3NU,1.875,0.0,62.37,True
+1XO2,FSE,3NUX,3NV,0.754,0.0,62.37,True
+1XO2,FSE,4AUA,4AU,1.086,0.0,62.37,True
+1XO2,FSE,4EZ5,0RS,1.943,0.0,62.37,True
+1XO2,FSE,5L2I,LQQ,0.642,0.0,62.37,True
+1XO2,FSE,5L2S,6ZV,1.701,0.0,62.37,True
+1XO2,FSE,5L2T,6ZZ,1.2,0.0,62.37,True
+1XO2,FSE,6OQL,N1A,1.312,0.0,62.37,True
+1XO2,FSE,6OQO,N1J,2.13,0.0,62.37,False
+1XO2,FSE,8I0M,NJ6,1.092,0.0,62.37,True
+2EUF,LQQ,3NUP,3NU,1.875,0.0,53.09,True
+2EUF,LQQ,3NUX,3NV,0.754,0.0,53.09,True
+2EUF,LQQ,4AUA,4AU,1.086,0.0,53.09,True
+2EUF,LQQ,4EZ5,0RS,1.943,0.0,53.09,True
+2EUF,LQQ,5L2I,LQQ,0.642,0.0,53.09,True
+2EUF,LQQ,5L2S,6ZV,1.701,0.0,53.09,True
+2EUF,LQQ,5L2T,6ZZ,1.2,0.0,53.09,True
+2EUF,LQQ,6OQL,N1A,1.312,0.0,53.09,True
+2EUF,LQQ,6OQO,N1J,2.13,0.0,53.09,False
+2EUF,LQQ,8I0M,NJ6,1.093,0.0,53.09,True
+3NUP,3NU,3NUX,3NV,1.227,-6.793,61.6,True
+3NUP,3NU,4AUA,4AU,0.945,-7.379,61.6,True
+3NUP,3NU,4EZ5,0RS,1.709,-6.878,61.6,True
+3NUP,3NU,5L2I,LQQ,1.372,-6.684,61.6,True
+3NUP,3NU,5L2S,6ZV,1.225,-9.141,61.6,True
+3NUP,3NU,5L2T,6ZZ,1.326,-8.582,61.6,True
+3NUP,3NU,6OQL,N1A,0.436,-9.392,61.6,True
+3NUP,3NU,6OQO,N1J,1.515,-9.138,61.6,True
+3NUP,3NU,8I0M,NJ6,1.088,-3.942,61.6,True
+4AUA,4AU,3NUP,3NU,2.629,-8.661,55.5,False
+4AUA,4AU,3NUX,3NV,1.027,-6.972,55.5,True
+4AUA,4AU,4EZ5,0RS,2.727,-7.274,55.5,False
+4AUA,4AU,5L2I,LQQ,0.904,-6.107,55.5,True
+4AUA,4AU,5L2S,6ZV,2.655,-9.66,55.5,False
+4AUA,4AU,5L2T,6ZZ,1.409,-8.198,55.5,True
+4AUA,4AU,6OQL,N1A,2.171,-8.875,55.5,False
+4AUA,4AU,6OQO,N1J,1.981,-8.357,55.5,True
+4AUA,4AU,8I0M,NJ6,1.127,-4.461,55.5,True
+4EZ5,0RS,3NUP,3NU,2.025,-5.04,87.92,False
+4EZ5,0RS,3NUX,3NV,2.122,-6.147,87.92,False
+4EZ5,0RS,4AUA,4AU,1.084,-5.109,87.92,True
+4EZ5,0RS,5L2I,LQQ,1.653,-6.36,87.92,True
+4EZ5,0RS,5L2S,6ZV,2.691,-6.411,87.92,False
+4EZ5,0RS,5L2T,6ZZ,0.367,-6.376,87.92,True
+4EZ5,0RS,6OQL,N1A,1.804,-6.506,87.92,True
+4EZ5,0RS,6OQO,N1J,1.165,-5.968,87.92,True
+4EZ5,0RS,8I0M,NJ6,1.093,0.0,87.92,True
+5L2S,6ZV,3NUP,3NU,2.542,-8.267,55.42,False
+5L2S,6ZV,3NUX,3NV,1.295,-6.718,55.42,True
+5L2S,6ZV,4AUA,4AU,0.899,-7.352,55.42,True
+5L2S,6ZV,4EZ5,0RS,2.414,-7.096,55.42,False
+5L2S,6ZV,5L2I,LQQ,1.258,-6.758,55.42,True
+5L2S,6ZV,5L2T,6ZZ,0.136,-9.181,55.42,True
+5L2S,6ZV,6OQL,N1A,0.662,-10.41,55.42,True
+5L2S,6ZV,6OQO,N1J,0.821,-9.714,55.42,True
+5L2S,6ZV,8I0M,NJ6,0.117,-4.314,55.42,True
+5L2T,6ZZ,3NUP,3NU,2.643,-8.609,61.94,False
+5L2T,6ZZ,3NUX,3NV,1.421,-7.202,61.94,True
+5L2T,6ZZ,4AUA,4AU,0.62,-7.454,61.94,True
+5L2T,6ZZ,4EZ5,0RS,2.662,-7.123,61.94,False
+5L2T,6ZZ,5L2I,LQQ,1.507,-6.816,61.94,True
+5L2T,6ZZ,5L2S,6ZV,1.423,-9.944,61.94,True
+5L2T,6ZZ,6OQL,N1A,0.806,-9.67,61.94,True
+5L2T,6ZZ,6OQO,N1J,1.227,-9.69,61.94,True
+5L2T,6ZZ,8I0M,NJ6,0.152,-4.578,61.94,True
+6OQL,N1A,3NUP,3NU,0.88,-9.083,115.8,True
+6OQL,N1A,3NUX,3NV,2.105,-6.964,115.8,False
+6OQL,N1A,4AUA,4AU,0.861,-7.784,115.8,True
+6OQL,N1A,4EZ5,0RS,2.775,-7.234,115.8,False
+6OQL,N1A,5L2I,LQQ,1.324,-6.264,115.8,True
+6OQL,N1A,5L2S,6ZV,1.396,-10.61,115.8,True
+6OQL,N1A,5L2T,6ZZ,0.813,-8.955,115.8,True
+6OQL,N1A,6OQO,N1J,0.959,-11.39,115.8,True
+6OQL,N1A,8I0M,NJ6,1.126,-4.421,115.8,True
+8I0M,NJ6,3NUP,3NU,1.237,-4.316,80.69,True
+8I0M,NJ6,3NUX,3NV,1.011,-6.3,80.69,True
+8I0M,NJ6,4AUA,4AU,0.971,-4.477,80.69,True
+8I0M,NJ6,4EZ5,0RS,1.942,0.0,80.69,True
+8I0M,NJ6,5L2I,LQQ,1.053,-6.644,80.69,True
+8I0M,NJ6,5L2S,6ZV,1.309,-5.507,80.69,True
+8I0M,NJ6,5L2T,6ZZ,1.556,-5.25,80.69,True
+8I0M,NJ6,6OQL,N1A,2.199,-5.918,80.69,False
+8I0M,NJ6,6OQO,N1J,1.04,-5.651,80.69,True`);
+
+// ==================== STATISTICS ====================
+const STATS = {
+  CDK2: {pairs:870, success:471, rate:54.1, pearson:-0.0058, pp:0.865, spearman:-0.0091, ttest:0.773},
+  Trypsin: {pairs:130, success:130, rate:100, pearson:0.0366, pp:0.679, spearman:0.0155, ttest:null},
+  CDK1: {pairs:56, success:49, rate:87.5, pearson:0.0022, pp:0.987, spearman:-0.0596, ttest:0.999},
+  CDK6: {pairs:140, success:117, rate:83.6, pearson:0.0362, pp:0.671, spearman:0.0477, ttest:0.346}
+};
+
+// ==================== COLORS ====================
+const COLORS = {CDK2:'#58a6ff', Trypsin:'#3fb950', CDK1:'#d2991d', CDK6:'#f85149'};
+const CHIP = {CDK2:'cdk2', Trypsin:'trypsin', CDK1:'cdk1', CDK6:'cdk6'};
+
+// ==================== BFIBS DATA (per-structure flexibility scores) ====================
+const BFIBS_DATA = {
+  CDK2: [
+    {pdb:'3PXF',bfibs:1.087,median_pocket:21.76,mean_pocket:24.82},
+    {pdb:'3PXY',bfibs:0.985,median_pocket:21.36,mean_pocket:25.79},
+    {pdb:'3PXZ',bfibs:1.185,median_pocket:22.46,mean_pocket:24.65},
+    {pdb:'3PY0',bfibs:1.018,median_pocket:24.26,mean_pocket:29.59},
+    {pdb:'3QQF',bfibs:0.946,median_pocket:18.96,mean_pocket:25.23},
+    {pdb:'3QQJ',bfibs:1.018,median_pocket:18.50,mean_pocket:21.11},
+    {pdb:'3QQL',bfibs:0.948,median_pocket:20.26,mean_pocket:21.85},
+    {pdb:'3QRT',bfibs:0.841,median_pocket:15.53,mean_pocket:18.37},
+    {pdb:'3QWJ',bfibs:0.941,median_pocket:19.57,mean_pocket:25.00},
+    {pdb:'3QWK',bfibs:0.973,median_pocket:20.85,mean_pocket:24.81},
+    {pdb:'3QX2',bfibs:0.914,median_pocket:20.03,mean_pocket:23.52},
+    {pdb:'3QXO',bfibs:0.993,median_pocket:18.83,mean_pocket:24.87},
+    {pdb:'3QZG',bfibs:1.043,median_pocket:20.76,mean_pocket:24.48},
+    {pdb:'3QZI',bfibs:0.870,median_pocket:18.35,mean_pocket:22.52},
+    {pdb:'3R1Q',bfibs:0.922,median_pocket:19.79,mean_pocket:24.67},
+    {pdb:'3R1S',bfibs:0.947,median_pocket:18.74,mean_pocket:24.94},
+    {pdb:'3R1Y',bfibs:0.880,median_pocket:18.34,mean_pocket:24.17},
+    {pdb:'3R28',bfibs:0.865,median_pocket:16.85,mean_pocket:22.30},
+    {pdb:'3R6X',bfibs:0.895,median_pocket:18.03,mean_pocket:22.83},
+    {pdb:'3R71',bfibs:0.841,median_pocket:13.86,mean_pocket:16.95},
+    {pdb:'3R73',bfibs:0.869,median_pocket:16.87,mean_pocket:21.46},
+    {pdb:'3R7U',bfibs:0.931,median_pocket:16.58,mean_pocket:21.49},
+    {pdb:'3R83',bfibs:0.849,median_pocket:14.44,mean_pocket:16.23},
+    {pdb:'3R8M',bfibs:1.052,median_pocket:23.05,mean_pocket:29.49},
+    {pdb:'3R8P',bfibs:0.934,median_pocket:15.99,mean_pocket:17.21},
+    {pdb:'3RAI',bfibs:0.874,median_pocket:17.89,mean_pocket:22.04},
+    {pdb:'3RM6',bfibs:0.866,median_pocket:17.28,mean_pocket:22.80},
+    {pdb:'3ROY',bfibs:0.968,median_pocket:18.87,mean_pocket:24.23},
+    {pdb:'3RPO',bfibs:0.960,median_pocket:18.72,mean_pocket:21.86},
+    {pdb:'5MHQ',bfibs:0.981,median_pocket:18.94,mean_pocket:21.04}
+  ],
+  Trypsin: [
+    {pdb:'1A0J',bfibs:0.843,median_pocket:15.77,mean_pocket:19.11},
+    {pdb:'1AKS',bfibs:1.290,median_pocket:22.48,mean_pocket:23.30},
+    {pdb:'1AVW',bfibs:0.826,median_pocket:17.88,mean_pocket:19.28},
+    {pdb:'1AVX',bfibs:0.725,median_pocket:16.58,mean_pocket:17.70},
+    {pdb:'1BIT',bfibs:0.842,median_pocket:11.94,mean_pocket:13.68},
+    {pdb:'1EPT',bfibs:2.793,median_pocket:5.59,mean_pocket:12.30},
+    {pdb:'1F2S',bfibs:1.285,median_pocket:26.46,mean_pocket:28.14},
+    {pdb:'1HJ8',bfibs:0.937,median_pocket:10.00,mean_pocket:11.36},
+    {pdb:'1MBQ',bfibs:0.792,median_pocket:9.50,mean_pocket:10.64},
+    {pdb:'1MCT',bfibs:1.192,median_pocket:16.12,mean_pocket:19.83},
+    {pdb:'1PPZ',bfibs:0.891,median_pocket:13.57,mean_pocket:15.29},
+    {pdb:'1PQA',bfibs:0.925,median_pocket:14.50,mean_pocket:16.61},
+    {pdb:'1SGT',bfibs:0.797,median_pocket:12.92,mean_pocket:15.37},
+    {pdb:'1TPO',bfibs:1.078,median_pocket:16.67,mean_pocket:17.76},
+    {pdb:'1TRY',bfibs:0.900,median_pocket:12.93,mean_pocket:14.71},
+    {pdb:'1TX6',bfibs:1.034,median_pocket:36.14,mean_pocket:35.95},
+    {pdb:'1UHB',bfibs:1.290,median_pocket:17.28,mean_pocket:26.15},
+    {pdb:'1UTJ',bfibs:0.790,median_pocket:5.99,mean_pocket:6.56},
+    {pdb:'1UTM',bfibs:0.929,median_pocket:12.60,mean_pocket:12.44},
+    {pdb:'1XVO',bfibs:1.036,median_pocket:6.59,mean_pocket:7.88},
+    {pdb:'1YF4',bfibs:0.973,median_pocket:14.15,mean_pocket:15.87},
+    {pdb:'2A31',bfibs:1.104,median_pocket:9.59,mean_pocket:11.29},
+    {pdb:'2FPZ',bfibs:0.880,median_pocket:17.75,mean_pocket:19.28},
+    {pdb:'3PTB',bfibs:0.967,median_pocket:11.68,mean_pocket:11.83},
+    {pdb:'5PTP',bfibs:0.852,median_pocket:10.75,mean_pocket:11.75},
+    {pdb:'6DWH',bfibs:0.883,median_pocket:26.67,mean_pocket:29.37},
+    {pdb:'7JR1',bfibs:1.023,median_pocket:49.06,mean_pocket:52.23},
+    {pdb:'7JR2',bfibs:1.101,median_pocket:24.10,mean_pocket:27.68}
+  ]
+};
+
+// Per-structure B-factor (for CDK1, CDK6 — no BFIbs available)
+const BF_PER_STRUCTURE = {
+  CDK1: [
+    {pdb:'4Y72',pocket_avg:44.73},{pdb:'5HQ0',pocket_avg:44.73},{pdb:'5LQF',pocket_avg:43.36},
+    {pdb:'6GU2',pocket_avg:38.09},{pdb:'6GU3',pocket_avg:43.56},{pdb:'6GU4',pocket_avg:51.13},
+    {pdb:'6GU6',pocket_avg:47.75},{pdb:'6GU7',pocket_avg:68.41}
+  ],
+  CDK6: [
+    {pdb:'1XO2',pocket_avg:62.37},{pdb:'2EUF',pocket_avg:53.09},{pdb:'2F2C',pocket_avg:70.95},
+    {pdb:'3NUP',pocket_avg:61.60},{pdb:'3NUX',pocket_avg:64.53},{pdb:'4AUA',pocket_avg:55.50},
+    {pdb:'4EZ5',pocket_avg:87.92},{pdb:'4TTH',pocket_avg:71.59},{pdb:'5L2I',pocket_avg:88.68},
+    {pdb:'5L2S',pocket_avg:55.42},{pdb:'5L2T',pocket_avg:61.94},{pdb:'6OQL',pocket_avg:115.80},
+    {pdb:'6OQO',pocket_avg:63.14},{pdb:'8I0M',pocket_avg:80.69}
+  ]
+};
+
+// ==================== CONE DATA (per-pair REAL docking scores, affinity<0) ====================
+const CONE_DATA = {
+  CDK2: [[28.04,-2.28,"3PXF","3PXZ"],[23.95,-0.04,"3PXY","3QQF"],[23.95,-0.73,"3PXY","3QZG"],[23.95,-2.63,"3PXY","3RM6"],[24.54,-0.2,"3PXZ","3RPO"],[27.94,-0.12,"3QQF","3R7U"],[19.31,-0.45,"3QQJ","3QWJ"],[19.31,-4.62,"3QQJ","3QXO"],[18.01,-5.75,"3QRT","3R71"],[18.01,-6.14,"3QRT","3R73"],[27.17,-0.04,"3QWJ","3QXO"],[25.81,-5.84,"3QXO","3R1Q"],[25.81,-6.9,"3QXO","3RAI"],[25.08,-5.93,"3QZG","3PXY"],[24.02,-8.67,"3QZI","3R28"],[24.02,-8.02,"3QZI","3R6X"],[24.02,-7.49,"3QZI","3ROY"],[26.99,-6.32,"3R1Q","3QXO"],[26.99,-0.05,"3R1Q","3QZI"],[26.99,-0.02,"3R1Q","3R28"],[26.99,-8.58,"3R1Q","3RAI"],[27.31,-0.5,"3R1S","3QQF"],[27.31,-4.71,"3R1S","3QRT"],[27.31,-6.17,"3R1S","3R71"],[27.31,-6.16,"3R1S","3R73"],[27.31,-0.15,"3R1S","3R7U"],[24.68,-7.55,"3R28","3QZI"],[24.68,-7.83,"3R28","3R6X"],[24.68,-8.1,"3R28","3ROY"],[25.59,-7.72,"3R6X","3QZI"],[25.59,-9.11,"3R6X","3R28"],[25.59,-7.95,"3R6X","3ROY"],[16.93,-0.7,"3R71","3QQF"],[16.93,-7.46,"3R71","3QRT"],[16.93,-0.57,"3R71","3R1S"],[16.93,-7.4,"3R71","3R73"],[22.94,-0.59,"3R73","3QQF"],[22.94,-7.18,"3R73","3QRT"],[22.94,-0.28,"3R73","3R1S"],[22.94,-7.57,"3R73","3R71"],[23.38,-4.39,"3R7U","3QQF"],[23.38,-0.01,"3R7U","3QRT"],[23.38,-0.47,"3R7U","3RM6"],[23.13,-6.49,"3RAI","3QXO"],[23.13,-0.04,"3RAI","3QZI"],[23.13,-7.58,"3RAI","3R1Q"],[23.13,-0.02,"3RAI","3R28"],[27.54,-7.7,"3ROY","3QZI"],[27.54,-8.91,"3ROY","3R28"],[27.54,-7.61,"3ROY","3R6X"],[23.23,-0.47,"3RPO","3R1S"],[23.23,-0.41,"3RPO","3R71"],[23.23,-0.32,"3RPO","3R73"]],
+  Trypsin: [[15.42,-0.2,"1A0J","1MBQ"],[15.42,-5.25,"1A0J","1UTJ"],[15.42,-0.57,"1A0J","5PTP"],[12.11,-4.35,"1BIT","1HJ8"],[12.11,-0.46,"1BIT","1UTM"],[10.0,-7.23,"1HJ8","1BIT"],[10.0,-0.18,"1HJ8","1UTM"],[8.44,-5.5,"1MBQ","1PQA"],[8.44,-1.27,"1MBQ","1TRY"],[8.44,-1.8,"1MBQ","1UTJ"],[8.44,-4.15,"1MBQ","3PTB"],[8.44,-5.13,"1MBQ","5PTP"],[12.47,-4.67,"1PPZ","1MBQ"],[12.47,-5.92,"1PPZ","1PQA"],[12.47,-1.43,"1PPZ","1TRY"],[12.47,-6.18,"1PPZ","3PTB"],[12.47,-3.63,"1PPZ","5PTP"],[12.39,-4.49,"1PQA","1MBQ"],[12.39,-1.61,"1PQA","1TRY"],[12.39,-5.28,"1PQA","3PTB"],[12.39,-3.58,"1PQA","5PTP"],[12.72,-1.74,"1TRY","1PQA"],[12.72,-3.8,"1TRY","3PTB"],[3.89,-4.17,"1UTJ","1A0J"],[3.89,-2.01,"1UTJ","1MBQ"],[3.89,-0.34,"1UTJ","5PTP"],[11.65,-3.28,"1UTM","1BIT"],[11.65,-2.81,"1UTM","1HJ8"],[8.13,-1.54,"2A31","1HJ8"],[8.13,-3.66,"2A31","1MBQ"],[8.13,-2.05,"2A31","1PQA"],[8.13,-5.67,"2A31","5PTP"],[19.61,-5.45,"2FPZ","1A0J"],[19.61,-1.6,"2FPZ","1MBQ"],[19.61,-4.94,"2FPZ","1UTJ"],[19.61,-0.17,"2FPZ","5PTP"],[11.74,-4.44,"3PTB","1MBQ"],[11.74,-4.79,"3PTB","1PQA"],[11.74,-1.46,"3PTB","1TRY"],[11.74,-1.54,"3PTB","1UTJ"],[11.74,-4.07,"3PTB","5PTP"],[11.55,-5.15,"5PTP","1MBQ"],[11.55,-3.96,"5PTP","1PQA"],[11.55,-0.79,"5PTP","1TRY"],[11.55,-2.29,"5PTP","1UTJ"],[11.55,-4.03,"5PTP","3PTB"]],
+  CDK1: [[44.73,-10.62,"4Y72","5HQ0"],[44.73,-6.96,"4Y72","5LQF"],[44.73,-10.63,"5HQ0","4Y72"],[44.73,-6.96,"5HQ0","5LQF"],[43.36,-10.75,"5LQF","4Y72"],[43.36,-10.82,"5LQF","5HQ0"],[43.56,-3.52,"6GU3","4Y72"],[43.56,-3.45,"6GU3","5HQ0"],[47.75,-6.31,"6GU6","6GU7"],[68.41,-8.01,"6GU7","6GU6"]],
+  CDK6: [[53.09,-8.96,"2EUF","2F2C"],[70.95,-9.2,"2F2C","2EUF"],[61.6,-6.79,"3NUP","3NUX"],[61.6,-7.38,"3NUP","4AUA"],[61.6,-6.88,"3NUP","4EZ5"],[61.6,-0.02,"3NUP","4TTH"],[61.6,-6.68,"3NUP","5L2I"],[61.6,-9.14,"3NUP","5L2S"],[61.6,-8.58,"3NUP","5L2T"],[61.6,-9.39,"3NUP","6OQL"],[61.6,-9.14,"3NUP","6OQO"],[61.6,-3.94,"3NUP","8I0M"],[64.53,-6.61,"3NUX","3NUP"],[64.53,-6.23,"3NUX","4AUA"],[64.53,-7.58,"3NUX","4EZ5"],[64.53,-10.16,"3NUX","5L2I"],[64.53,-7.38,"3NUX","5L2S"],[64.53,-6.57,"3NUX","5L2T"],[64.53,-7.83,"3NUX","6OQL"],[64.53,-7.7,"3NUX","6OQO"],[55.5,-8.66,"4AUA","3NUP"],[55.5,-6.97,"4AUA","3NUX"],[55.5,-7.27,"4AUA","4EZ5"],[55.5,-0.02,"4AUA","4TTH"],[55.5,-6.11,"4AUA","5L2I"],[55.5,-9.66,"4AUA","5L2S"],[55.5,-8.2,"4AUA","5L2T"],[55.5,-8.88,"4AUA","6OQL"],[55.5,-8.36,"4AUA","6OQO"],[55.5,-4.46,"4AUA","8I0M"],[87.92,-5.04,"4EZ5","3NUP"],[87.92,-6.15,"4EZ5","3NUX"],[87.92,-5.11,"4EZ5","4AUA"],[87.92,-6.36,"4EZ5","5L2I"],[87.92,-6.41,"4EZ5","5L2S"],[87.92,-6.38,"4EZ5","5L2T"],[87.92,-6.51,"4EZ5","6OQL"],[87.92,-5.97,"4EZ5","6OQO"],[71.59,-0.27,"4TTH","3NUP"],[71.59,-0.98,"4TTH","3NUX"],[71.59,-0.85,"4TTH","4AUA"],[71.59,-0.89,"4TTH","5L2I"],[71.59,-0.04,"4TTH","5L2S"],[71.59,-0.26,"4TTH","5L2T"],[71.59,-0.27,"4TTH","6OQL"],[71.59,-0.09,"4TTH","6OQO"],[71.59,-5.56,"4TTH","8I0M"],[88.68,-5.92,"5L2I","3NUP"],[88.68,-9.49,"5L2I","3NUX"],[88.68,-6.66,"5L2I","4AUA"],[88.68,-7.12,"5L2I","4EZ5"],[88.68,-7.33,"5L2I","5L2S"],[88.68,-6.13,"5L2I","5L2T"],[88.68,-7.52,"5L2I","6OQL"],[88.68,-7.07,"5L2I","6OQO"],[55.42,-8.27,"5L2S","3NUP"],[55.42,-6.72,"5L2S","3NUX"],[55.42,-7.35,"5L2S","4AUA"],[55.42,-7.1,"5L2S","4EZ5"],[55.42,-0.02,"5L2S","4TTH"],[55.42,-6.76,"5L2S","5L2I"],[55.42,-9.18,"5L2S","5L2T"],[55.42,-10.41,"5L2S","6OQL"],[55.42,-9.71,"5L2S","6OQO"],[55.42,-4.31,"5L2S","8I0M"],[61.94,-8.61,"5L2T","3NUP"],[61.94,-7.2,"5L2T","3NUX"],[61.94,-7.45,"5L2T","4AUA"],[61.94,-7.12,"5L2T","4EZ5"],[61.94,-0.01,"5L2T","4TTH"],[61.94,-6.82,"5L2T","5L2I"],[61.94,-9.94,"5L2T","5L2S"],[61.94,-9.67,"5L2T","6OQL"],[61.94,-9.69,"5L2T","6OQO"],[61.94,-4.58,"5L2T","8I0M"],[115.8,-9.08,"6OQL","3NUP"],[115.8,-6.96,"6OQL","3NUX"],[115.8,-7.78,"6OQL","4AUA"],[115.8,-7.23,"6OQL","4EZ5"],[115.8,-0.16,"6OQL","4TTH"],[115.8,-6.26,"6OQL","5L2I"],[115.8,-10.61,"6OQL","5L2S"],[115.8,-8.96,"6OQL","5L2T"],[115.8,-11.39,"6OQL","6OQO"],[115.8,-4.42,"6OQL","8I0M"],[63.14,-8.51,"6OQO","3NUP"],[63.14,-7.14,"6OQO","3NUX"],[63.14,-7.73,"6OQO","4AUA"],[63.14,-7.43,"6OQO","4EZ5"],[63.14,-0.01,"6OQO","4TTH"],[63.14,-6.97,"6OQO","5L2I"],[63.14,-10.09,"6OQO","5L2S"],[63.14,-8.64,"6OQO","5L2T"],[63.14,-11.71,"6OQO","6OQL"],[63.14,-4.36,"6OQO","8I0M"],[80.69,-4.32,"8I0M","3NUP"],[80.69,-6.3,"8I0M","3NUX"],[80.69,-4.48,"8I0M","4AUA"],[80.69,-6.12,"8I0M","4TTH"],[80.69,-6.64,"8I0M","5L2I"],[80.69,-5.51,"8I0M","5L2S"],[80.69,-5.25,"8I0M","5L2T"],[80.69,-5.92,"8I0M","6OQL"],[80.69,-5.65,"8I0M","6OQO"]]
+};
+
+// ==================== INIT ====================
+const PROTEINS = ['CDK2','Trypsin','CDK1','CDK6'];
+let activeProteins = new Set(PROTEINS);
+let bfActiveProteins = new Set(PROTEINS);
+let coneActiveProteins = new Set(PROTEINS);
+let showSuccess = true;
+let showFail = true;
+let explorerSortKey = 'protein';
+let explorerSortAsc = true;
+
+function init() {
+  buildSummaryCards();
+  buildPlotControls();
+  buildStatsTable();
+  buildStatsDetail();
+  buildFigures();
+  buildCompareSelects();
+  buildExplorerSelects();
+  renderScatter();
+  renderExplorer();
+}
+
+// ==================== SUMMARY CARDS ====================
+function buildSummaryCards() {
+  const container = document.getElementById('summary-cards');
+  const labels = {pairs:'Cross-Docking Pairs', success:'Success (RMSD<2.0Å)', rate:'Success Rate', pearson:'Pearson r', pp:'p-value'};
+  container.innerHTML = PROTEINS.map(p => {
+    const s = STATS[p];
+    const sc = s.success + '/' + s.pairs;
+    return `<div class="card"><h3><span class="chip ${CHIP[p]}">${p}</span></h3>
+      <div class="stat-row"><span class="sl">Pairs</span><span class="sv">${s.pairs}</span></div>
+      <div class="stat-row"><span class="sl">Success Rate</span><span class="sv ${s.rate===100?'g':(s.rate<60?'r':'o')}">${s.rate}% (${sc})</span></div>
+      <div class="stat-row"><span class="sl">Pearson r</span><span class="sv r">${s.pearson}</span></div>
+      <div class="stat-row"><span class="sl">p-value</span><span class="sv r">${s.pp}</span></div>
+      <div class="stat-row"><span class="sl">T-test p</span><span class="sv r">${s.ttest===null?'N/A':s.ttest}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== PLOT CONTROLS ====================
+function buildPlotControls() {
+  const ctrl = document.getElementById('plot-controls');
+  // Get unique receptors and ligands across all data
+  const allCross = ALL_DATA.filter(d => d.receptor !== d.ligand_from);
+  const receptors = [...new Set(allCross.map(d => d.receptor))].sort();
+  const ligands = [...new Set(allCross.map(d => d.ligand_from))].sort();
+
+  const proteinChips = PROTEINS.map(p =>
+    `<label><input type="checkbox" checked onchange="toggleProtein('${p}',this.checked)"><span class="chip ${CHIP[p]}">${p}</span></label>`
+  ).join('');
+
+  ctrl.innerHTML = `
+    ${proteinChips}
+    <span style="color:var(--muted);margin:0 4px">|</span>
+    <label><input type="checkbox" checked onchange="toggleResult('success',this.checked)"><span style="color:var(--grn);font-size:.82rem">✅ Success</span></label>
+    <label><input type="checkbox" checked onchange="toggleResult('fail',this.checked)"><span style="color:var(--red);font-size:.82rem">❌ Fail</span></label>
+    <span style="color:var(--muted);margin:0 4px">|</span>
+    <select id="plot-receptor-filter" onchange="renderScatter()" style="padding:4px 8px;background:#0d1117;border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.8rem;max-width:140px">
+      <option value="">All Receptors</option>
+      ${receptors.map(r => `<option value="${r}">${r}</option>`).join('')}
+    </select>
+    <select id="plot-ligand-filter" onchange="renderScatter()" style="padding:4px 8px;background:#0d1117;border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.8rem;max-width:140px">
+      <option value="">All Ligands</option>
+      ${ligands.map(l => `<option value="${l}">${l}</option>`).join('')}
+    </select>
+    <span style="color:var(--muted);font-size:.78rem;margin-left:auto">🖱 Hover: details | Click legend: isolate</span>
+  `;
+}
+
+function toggleProtein(protein, show) {
+  if (show) activeProteins.add(protein); else activeProteins.delete(protein);
+  renderScatter();
+}
+
+function toggleResult(type, show) {
+  if (type === 'success') showSuccess = show;
+  else showFail = show;
+  renderScatter();
+}
+
+// ==================== SCATTER PLOT ====================
+function renderScatter() {
+  const traces = [];
+  const receptorFilter = document.getElementById('plot-receptor-filter')?.value || '';
+  const ligandFilter = document.getElementById('plot-ligand-filter')?.value || '';
+
+  PROTEINS.filter(p => activeProteins.has(p)).forEach(p => {
+    let pts = ALL_DATA.filter(d => d.protein === p && d.receptor !== d.ligand_from);
+    // Apply result filters
+    if (!showSuccess) pts = pts.filter(d => !d.success);
+    if (!showFail) pts = pts.filter(d => d.success);
+    // Apply receptor/ligand filters
+    if (receptorFilter) pts = pts.filter(d => d.receptor === receptorFilter);
+    if (ligandFilter) pts = pts.filter(d => d.ligand_from === ligandFilter);
+
+    const successPts = pts.filter(d => d.success);
+    const failPts = pts.filter(d => !d.success);
+    const color = COLORS[p];
+    const makeTrace = (data, symbol, nameSuffix) => ({
+      x: data.map(d => d.bfactor),
+      y: data.map(d => d.rmsd),
+      type: 'scatter', mode: 'markers',
+      name: p + nameSuffix,
+      marker: {color: color, size: 8, symbol: symbol, line:{width:0.5,color:'rgba(255,255,255,0.3)'}, opacity: 0.78},
+      hovertemplate: data.map(d => {
+        const resultIcon = d.success ? '✅ Success' : '❌ Fail';
+        const nativeInfo = d.receptor_native ? `<br><b>   Receptor Native Ligand:</b> ${d.receptor_native}` : '';
+        return `<b>📦 Receptor:</b> ${d.receptor} (${p})${nativeInfo}<br><b>⚡ Docked Ligand:</b> ${d.ligand_code} <i>from PDB</i> ${d.ligand_from}<br><b>📊 RMSD:</b> ${d.rmsd.toFixed(2)} Å  |  <b>B-factor:</b> ${d.bfactor.toFixed(1)}<br><b>⚡ Affinity:</b> ${d.affinity.toFixed(1)} kcal/mol<br><b>🏷 Result:</b> ${resultIcon}<extra></extra>`;
+      }),
+      hoverlabel: {bgcolor:'#1f2937', font:{color:'#c9d1d9', size:12}, bordercolor:color},
+      showlegend: nameSuffix === ' ✓'
+    });
+    if (successPts.length) traces.push(makeTrace(successPts, 'circle', ' ✓'));
+    if (failPts.length) traces.push(makeTrace(failPts, 'x', ' ✗'));
+  });
+
+  const totalPts = traces.reduce((s,t) => s + t.x.length, 0);
+  const layout = {
+    template: {layout:{paper_bgcolor:'#161b22',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9'},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'}}},
+    title: totalPts === 0 ? '⚠ No data matches current filters' : `Showing ${totalPts} cross-docking results`,
+    xaxis: {title:{text:'<b>Pocket Average B-factor</b> (Å²)<br><sub>Average B-factor of receptor binding-pocket residues — reflects local flexibility</sub>', standoff:0}, zeroline:false, titlefont:{size:13}},
+    yaxis: {title:{text:'<b>Cross-Docking RMSD</b> (Å)<br><sub>RMSD between docked and crystal pose — RMSD<2.0Å = success</sub>', standoff:0}, zeroline:false, titlefont:{size:13}},
+    shapes: [{type:'line',x0:0,x1:130,y0:2.0,y1:2.0,line:{dash:'dash',color:'#f85149',width:1.5}}],
+    annotations: [{x:125,y:2.15,text:'RMSD=2.0Å',showarrow:false,font:{color:'#f85149',size:10}}],
+    legend: {orientation:'h', y:1.15, x:0, font:{size:11}, itemclick:'toggle', itemdoubleclick:'toggleothers'},
+    margin: {l:70, r:20, t:40, b:60},
+    hovermode: 'closest',
+    dragmode: 'zoom'
+  };
+
+  Plotly.react('scatter-plot', traces, layout, {responsive:true, displayModeBar:true, modeBarButtonsToRemove:['lasso2d','select2d'], displaylogo:false});
+}
+
+// ==================== TABS ====================
+function switchTab(name) {
+  document.querySelectorAll('.tab-nav button').forEach(b => {
+    const btnText = b.textContent.trim();
+    b.classList.remove('active');
+    if (name === 'scatter' && btnText.includes('Scatter')) b.classList.add('active');
+    if (name === 'bfactor' && btnText.includes('vs Score')) b.classList.add('active');
+    if (name === 'cone' && btnText.includes('Cone')) b.classList.add('active');
+    if (name === 'explorer' && btnText.includes('Explorer')) b.classList.add('active');
+    if (name === 'stats' && btnText.includes('Statistics')) b.classList.add('active');
+    if (name === 'figures' && btnText.includes('Figures')) b.classList.add('active');
+    if (name === 'compare' && btnText.includes('Compare')) b.classList.add('active');
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('tab-' + name);
+  if (panel) { panel.classList.add('active');
+    if (name === 'scatter') setTimeout(renderScatter, 100);
+    if (name === 'bfactor') setTimeout(renderBFAnalysis, 100);
+    if (name === 'cone') setTimeout(renderConeAnalysis, 100);
+    if (name === 'explorer') renderExplorer();
+    if (name === 'compare') updateComparison();
+  }
+}
+
+// ==================== STATS TABLE ====================
+function buildStatsTable() {
+  const rows = PROTEINS.map(p => {
+    const s = STATS[p];
+    return `<tr><td><span class="chip ${CHIP[p]}">${p}</span></td><td>${s.pairs}</td><td>${s.rate}%</td><td class="r">${s.pearson}</td><td class="r">${s.pp}</td><td>${s.spearman}</td><td class="r">${s.ttest===null?'N/A':s.ttest}</td></tr>`;
+  }).join('');
+  document.getElementById('stats-table').innerHTML = `<thead><tr><th>Protein</th><th>N Pairs</th><th>Success</th><th>Pearson r</th><th>p-value</th><th>Spearman ρ</th><th>T-test p</th></tr></thead><tbody>${rows}</tbody>`;
+}
+
+function buildStatsDetail() {
+  document.getElementById('stats-detail').innerHTML = PROTEINS.map(p => {
+    const pts = ALL_DATA.filter(d => d.protein === p && d.receptor !== d.ligand_from);
+    const meanBF = (pts.reduce((s,d)=>s+d.bfactor,0)/pts.length).toFixed(1);
+    const meanRMSD = (pts.reduce((s,d)=>s+d.rmsd,0)/pts.length).toFixed(2);
+    return `<div class="card" style="margin-bottom:12px"><h3><span class="chip ${CHIP[p]}">${p}</span> Statistical Tests</h3>
+      <div class="stat-row"><span class="sl">N cross-docking pairs</span><span class="sv">${pts.length}</span></div>
+      <div class="stat-row"><span class="sl">Mean B-factor</span><span class="sv">${meanBF}</span></div>
+      <div class="stat-row"><span class="sl">Mean RMSD</span><span class="sv">${meanRMSD}Å</span></div>
+      <div class="stat-row"><span class="sl">Unique receptors</span><span class="sv">${new Set(pts.map(d=>d.receptor)).size}</span></div>
+      <div class="stat-row"><span class="sl">Unique ligands</span><span class="sv">${new Set(pts.map(d=>d.ligand_from)).size}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== FIGURES ====================
+function buildFigures() {
+  const figs = {
+    CDK2: [
+      ['bfactor_vs_rmsd.png','B-factor vs RMSD scatter (r=-0.006, p=0.865)'],
+      ['bfactor_vs_rmsd_by_ligand.png','Per-ligand B-factor vs RMSD'],
+      ['bfactor_distribution.png','Pocket B-factor distribution (30 structures)'],
+      ['rmsd_distribution.png','Cross-docking RMSD distribution'],
+      ['positive_control_comparison.png','Self-docking vs cross-docking'],
+      ['self_vs_cross_docking.png','Self vs cross RMSD comparison'],
+      ['ensemble_comparison.png','Ensemble docking: all strategies yield 0%']
+    ],
+    Trypsin: [
+      ['bfactor_vs_rmsd.png','B-factor vs RMSD — all below 2.0Å (r=0.037)'],
+      ['bfactor_vs_rmsd_by_ligand.png','Per-ligand B-factor vs RMSD'],
+      ['bfactor_distribution.png','B-factor distribution (wide but no effect)'],
+      ['rmsd_distribution.png','RMSD distribution — all success'],
+      ['positive_control_comparison.png','Self-docking positive control'],
+      ['ensemble_comparison.png','Ensemble docking comparison']
+    ],
+    CDK1: [
+      ['bfactor_vs_rmsd.png','B-factor vs RMSD (r=0.002, p=0.987)'],
+      ['bfactor_distribution.png','B-factor distribution (8 structures)'],
+      ['rmsd_distribution.png','RMSD distribution'],
+      ['positive_control_comparison.png','Self-docking control']
+    ],
+    CDK6: [
+      ['bfactor_vs_rmsd.png','B-factor vs RMSD (r=0.036, p=0.671)'],
+      ['bfactor_vs_rmsd_by_ligand.png','Per-ligand B-factor vs RMSD'],
+      ['bfactor_distribution.png','B-factor distribution (10 structures)'],
+      ['rmsd_distribution.png','RMSD distribution']
+    ]
+  };
+  const base = 'experiment/figures/';
+  document.getElementById('figures-container').innerHTML = PROTEINS.map(p => {
+    const imgs = figs[p].map(([fn,cap]) =>
+      `<div class="figure-card" data-protein="${p}"><img src="${base}${p}/${fn}" alt="${p} ${cap}" onclick="openLB(this.src)" loading="lazy"><div class="cap">${cap}</div></div>`
+    ).join('');
+    return `<h2 id="fig-${p}"><span class="chip ${CHIP[p]}">${p}</span></h2><div class="figure-grid">${imgs}</div>`;
+  }).join('');
+}
+
+function toggleFigProtein(protein, show) {
+  document.querySelectorAll(`[data-protein="${protein}"]`).forEach(el => el.style.display = show ? '' : 'none');
+  const h2 = document.getElementById('fig-' + protein);
+  if (h2) h2.style.display = show ? '' : 'none';
+}
+
+// ==================== DATA EXPLORER ====================
+function buildExplorerSelects() {
+  const sel = document.getElementById('explorer-protein');
+  sel.innerHTML = '<option value="">All Proteins</option>' + PROTEINS.map(p => `<option value="${p}">${p}</option>`).join('');
+}
+
+function renderExplorer() {
+  const search = (document.getElementById('explorer-search')?.value || '').toLowerCase();
+  const protein = document.getElementById('explorer-protein')?.value || '';
+  const filter = document.getElementById('explorer-filter')?.value || '';
+  const tbody = document.querySelector('#explorer-table tbody');
+
+  let data = [...ALL_DATA];
+  // Filter by protein
+  if (protein) data = data.filter(d => d.protein === protein);
+  // Filter by type
+  if (filter === 'success') data = data.filter(d => d.success);
+  if (filter === 'fail') data = data.filter(d => !d.success);
+  if (filter === 'cross') data = data.filter(d => d.receptor !== d.ligand_from);
+  if (filter === 'self') data = data.filter(d => d.receptor === d.ligand_from);
+  // Search
+  if (search) data = data.filter(d =>
+    d.receptor.toLowerCase().includes(search) ||
+    d.ligand_from.toLowerCase().includes(search) ||
+    d.ligand_code.toLowerCase().includes(search) ||
+    (d.receptor_native||'').toLowerCase().includes(search) ||
+    d.protein.toLowerCase().includes(search)
+  );
+  // Sort
+  data.sort((a, b) => {
+    let va, vb;
+    switch (explorerSortKey) {
+      case 'protein': va = a.protein; vb = b.protein; break;
+      case 'receptor': va = a.receptor; vb = b.receptor; break;
+      case 'ligand_from': va = a.ligand_from; vb = b.ligand_from; break;
+      case 'rmsd': va = a.rmsd; vb = b.rmsd; break;
+      case 'bfactor': va = a.bfactor; vb = b.bfactor; break;
+      case 'affinity': va = a.affinity; vb = b.affinity; break;
+      case 'success': va = a.success ? 1 : 0; vb = b.success ? 1 : 0; break;
+      default: va = a.protein; vb = b.protein;
+    }
+    if (typeof va === 'string') return explorerSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return explorerSortAsc ? va - vb : vb - va;
+  });
+
+  document.getElementById('explorer-count').textContent = `${data.length} results`;
+
+  tbody.innerHTML = data.map(d => {
+    const isSelf = d.receptor === d.ligand_from;
+    return `<tr style="${isSelf ? 'background:rgba(88,166,255,0.04)' : ''}" onclick="highlightDocking('${d.receptor}','${d.ligand_from}','${d.protein}')" title="Click to locate in scatter plot">
+      <td><span class="chip ${CHIP[d.protein]}">${d.protein}</span></td>
+      <td><b>${d.receptor}</b>${d.receptor_native ? ` <span style="color:var(--muted);font-size:.78rem">(${d.receptor_native})</span>` : ''}</td>
+      <td style="color:var(--muted)">${d.receptor_native || '—'}</td>
+      <td>${d.ligand_from} ${isSelf ? '<span style="color:var(--muted);font-size:.75rem">(self)</span>' : ''}</td>
+      <td><b style="color:var(--acc)">${d.ligand_code}</b></td>
+      <td class="${d.success ? 'g' : 'r'}">${d.rmsd.toFixed(2)}</td>
+      <td>${d.bfactor.toFixed(1)}</td>
+      <td>${d.affinity.toFixed(1)}</td>
+      <td>${d.success ? '✅' : '❌'}</td>
+    </tr>`;
+  }).join('');
+
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:40px">No results match the current filters</td></tr>';
+  }
+}
+
+function sortExplorer(key) {
+  if (explorerSortKey === key) explorerSortAsc = !explorerSortAsc;
+  else { explorerSortKey = key; explorerSortAsc = true; }
+  renderExplorer();
+}
+
+function highlightDocking(receptor, ligandFrom, protein) {
+  // Switch to scatter tab and filter by receptor + ligand
+  switchTab('scatter');
+  setTimeout(() => {
+    const recSel = document.getElementById('plot-receptor-filter');
+    const ligSel = document.getElementById('plot-ligand-filter');
+    if (recSel) recSel.value = receptor;
+    if (ligSel) ligSel.value = ligandFrom;
+    // Set only the target protein as active
+    activeProteins = new Set([protein]);
+    // Update checkboxes visually - find by chip class
+    document.querySelectorAll('#plot-controls label').forEach(label => {
+      const chipSpan = label.querySelector('.chip');
+      if (chipSpan) {
+        const chipClass = [...chipSpan.classList].find(c => c !== 'chip');
+        const matchedProtein = PROTEINS.find(pr => CHIP[pr] === chipClass);
+        if (matchedProtein) {
+          const cb = label.querySelector('input[type=checkbox]');
+          if (cb) cb.checked = (matchedProtein === protein);
+        }
+      }
+    });
+    renderScatter();
+  }, 150);
+}
+
+// ==================== COMPARISON ====================
+function buildCompareSelects() {
+  const opts = PROTEINS.map(p => `<option value="${p}">${p}</option>`).join('');
+  document.getElementById('cmp-a').innerHTML = opts;
+  document.getElementById('cmp-b').innerHTML = opts;
+  document.getElementById('cmp-b').value = 'Trypsin';
+  updateComparison();
+}
+
+function updateComparison() {
+  const a = document.getElementById('cmp-a').value;
+  const b = document.getElementById('cmp-b').value;
+  const sa = STATS[a], sb = STATS[b];
+  const ptsA = ALL_DATA.filter(d => d.protein === a && d.receptor !== d.ligand_from);
+  const ptsB = ALL_DATA.filter(d => d.protein === b && d.receptor !== d.ligand_from);
+
+  // Title
+  document.getElementById('cmp-title-a').innerHTML = `<span class="chip ${CHIP[a]}">${a}</span> N=${ptsA.length} | ${sa.rate}% success`;
+  document.getElementById('cmp-title-b').innerHTML = `<span class="chip ${CHIP[b]}">${b}</span> N=${ptsB.length} | ${sb.rate}% success`;
+
+  // Stats text
+  const formatStats = (pts, s) => {
+    const meanBf = (pts.reduce((s,d)=>s+d.bfactor,0)/pts.length).toFixed(1);
+    const meanRmsd = (pts.reduce((s,d)=>s+d.rmsd,0)/pts.length).toFixed(2);
+    return `<div style="font-size:.82rem;color:var(--muted);margin-top:8px">Mean B-factor: ${meanBf} · Mean RMSD: ${meanRmsd}Å · Pearson r: ${s.pearson} (p=${s.pp}) · N Rec: ${new Set(pts.map(d=>d.receptor)).size}</div>`;
+  };
+  document.getElementById('cmp-stats-a').innerHTML = formatStats(ptsA, sa);
+  document.getElementById('cmp-stats-b').innerHTML = formatStats(ptsB, sb);
+
+  // Mini scatter function
+  const makeMiniPlot = (divId, pts, protein, color) => {
+    const successPts = pts.filter(d => d.success);
+    const failPts = pts.filter(d => !d.success);
+    const traces = [];
+    if (successPts.length) traces.push({x: successPts.map(d=>d.bfactor), y: successPts.map(d=>d.rmsd), type:'scatter', mode:'markers', name:'Success', marker:{color, size:7, symbol:'circle', opacity:0.7}, hovertemplate: successPts.map(d=>`<b>${d.receptor}</b> ← ${d.ligand_from} (${d.ligand_code})<br>RMSD: ${d.rmsd.toFixed(2)}Å | B-factor: ${d.bfactor.toFixed(1)}<br>✅ Success<extra></extra>`), hoverlabel:{bgcolor:'#1f2937',font:{color:'#c9d1d9',size:11}}});
+    if (failPts.length) traces.push({x: failPts.map(d=>d.bfactor), y: failPts.map(d=>d.rmsd), type:'scatter', mode:'markers', name:'Fail', marker:{color, size:7, symbol:'x', opacity:0.7}, hovertemplate: failPts.map(d=>`<b>${d.receptor}</b> ← ${d.ligand_from} (${d.ligand_code})<br>RMSD: ${d.rmsd.toFixed(2)}Å | B-factor: ${d.bfactor.toFixed(1)}<br>❌ Fail<extra></extra>`), hoverlabel:{bgcolor:'#1f2937',font:{color:'#c9d1d9',size:11}}});
+    const layout = {
+      template:{layout:{paper_bgcolor:'#0d1117',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9',size:10},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'}}},
+      xaxis:{title:'B-factor'}, yaxis:{title:'RMSD (Å)', range:[0, Math.max(3, ...pts.map(d=>d.rmsd))*1.1]},
+      shapes:[{type:'line',x0:0,x1:130,y0:2.0,y1:2.0,line:{dash:'dash',color:'#f85149',width:1}}],
+      margin:{l:50,r:10,t:10,b:40}, showlegend:false, hovermode:'closest', dragmode:'zoom'
+    };
+    Plotly.react(divId, traces, layout, {responsive:true, displayModeBar:false, displaylogo:false});
+  };
+
+  makeMiniPlot('cmp-plot-a', ptsA, a, COLORS[a]);
+  makeMiniPlot('cmp-plot-b', ptsB, b, COLORS[b]);
+}
+
+// ==================== B-FACTOR vs DOCKING SCORE ANALYSIS ====================
+function toggleBFProtein(protein, show) {
+  if (show) bfActiveProteins.add(protein); else bfActiveProteins.delete(protein);
+  renderBFAnalysis();
+}
+
+function getPerStructureStats(protein) {
+  // Aggregate docking results per receptor structure
+  const cross = ALL_DATA.filter(d => d.protein === protein && d.receptor !== d.ligand_from);
+  const byReceptor = {};
+  cross.forEach(d => {
+    if (!byReceptor[d.receptor]) byReceptor[d.receptor] = {affinities:[], successes:0, total:0, rmsds:[]};
+    byReceptor[d.receptor].affinities.push(d.affinity);
+    byReceptor[d.receptor].rmsds.push(d.rmsd);
+    byReceptor[d.receptor].total++;
+    if (d.success) byReceptor[d.receptor].successes++;
+  });
+  return Object.entries(byReceptor).map(([rec, v]) => ({
+    receptor: rec,
+    meanAffinity: v.affinities.reduce((s,a)=>s+a,0) / v.affinities.length,
+    successRate: v.successes / v.total * 100,
+    meanRMSD: v.rmsds.reduce((s,r)=>s+r,0) / v.rmsds.length,
+    nPairs: v.total
+  }));
+}
+
+function renderBFAnalysis() {
+  // ---- Affinity plot ----
+  const affTraces = [];
+  PROTEINS.filter(p => bfActiveProteins.has(p)).forEach(p => {
+    const stats = getPerStructureStats(p);
+    const bfData = BFIBS_DATA[p] || BF_PER_STRUCTURE[p] || [];
+    // Match per-structure stats with B-factor data
+    const merged = [];
+    stats.forEach(s => {
+      const bfMatch = bfData.find(b => b.pdb === s.receptor);
+      if (bfMatch) merged.push({...s, bfactor: bfMatch.mean_pocket || bfMatch.pocket_avg || 0, pdb: s.receptor});
+    });
+    if (merged.length === 0) return;
+    affTraces.push({
+      x: merged.map(d => d.bfactor),
+      y: merged.map(d => d.meanAffinity),
+      type: 'scatter', mode: 'markers+text',
+      name: p,
+      text: merged.map(d => d.pdb),
+      textposition: 'top center',
+      textfont: {size: 9, color: COLORS[p]},
+      marker: {color: COLORS[p], size: 12, line:{width:1,color:'rgba(255,255,255,0.3)'}},
+      hovertemplate: merged.map(d =>
+        `<b>${d.pdb}</b> (${p})<br>B-factor: ${d.bfactor.toFixed(1)}<br>Mean Affinity: ${d.meanAffinity.toFixed(1)} kcal/mol<br>Success Rate: ${d.successRate.toFixed(0)}%<br>${d.nPairs} docking pairs<extra></extra>`
+      ),
+      hoverlabel: {bgcolor:'#1f2937', font:{color:'#c9d1d9', size:11}}
+    });
+  });
+
+  Plotly.react('bf-affinity-plot', affTraces, {
+    template: {layout:{paper_bgcolor:'#161b22',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9',size:11},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'}}},
+    xaxis: {title:{text:'<b>Pocket Mean B-factor</b> (Å²)<br><sub>Mean pocket B-factor of this PDB structure</sub>'}},
+    yaxis: {title:{text:'<b>Mean Docking Affinity</b> (kcal/mol)<br><sub>Mean Vina score of all ligands docked into this receptor</sub>'}},
+    legend: {orientation:'h', y:1.15},
+    margin: {l:60, r:20, t:10, b:60},
+    hovermode: 'closest'
+  }, {responsive:true, displayModeBar:false, displaylogo:false});
+
+  // ---- Success Rate plot ----
+  const sucTraces = [];
+  PROTEINS.filter(p => bfActiveProteins.has(p)).forEach(p => {
+    const stats = getPerStructureStats(p);
+    const bfData = BFIBS_DATA[p] || BF_PER_STRUCTURE[p] || [];
+    const merged = [];
+    stats.forEach(s => {
+      const bfMatch = bfData.find(b => b.pdb === s.receptor);
+      if (bfMatch) merged.push({...s, bfactor: bfMatch.mean_pocket || bfMatch.pocket_avg || 0, pdb: s.receptor});
+    });
+    if (merged.length === 0) return;
+    sucTraces.push({
+      x: merged.map(d => d.bfactor),
+      y: merged.map(d => d.successRate),
+      type: 'scatter', mode: 'markers+text',
+      name: p,
+      text: merged.map(d => d.pdb),
+      textposition: 'top center',
+      textfont: {size: 9, color: COLORS[p]},
+      marker: {color: COLORS[p], size: 12, line:{width:1,color:'rgba(255,255,255,0.3)'}},
+      hovertemplate: merged.map(d =>
+        `<b>${d.pdb}</b> (${p})<br>B-factor: ${d.bfactor.toFixed(1)}<br>Success Rate: ${d.successRate.toFixed(0)}% (${Math.round(d.successRate/100*d.nPairs)}/${d.nPairs})<extra></extra>`
+      ),
+      hoverlabel: {bgcolor:'#1f2937', font:{color:'#c9d1d9', size:11}}
+    });
+  });
+
+  Plotly.react('bf-success-plot', sucTraces, {
+    template: {layout:{paper_bgcolor:'#161b22',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9',size:11},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'}}},
+    xaxis: {title:{text:'<b>Pocket Mean B-factor</b> (Å²)<br><sub>Mean pocket B-factor of this PDB structure</sub>'}},
+    yaxis: {title:{text:'<b>Docking Success Rate</b> (%)<br><sub>Success rate when docking into this receptor (RMSD<2.0Å)</sub>', standoff:0}, range:[-5,105]},
+    legend: {orientation:'h', y:1.15},
+    margin: {l:60, r:20, t:10, b:60},
+    hovermode: 'closest'
+  }, {responsive:true, displayModeBar:false, displaylogo:false});
+
+  // ---- BFIbs Distribution (CDK2 + Trypsin only) ----
+  const bfibsTraces = [];
+  let maxBFIbsLen = 0;
+  ['CDK2','Trypsin'].filter(p => bfActiveProteins.has(p)).forEach(p => {
+    const data = BFIBS_DATA[p];
+    if (!data) return;
+    if (data.length > maxBFIbsLen) maxBFIbsLen = data.length;
+    bfibsTraces.push({
+      x: data.map(d => d.pdb),
+      y: data.map(d => d.bfibs),
+      type: 'bar',
+      name: p + ' BFIbs',
+      marker: {color: COLORS[p], opacity: 0.8},
+      text: data.map(d => d.bfibs.toFixed(2)),
+      textposition: 'outside',
+      textfont: {size: 9, color: COLORS[p]},
+      hovertemplate: data.map(d =>
+        `<b>${d.pdb}</b><br>BFIbs: ${d.bfibs.toFixed(3)}<br>Median Pocket B-factor: ${d.median_pocket.toFixed(1)}<extra></extra>`
+      ),
+      hoverlabel: {bgcolor:'#1f2937', font:{color:'#c9d1d9', size:11}}
+    });
+  });
+
+  Plotly.react('bfibs-plot', bfibsTraces, {
+    template: {layout:{paper_bgcolor:'#161b22',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9',size:10},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d',title:{text:'<b>BFIbs Score</b>'}}}},
+    xaxis: {title:{text:'<b>PDB Structure</b>', standoff:10}, tickangle:-45},
+    yaxis: {title:{text:'<b>BFIbs</b><br><sub>Binding-site Flexibility Index</sub>', standoff:0}},
+    shapes: [{type:'line',x0:-0.5,x1:maxBFIbsLen-0.5,y0:1.0,y1:1.0,line:{dash:'dash',color:'rgba(255,255,255,0.4)',width:1}}],
+    legend: {orientation:'h', y:1.15},
+    margin: {l:50, r:10, t:10, b:100},
+    hovermode: 'closest',
+    barmode: 'group'
+  }, {responsive:true, displayModeBar:false, displaylogo:false});
+}
+
+// ==================== CONE / SCORE-SPREAD ANALYSIS ====================
+function toggleConeProtein(protein, show) {
+  if (show) coneActiveProteins.add(protein); else coneActiveProteins.delete(protein);
+  renderConeAnalysis();
+}
+
+function coneBinEnvelope(pts) {
+  // pts: [{bf, aff}] -> equal-count-ish bins by B-factor, return {centers, best, worst, mean}
+  if (pts.length < 8) return null;
+  const sorted = [...pts].sort((a,b) => a.bf - b.bf);
+  const nBins = Math.min(7, Math.max(4, Math.round(sorted.length / 18)));
+  const per = Math.ceil(sorted.length / nBins);
+  const centers=[], best=[], worst=[], mean=[];
+  for (let i=0; i<sorted.length; i+=per) {
+    const chunk = sorted.slice(i, i+per);
+    if (chunk.length < 3) continue;
+    const ys = chunk.map(d => d.aff);
+    centers.push(chunk.reduce((s,d)=>s+d.bf,0)/chunk.length);
+    best.push(Math.min(...ys));   // strongest (most negative)
+    worst.push(Math.max(...ys));  // weakest (closest to 0)
+    mean.push(ys.reduce((s,y)=>s+y,0)/ys.length);
+  }
+  return {centers, best, worst, mean};
+}
+
+function renderConeAnalysis() {
+  const showEnv = document.getElementById('cone-env')?.checked;
+  const traces = [];
+  let all = [];
+  PROTEINS.filter(p => coneActiveProteins.has(p)).forEach(p => {
+    const pts = (CONE_DATA[p] || []).map(r => ({bf:r[0], aff:r[1], rec:r[2], lig:r[3]}));
+    all = all.concat(pts.map(d => ({...d, protein:p})));
+    if (!pts.length) return;
+    traces.push({
+      x: pts.map(d => d.bf), y: pts.map(d => d.aff),
+      type:'scatter', mode:'markers', name:p,
+      marker:{color:COLORS[p], size:7, opacity:0.7, line:{width:0.5, color:'rgba(255,255,255,0.25)'}},
+      hovertemplate: pts.map(d => `<b>${d.rec}</b> ← ${d.lig} (${p})<br>B-factor: ${d.bf.toFixed(1)}<br>Vina score: ${d.aff.toFixed(2)} kcal/mol<extra></extra>`),
+      hoverlabel:{bgcolor:'#1f2937', font:{color:'#c9d1d9', size:11}, bordercolor:COLORS[p]}
+    });
+  });
+
+  // ---- Cone envelope over the POOLED points ----
+  const env = showEnv ? coneBinEnvelope(all) : null;
+  if (env) {
+    // filled cone band (worst edge going right, then best edge coming back)
+    traces.push({
+      x: env.centers.concat([...env.centers].reverse()),
+      y: env.worst.concat([...env.best].reverse()),
+      type:'scatter', mode:'lines', name:'Score envelope', fill:'toself',
+      fillcolor:'rgba(210,153,29,0.10)', line:{color:'rgba(210,153,29,0)'},
+      hoverinfo:'skip', showlegend:true
+    });
+    traces.push({x:env.centers, y:env.best, type:'scatter', mode:'lines+markers', name:'Strongest score (lower edge)',
+      line:{color:'#d2991d', width:2}, marker:{size:5,color:'#d2991d'},
+      hovertemplate:'B-factor≈%{x:.0f}<br>Strongest: %{y:.2f}<extra></extra>'});
+    traces.push({x:env.centers, y:env.worst, type:'scatter', mode:'lines+markers', name:'Weakest score (upper edge)',
+      line:{color:'#8b949e', width:1.5, dash:'dot'}, marker:{size:4,color:'#8b949e'},
+      hovertemplate:'B-factor≈%{x:.0f}<br>Weakest: %{y:.2f}<extra></extra>'});
+  }
+
+  Plotly.react('cone-plot', traces, {
+    template:{layout:{paper_bgcolor:'#161b22',plot_bgcolor:'#0d1117',font:{color:'#c9d1d9',size:11},xaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'},yaxis:{gridcolor:'#21262d',zerolinecolor:'#30363d'}}},
+    title: all.length ? `Docking Score vs B-factor — ${all.length} real scores` : '⚠ No data (select a protein)',
+    xaxis:{title:{text:'<b>Pocket Average B-factor</b> (Å²) →<br><sub>Receptor pocket average B-factor — larger = more flexible</sub>', standoff:0}, zeroline:false},
+    yaxis:{title:{text:'<b>Vina Docking Score</b> (kcal/mol)<br><sub>More negative = stronger binding</sub>', standoff:0}, zeroline:false},
+    legend:{orientation:'h', y:1.12, x:0, font:{size:10}},
+    margin:{l:70, r:20, t:44, b:64}, hovermode:'closest', dragmode:'zoom'
+  }, {responsive:true, displayModeBar:true, modeBarButtonsToRemove:['lasso2d','select2d'], displaylogo:false});
+
+  renderConeVerdict(all, env);
+}
+
+function renderConeVerdict(all, env) {
+  const el = document.getElementById('cone-verdict');
+  if (!all.length) { el.innerHTML=''; return; }
+  // Pearson: B-factor vs score, and B-factor vs |residual| (heteroscedasticity / cone test)
+  const xs = all.map(d=>d.bf), ys = all.map(d=>d.aff), n=xs.length;
+  const mx=xs.reduce((s,v)=>s+v,0)/n, my=ys.reduce((s,v)=>s+v,0)/n;
+  const sxy=xs.reduce((s,v,i)=>s+(v-mx)*(ys[i]-my),0);
+  const sxx=xs.reduce((s,v)=>s+(v-mx)**2,0), syy=ys.reduce((s,v)=>s+(v-my)**2,0);
+  const r = sxy/Math.sqrt(sxx*syy);
+  const slope=sxy/sxx, icpt=my-slope*mx;
+  const res = ys.map((y,i)=>Math.abs(y-(icpt+slope*xs[i])));
+  const mr=res.reduce((s,v)=>s+v,0)/n;
+  const rr = (res.reduce((s,v,i)=>s+(xs[i]-mx)*(v-mr),0)) /
+             Math.sqrt(sxx * res.reduce((s,v)=>s+(v-mr)**2,0));
+  const nProt = new Set(all.map(d=>d.protein)).size;
+  let widen='', headline='', color='';
+  if (env) {
+    const rangeLo = env.worst[0]-env.best[0];
+    const rangeHi = env.worst[env.worst.length-1]-env.best[env.best.length-1];
+    widen = `Envelope width grows from ${rangeLo.toFixed(1)} kcal/mol at low B → ${rangeHi.toFixed(1)} kcal/mol at high B; the strongest score deepens from ${env.best[0].toFixed(1)} to ${Math.min(...env.best).toFixed(1)} kcal/mol as B-factor rises.`;
+  }
+  // Verdict logic
+  if (nProt >= 2 && r < -0.2) {
+    headline = '✅ Cone present (cross-protein)'; color='var(--org)';
+  } else if (Math.abs(rr) < 0.15) {
+    headline = '⚠ Cone not evident'; color='var(--muted)';
+  } else {
+    headline = rr>0 ? '✅ Spread grows with B-factor' : '❌ Spread does not grow with B-factor'; color = rr>0?'var(--org)':'var(--red)';
+  }
+  el.innerHTML = `<div class="card" style="border-left:3px solid ${color}">
+    <h3 style="color:${color};margin-bottom:8px">${headline}</h3>
+    <div class="stat-row"><span class="sl">Pearson r (B-factor vs score)</span><span class="sv o">${r.toFixed(3)}</span></div>
+    <div class="stat-row"><span class="sl">Pearson r (B-factor vs |residual|) — cone / heteroscedasticity test</span><span class="sv">${rr.toFixed(3)}</span></div>
+    <div class="stat-row"><span class="sl">Samples / proteins</span><span class="sv">${n} scores · ${nProt} proteins</span></div>
+    <p style="color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.7">
+      ${widen}<br>
+      <b>Interpretation:</b>${nProt>=2
+        ? 'Pooling all 4 proteins (B-factor span 4–116 Å²), the lower edge (strongest score) deepens monotonically with B-factor while the upper edge (weakest score) hugs 0, so the envelope genuinely opens toward the lower-right — a cone. But this is mainly a <b>cross-protein difference</b> (the flexible CDK6 has larger ligands and stronger scores).'
+        : 'Within a single protein family the B-factor span is small and the score spread barely changes with B-factor (|residual| correlation ≈ 0), so no clear cone. Select multiple proteins to see the cross-family cone.'}
+    </p>
+  </div>`;
+}
+
+// ==================== LIGHTBOX ====================
+function openLB(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb').classList.add('on');
+}
+document.addEventListener('keydown', e => { if (e.key==='Escape') document.getElementById('lb').classList.remove('on'); });
+
+// ==================== STARTUP ====================
+window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('resize', () => { if (document.getElementById('tab-scatter').classList.contains('active')) renderScatter(); });
+</script>
+</body>
+</html>

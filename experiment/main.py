@@ -10,6 +10,7 @@ Usage:
     python main.py bfactors             # Extract binding-site B-factors
     python main.py prepare              # Prepare Vina inputs (PDBQT files)
     python main.py dock                 # Run cross-docking
+    python main.py selfdock             # Run native/self docking
     python main.py analyze              # Analyze B-factor vs RMSD correlation
     python main.py positive             # Positive control: pocket Cα RMSD vs docking
     python main.py ensemble             # Run ensemble docking (all strategies)
@@ -87,6 +88,11 @@ def cmd_prepare():
 def cmd_dock():
     from step3_cross_docking import run_cross_docking
     run_cross_docking()
+
+
+def cmd_selfdock():
+    from step3_cross_docking import run_self_docking
+    run_self_docking()
 
 
 def cmd_analyze():
@@ -218,6 +224,8 @@ if __name__ == "__main__":
         cmd_prepare()
     elif command == "dock":
         cmd_dock()
+    elif command == "selfdock":
+        cmd_selfdock()
     elif command == "analyze":
         cmd_analyze()
     elif command == "positive":

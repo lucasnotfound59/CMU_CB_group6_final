@@ -51,6 +51,7 @@ def analyze():
     bfactor_path = os.path.join(OUTPUT_DIR, "bfactor_summary.csv")
     structure_path = os.path.join(OUTPUT_DIR, "bfactor_per_structure.csv")
     docking_path = os.path.join(OUTPUT_DIR, "cross_docking_results.csv")
+    self_docking_path = os.path.join(OUTPUT_DIR, "self_docking_results.csv")
 
     if not os.path.exists(bfactor_path):
         print("ERROR: Run step2 first (bfactor_summary.csv not found)")
@@ -62,8 +63,18 @@ def analyze():
     bfactors = load_csv(bfactor_path)
     structures = load_csv(structure_path) if os.path.exists(structure_path) else []
     docking = load_csv(docking_path)
+    for row in docking:
+        row["docking_type"] = "cross"
+    self_docking = []
+    if os.path.exists(self_docking_path):
+        self_docking = load_csv(self_docking_path)
+        for row in self_docking:
+            row["docking_type"] = "self"
+        docking.extend(self_docking)
 
-    print(f"Loaded {len(bfactors)} residue records, {len(docking)} docking pairs\n")
+    print(f"Loaded {len(bfactors)} residue records, "
+          f"{len(docking) - len(self_docking)} cross-docking pairs, "
+          f"{len(self_docking)} self-docking pairs\n")
 
     # === Build B-factor lookup ===
     # pdb_id -> list of residue dicts
@@ -112,6 +123,7 @@ def analyze():
             "docked_ligand_native_ligand": native_ligand_by_pdb.get(pair["ligand_from"], ""),
             "rmsd": rmsd,
             "affinity": pair.get("affinity"),
+            "docking_type": pair.get("docking_type", "cross"),
             "receptor_pocket_avg_bfactor": round(np.mean(avg_bf), 2) if avg_bf else None,
             "receptor_pocket_max_bfactor": round(max(avg_bf), 2) if avg_bf else None,
             "receptor_pocket_std_bfactor": round(np.std(avg_bf), 2) if avg_bf else None,
@@ -128,16 +140,21 @@ def analyze():
         sys.exit(1)
 
     # === Statistical tests ===
-    rmsds = [a["rmsd"] for a in analysis]
-    pocket_avgs = [a["receptor_pocket_avg_bfactor"] for a in analysis]
-    pocket_maxs = [a["receptor_pocket_max_bfactor"] for a in analysis]
-    pocket_stds = [a["receptor_pocket_std_bfactor"] for a in analysis]
-    rel_bfs = [a["receptor_mean_relative_bfactor"] for a in analysis
+    cross_analysis = [a for a in analysis if a.get("docking_type") == "cross"]
+    stats_analysis = cross_analysis or analysis
+    rmsds = [a["rmsd"] for a in stats_analysis]
+    pocket_avgs = [a["receptor_pocket_avg_bfactor"] for a in stats_analysis]
+    pocket_maxs = [a["receptor_pocket_max_bfactor"] for a in stats_analysis]
+    pocket_stds = [a["receptor_pocket_std_bfactor"] for a in stats_analysis]
+    rel_bfs = [a["receptor_mean_relative_bfactor"] for a in stats_analysis
                if a["receptor_mean_relative_bfactor"] is not None]
 
     print("=" * 60)
     print("STATISTICAL ANALYSIS")
     print("=" * 60)
+    if self_docking:
+        print("Correlation statistics use cross-docking rows only; "
+              "self-docking rows are plotted as native controls.")
 
     # Correlation: pocket avg B-factor vs RMSD
     if len(pocket_avgs) == len(rmsds):
@@ -160,10 +177,10 @@ def analyze():
         print(f"  Pearson:  r = {r_std:.4f}, p = {p_std:.4f}")
 
     # Success rate comparison
-    success_rmsds = [a["rmsd"] for a in analysis if a["success"]]
-    fail_rmsds = [a["rmsd"] for a in analysis if not a["success"]]
-    print(f"\nCross-docking success rate: {len(success_rmsds)}/{len(analysis)} "
-          f"({100*len(success_rmsds)/len(analysis):.1f}%)")
+    success_rmsds = [a["rmsd"] for a in cross_analysis if a["success"]]
+    fail_rmsds = [a["rmsd"] for a in cross_analysis if not a["success"]]
+    print(f"\nCross-docking success rate: {len(success_rmsds)}/{len(cross_analysis)} "
+          f"({100*len(success_rmsds)/len(cross_analysis):.1f}%)")
     native_rows = [a for a in analysis if _is_native_interaction(a)]
     if native_rows:
         print(f"Native/self interactions available for labeling: {len(native_rows)}")
@@ -172,8 +189,8 @@ def analyze():
               "(cross-docking excludes receptor == ligand_from)")
 
     # T-test: B-factor of successful vs failed pairs
-    success_bf = [a["receptor_pocket_avg_bfactor"] for a in analysis if a["success"]]
-    fail_bf = [a["receptor_pocket_avg_bfactor"] for a in analysis if not a["success"]]
+    success_bf = [a["receptor_pocket_avg_bfactor"] for a in cross_analysis if a["success"]]
+    fail_bf = [a["receptor_pocket_avg_bfactor"] for a in cross_analysis if not a["success"]]
     t_stat, t_pval = None, None
     if len(success_bf) > 1 and len(fail_bf) > 1:
         t_stat, t_pval = stats.ttest_ind(success_bf, fail_bf)
@@ -186,6 +203,7 @@ def analyze():
     csv_path = os.path.join(OUTPUT_DIR, "analysis_summary.csv")
     fieldnames = ["receptor", "receptor_native_ligand", "ligand_from",
                   "docked_ligand_native_ligand", "rmsd", "affinity",
+                  "docking_type",
                   "receptor_pocket_avg_bfactor", "receptor_pocket_max_bfactor",
                   "receptor_pocket_std_bfactor", "receptor_mean_relative_bfactor",
                   "n_high_bfactor_residues", "high_bfactor_residues", "success"]
@@ -200,9 +218,10 @@ def analyze():
     with open(txt_path, "w") as f:
         f.write("B-factor vs Docking RMSD: Statistical Analysis\n")
         f.write("=" * 50 + "\n\n")
-        f.write(f"N pairs: {len(analysis)}\n")
+        f.write(f"N cross-docking pairs used for statistics: {len(cross_analysis)}\n")
+        f.write(f"N self-docking native controls plotted: {len(native_rows)}\n")
         f.write(f"Success rate (RMSD < {RMSD_SUCCESS_THRESHOLD}Å): "
-                f"{len(success_rmsds)}/{len(analysis)}\n\n")
+                f"{len(success_rmsds)}/{len(cross_analysis)}\n\n")
         f.write(f"Pocket avg B-factor vs RMSD:\n")
         f.write(f"  Pearson r = {r_pearson:.4f}, p = {p_pearson:.4f}\n")
         f.write(f"  Spearman ρ = {r_spearman:.4f}, p = {p_spearman:.4f}\n\n")
@@ -223,10 +242,11 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     ligands = [a["ligand_from"] for a in analysis]
     unique_ligands = sorted(set(ligands))
     ligand_colors = _make_category_colors(unique_ligands)
+    cross_rows = [a for a in analysis if a.get("docking_type") == "cross"]
 
     # --- Figure 1: B-factor vs RMSD scatter ---
     fig, ax = plt.subplots(figsize=(8, 6))
-    colors = ["green" if a["success"] else "red" for a in analysis]
+    colors = ["green" if a["success"] else "red" for a in cross_rows]
     ax.scatter(pocket_avgs, rmsds, c=colors, alpha=0.6, s=30, edgecolors="gray", linewidth=0.5)
     ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
     ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
@@ -251,36 +271,54 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
     fig, ax = plt.subplots(figsize=(10, 7))
     for ligand in unique_ligands:
         ligand_rows = [a for a in analysis if a["ligand_from"] == ligand]
-        x = [a["receptor_pocket_avg_bfactor"] for a in ligand_rows]
-        y = [a["rmsd"] for a in ligand_rows]
-        ax.scatter(
-            x, y,
-            color=ligand_colors[ligand],
-            alpha=0.75,
-            s=32,
-            edgecolors="gray",
-            linewidth=0.4,
-            label=ligand,
-        )
-        for a in ligand_rows:
-            if _is_native_interaction(a):
+        cross_ligand_rows = [a for a in ligand_rows if not _is_native_interaction(a)]
+        native_ligand_rows = [a for a in ligand_rows if _is_native_interaction(a)]
+        if cross_ligand_rows:
+            x = [a["receptor_pocket_avg_bfactor"] for a in cross_ligand_rows]
+            y = [a["rmsd"] for a in cross_ligand_rows]
+            ax.scatter(
+                x, y,
+                color=ligand_colors[ligand],
+                alpha=0.75,
+                s=32,
+                edgecolors="gray",
+                linewidth=0.4,
+                label=ligand,
+            )
+        if native_ligand_rows:
+            x = [a["receptor_pocket_avg_bfactor"] for a in native_ligand_rows]
+            y = [a["rmsd"] for a in native_ligand_rows]
+            ax.scatter(
+                x, y,
+                color=ligand_colors[ligand],
+                marker="*",
+                alpha=0.95,
+                s=170,
+                edgecolors="black",
+                linewidth=0.8,
+                label=ligand if not cross_ligand_rows else None,
+                zorder=4,
+            )
+            for a in native_ligand_rows:
                 ax.annotate(
                     _native_ligand_label(a),
                     (
                         a["receptor_pocket_avg_bfactor"],
                         a["rmsd"],
                     ),
-                    xytext=(4, 3),
+                    xytext=(5, 4),
                     textcoords="offset points",
                     fontsize=8,
                     fontweight="bold",
-                    alpha=0.9,
+                    alpha=0.95,
                     color="black",
+                    zorder=5,
                 )
 
     ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
-    ax.set_ylabel("Cross-docking RMSD (Å)", fontsize=12)
+    ax.set_ylabel("Docking RMSD (Å)", fontsize=12)
     ax.set_title("B-factor vs Docking RMSD by Original Ligand Structure", fontsize=14)
+    _add_native_control_note(ax, analysis)
     ax.axhline(
         y=RMSD_SUCCESS_THRESHOLD,
         color="gray",
@@ -307,31 +345,48 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
             ligand_rows = [a for a in score_rows if a["ligand_from"] == ligand]
             if not ligand_rows:
                 continue
-            x = [a["receptor_pocket_avg_bfactor"] for a in ligand_rows]
-            y = [float(a["affinity"]) for a in ligand_rows]
-            ax.scatter(
-                x, y,
-                color=ligand_colors[ligand],
-                alpha=0.75,
-                s=32,
-                edgecolors="gray",
-                linewidth=0.4,
-                label=ligand,
-            )
-            for a in ligand_rows:
-                if _is_native_interaction(a):
+            cross_ligand_rows = [a for a in ligand_rows if not _is_native_interaction(a)]
+            native_ligand_rows = [a for a in ligand_rows if _is_native_interaction(a)]
+            if cross_ligand_rows:
+                x = [a["receptor_pocket_avg_bfactor"] for a in cross_ligand_rows]
+                y = [float(a["affinity"]) for a in cross_ligand_rows]
+                ax.scatter(
+                    x, y,
+                    color=ligand_colors[ligand],
+                    alpha=0.75,
+                    s=32,
+                    edgecolors="gray",
+                    linewidth=0.4,
+                    label=ligand,
+                )
+            if native_ligand_rows:
+                x = [a["receptor_pocket_avg_bfactor"] for a in native_ligand_rows]
+                y = [float(a["affinity"]) for a in native_ligand_rows]
+                ax.scatter(
+                    x, y,
+                    color=ligand_colors[ligand],
+                    marker="*",
+                    alpha=0.95,
+                    s=170,
+                    edgecolors="black",
+                    linewidth=0.8,
+                    label=ligand if not cross_ligand_rows else None,
+                    zorder=4,
+                )
+                for a in native_ligand_rows:
                     ax.annotate(
                         _native_ligand_label(a),
                         (
                             a["receptor_pocket_avg_bfactor"],
                             float(a["affinity"]),
                         ),
-                        xytext=(4, 3),
+                        xytext=(5, 4),
                         textcoords="offset points",
                         fontsize=8,
                         fontweight="bold",
-                        alpha=0.9,
+                        alpha=0.95,
                         color="black",
+                        zorder=5,
                     )
 
         score_bfactors = [a["receptor_pocket_avg_bfactor"] for a in score_rows]
@@ -345,6 +400,7 @@ def generate_figures(analysis, rmsds, pocket_avgs, success_bf, fail_bf):
         ax.set_xlabel("Receptor Pocket Average B-factor (Å²)", fontsize=12)
         ax.set_ylabel("Vina Affinity / Docking Score (kcal/mol)", fontsize=12)
         ax.set_title("Docking Score vs B-factor by Original Ligand Structure", fontsize=14)
+        _add_native_control_note(ax, score_rows)
         _add_ligand_legend(ax, unique_ligands)
 
         fig_path = os.path.join(FIGURES_DIR, "bfactor_vs_docking_score_by_ligand.png")
@@ -414,6 +470,20 @@ def _add_ligand_legend(ax, labels):
             va="bottom",
             fontsize=9,
             color="dimgray",
+        )
+
+
+def _add_native_control_note(ax, rows):
+    if any(_is_native_interaction(row) for row in rows):
+        ax.text(
+            0.01,
+            0.99,
+            "* labeled native/self-docking controls",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=9,
+            color="black",
         )
 
 

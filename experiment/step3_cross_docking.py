@@ -404,10 +404,85 @@ def run_cross_docking():
           f"({100*success/len(results):.1f}%)")
 
 
+def run_self_docking():
+    """Run native/self docking for each structure against its own ligand."""
+    pdb_files = sorted([f for f in os.listdir(PDB_DIR) if f.endswith(".pdb")])
+    structures = []
+    for pf in pdb_files:
+        pdb_id = pf.replace(".pdb", "").upper()
+        pdb_path = os.path.join(PDB_DIR, pf)
+        lig = identify_ligand(pdb_path)
+        if lig:
+            structures.append({"pdb_id": pdb_id, "ligand": lig, "path": pdb_path})
+
+    print(f"Self-docking {len(structures)} structures ({len(structures)} pairs)...\n")
+
+    results = []
+    total = len(structures)
+    for count, structure in enumerate(structures, start=1):
+        pdb_id = structure["pdb_id"]
+        rec_pdbqt = os.path.join(VINA_DIR, f"{pdb_id.lower()}_receptor.pdbqt")
+        lig_pdbqt = os.path.join(VINA_DIR, f"{pdb_id.lower()}_ligand.pdbqt")
+
+        if not os.path.exists(rec_pdbqt) or not os.path.exists(lig_pdbqt):
+            print(f"  [{count}/{total}] {pdb_id} → {pdb_id} ... MISSING PDBQT")
+            results.append({
+                "receptor": pdb_id,
+                "ligand_from": pdb_id,
+                "rmsd": None,
+                "affinity": None,
+                "status": "missing_pdbqt",
+            })
+            continue
+
+        out_pdbqt = os.path.join(RESULTS_DIR, f"{pdb_id.lower()}_{pdb_id.lower()}_self.pdbqt")
+        center = get_binding_site_center(structure["path"], structure["ligand"])
+
+        print(f"  [{count}/{total}] {pdb_id} → {pdb_id} ...", end=" ")
+        vina_result = run_vina(rec_pdbqt, lig_pdbqt, out_pdbqt, center, VINA_BOX_SIZE)
+
+        if vina_result is None or not vina_result["success"]:
+            print("FAILED")
+            results.append({
+                "receptor": pdb_id,
+                "ligand_from": pdb_id,
+                "rmsd": None,
+                "affinity": None,
+                "status": "vina_failed",
+            })
+            continue
+
+        rmsd = compute_rmsd(structure["path"], out_pdbqt, structure["ligand"])
+        status = "success" if rmsd is not None and rmsd < 2.0 else "high_rmsd"
+        print(f"RMSD={rmsd}, affinity={vina_result['affinity']}")
+
+        results.append({
+            "receptor": pdb_id,
+            "ligand_from": pdb_id,
+            "rmsd": rmsd,
+            "affinity": vina_result["affinity"],
+            "status": status,
+        })
+
+    csv_path = os.path.join(OUTPUT_DIR, "self_docking_results.csv")
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["receptor", "ligand_from", "rmsd",
+                                               "affinity", "status"])
+        writer.writeheader()
+        writer.writerows(results)
+
+    success = sum(1 for r in results if r["status"] == "success")
+    print(f"\nResults: {csv_path}")
+    if results:
+        print(f"Success (RMSD < 2Å): {success}/{len(results)} "
+              f"({100*success/len(results):.1f}%)")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--prepare", action="store_true", help="Prepare PDBQT files")
     parser.add_argument("--run", action="store_true", help="Run cross-docking")
+    parser.add_argument("--self", action="store_true", help="Run native/self docking")
     parser.add_argument("--all", action="store_true", help="Prepare + run")
     args = parser.parse_args()
 
@@ -418,5 +493,7 @@ if __name__ == "__main__":
         prepare_all()
     elif args.run:
         run_cross_docking()
+    elif args.self:
+        run_self_docking()
     else:
         parser.print_help()
